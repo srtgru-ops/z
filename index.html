@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#087a45" />
+  <title>بوابة عمادة شؤون الطلاب | جامعة تبوك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <!-- UT_ACCESS_GATE_START -->
+  <script>
+    (function(){
+      var granted = false;
+      try { granted = sessionStorage.getItem('ut_student_affairs_access') === 'granted'; } catch (e) {}
+      if (!granted && window.name.indexOf('UT_STUDENT_AFFAIRS_ACCESS') !== -1) granted = true;
+      if (granted) document.documentElement.classList.add('access-granted');
+    })();
+  </script>
+  <style>
+    :root{
+      --green:#0b8a50;
+      --green-dark:#075f39;
+      --green-deep:#06492f;
+      --green-soft:#e8f5ee;
+      --gold:#b69a20;
+      --gold-light:#dfcc72;
+      --gold-soft:#f7f0d4;
+      --text:#183027;
+      --muted:#687d73;
+      --white:#ffffff;
+      --surface:#f6f9f7;
+      --border:#dce9e1;
+      --shadow:0 16px 42px rgba(5,78,46,.12);
+      --shadow-sm:0 8px 24px rgba(5,78,46,.08);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:"Tajawal",Tahoma,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(182,154,32,.12), transparent 26rem),
+        radial-gradient(circle at 90% 12%, rgba(11,138,80,.12), transparent 28rem),
+        linear-gradient(180deg,#f9fbfa 0%,#eef5f1 100%);
+    }
+    a{color:inherit}
+    .shell{width:min(1240px,calc(100% - 32px));margin:auto}
+
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(220,233,225,.9);
+    }
+    .topbar-inner{
+      min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .brand-logo{
+      width:54px;height:54px;border-radius:15px;background:#fff;padding:4px;
+      border:1px solid var(--border);box-shadow:var(--shadow-sm);object-fit:contain;
+    }
+    .brand-text strong{display:block;font-family:"Cairo",sans-serif;font-size:15px;color:var(--green-deep)}
+    .brand-text span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+    .top-note{
+      display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;
+      background:var(--green-soft);color:var(--green-dark);font-size:12px;font-weight:800;
+      border:1px solid #cfe6d8;
+    }
+    .top-note::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold)}
+
+    .hero{padding:54px 0 26px}
+    .hero-card{
+      position:relative;overflow:hidden;min-height:330px;
+      border-radius:34px;padding:44px clamp(24px,5vw,62px);
+      background:linear-gradient(125deg,var(--green-deep),var(--green) 63%,#159b61);
+      box-shadow:0 24px 60px rgba(6,73,47,.24);color:#fff;
+      display:grid;grid-template-columns:1.3fr .7fr;align-items:center;gap:30px;
+    }
+    .hero-card::before,
+    .hero-card::after{
+      content:"";position:absolute;border-radius:50%;pointer-events:none;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .hero-card::before{width:380px;height:380px;left:-140px;top:-180px;box-shadow:0 0 0 55px rgba(255,255,255,.035),0 0 0 110px rgba(255,255,255,.02)}
+    .hero-card::after{width:230px;height:230px;right:-90px;bottom:-120px;box-shadow:0 0 0 45px rgba(182,154,32,.09)}
+    .hero-copy{position:relative;z-index:2}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+      color:#f3e6a9;font-size:12px;font-weight:800;margin-bottom:16px;
+    }
+    .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold-light)}
+    h1{font-family:"Cairo",sans-serif;font-size:clamp(30px,4.2vw,52px);line-height:1.25;margin:0 0 14px;font-weight:900}
+    .hero-copy p{max-width:720px;margin:0;color:rgba(255,255,255,.82);font-size:clamp(14px,1.5vw,17px);line-height:1.95}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+    .hero-btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+      min-height:46px;padding:0 18px;border-radius:14px;font-weight:800;font-size:14px;
+      background:var(--gold);color:#1e291f;box-shadow:0 10px 24px rgba(0,0,0,.14);
+    }
+    .hero-btn.secondary{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.24);box-shadow:none}
+    .hero-logo-wrap{position:relative;z-index:2;display:grid;place-items:center}
+    .hero-logo-box{
+      width:min(250px,75vw);aspect-ratio:1/1;border-radius:34px;background:#fff;padding:20px;
+      display:grid;place-items:center;box-shadow:0 20px 50px rgba(0,0,0,.22);
+      border:5px solid rgba(223,204,114,.58);
+    }
+    .hero-logo-box img{width:100%;height:100%;object-fit:contain}
+
+    .section{padding:26px 0 64px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .section-title{font-family:"Cairo",sans-serif;margin:0;font-size:clamp(22px,2.4vw,30px);color:var(--green-deep)}
+    .section-sub{margin:7px 0 0;color:var(--muted);line-height:1.7;font-size:14px}
+    .count-pill{white-space:nowrap;background:var(--gold-soft);color:#7c6816;border:1px solid #eadb9e;border-radius:999px;padding:8px 13px;font-size:12px;font-weight:800}
+
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .portal-card{
+      position:relative;overflow:hidden;min-height:236px;
+      background:rgba(255,255,255,.93);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow-sm);padding:22px;display:flex;flex-direction:column;
+      transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+    }
+    .portal-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:#b9d6c4}
+    .portal-card::after{content:"";position:absolute;left:-35px;bottom:-45px;width:120px;height:120px;border-radius:50%;background:var(--green-soft)}
+    .card-top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:1}
+    .icon{
+      width:54px;height:54px;border-radius:16px;display:grid;place-items:center;
+      background:linear-gradient(145deg,var(--green),var(--green-dark));color:#fff;
+      box-shadow:0 10px 22px rgba(11,138,80,.22);
+    }
+    .icon svg{width:27px;height:27px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .card-badge{font-size:11px;font-weight:800;color:#826d18;background:var(--gold-soft);border:1px solid #eadb9e;border-radius:999px;padding:6px 9px}
+    .portal-card h3{font-family:"Cairo",sans-serif;font-size:17px;margin:17px 0 8px;color:var(--green-deep);position:relative;z-index:1}
+    .portal-card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.8;position:relative;z-index:1;flex:1}
+    .card-link{
+      margin-top:18px;position:relative;z-index:1;display:inline-flex;align-items:center;gap:7px;
+      text-decoration:none;color:var(--green-dark);font-weight:900;font-size:13px;
+    }
+    .card-link span{transition:transform .2s ease}
+    .portal-card:hover .card-link span{transform:translateX(-4px)}
+
+    .quick-panel{
+      margin-top:20px;background:linear-gradient(135deg,#fff,#f8fbf9);border:1px solid var(--border);
+      border-radius:22px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+      box-shadow:var(--shadow-sm);
+    }
+    .quick-panel strong{font-family:"Cairo",sans-serif;color:var(--green-deep)}
+    .quick-panel p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .quick-links{display:flex;gap:8px;flex-wrap:wrap}
+    .quick-links a{text-decoration:none;background:var(--green-soft);border:1px solid #cfe6d8;color:var(--green-dark);border-radius:12px;padding:9px 12px;font-weight:800;font-size:12px}
+
+    footer{background:var(--green-deep);color:#fff;margin-top:14px}
+    .footer-inner{min-height:96px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 0;flex-wrap:wrap}
+    .footer-brand{display:flex;align-items:center;gap:11px}
+    .footer-brand img{width:45px;height:45px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
+    .footer-brand strong{font-family:"Cairo",sans-serif;font-size:13px}
+    .footer-brand span{display:block;font-size:11px;color:rgba(255,255,255,.62);margin-top:2px}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.65)}
+
+    @media(max-width:960px){
+      .hero-card{grid-template-columns:1fr;text-align:center;padding-top:34px}
+      .hero-copy p{margin-inline:auto}
+      .hero-actions{justify-content:center}
+      .hero-logo-wrap{order:-1}
+      .hero-logo-box{width:190px;border-radius:27px;padding:15px}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:650px){
+      .shell{width:min(100% - 22px,1240px)}
+      .topbar-inner{min-height:68px}
+      .brand-logo{width:47px;height:47px}
+      .brand-text strong{font-size:13px}
+      .brand-text span{font-size:10px}
+      .top-note{display:none}
+      .hero{padding-top:24px}
+      .hero-card{border-radius:25px;padding:27px 18px 30px;min-height:auto}
+      h1{font-size:28px}
+      .hero-logo-box{width:150px;border-radius:22px;padding:11px}
+      .section-head{align-items:flex-start;flex-direction:column}
+      .grid{grid-template-columns:1fr}
+      .portal-card{min-height:218px}
+      .quick-panel{align-items:flex-start;flex-direction:column}
+      .footer-inner{justify-content:center;text-align:center}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+
+    /* بوابة رمز الدخول */
+    html:not(.access-granted) body{overflow:hidden}
+    html:not(.access-granted) .topbar,
+    html:not(.access-granted) main,
+    html:not(.access-granted) footer{visibility:hidden}
+    .access-gate{
+      position:fixed;inset:0;z-index:99999;display:grid;place-items:center;
+      padding:22px;overflow:auto;
+      background:
+        radial-gradient(circle at 14% 8%,rgba(223,204,114,.22),transparent 24rem),
+        radial-gradient(circle at 86% 90%,rgba(21,155,97,.28),transparent 28rem),
+        linear-gradient(135deg,#043824,#087a45 58%,#0b8a50);
+    }
+    html.access-granted .access-gate{display:none}
+    .access-gate::before,.access-gate::after{
+      content:"";position:absolute;border-radius:50%;pointer-events:none;
+      border:1px solid rgba(255,255,255,.12)
+    }
+    .access-gate::before{width:360px;height:360px;top:-190px;right:-140px;box-shadow:0 0 0 55px rgba(255,255,255,.025),0 0 0 110px rgba(255,255,255,.018)}
+    .access-gate::after{width:240px;height:240px;bottom:-140px;left:-100px;box-shadow:0 0 0 44px rgba(182,154,32,.08)}
+    .access-box{
+      position:relative;z-index:2;width:min(100%,430px);text-align:center;
+      background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.8);
+      border-radius:30px;padding:31px 28px 27px;box-shadow:0 28px 80px rgba(0,0,0,.28)
+    }
+    .access-logo{
+      width:102px;height:102px;object-fit:contain;background:#fff;border-radius:24px;
+      padding:7px;border:3px solid rgba(182,154,32,.5);box-shadow:0 12px 28px rgba(5,78,46,.14);margin-bottom:15px
+    }
+    .access-kicker{font-size:12px;font-weight:900;color:var(--gold);margin-bottom:5px}
+    .access-box h2{font-family:"Cairo",sans-serif;color:var(--green-deep);font-size:24px;margin:0 0 7px}
+    .access-box p{margin:0 0 20px;color:var(--muted);font-size:14px;line-height:1.75}
+    .access-form{display:grid;gap:11px}
+    .access-input-wrap{position:relative}
+    .access-input{
+      width:100%;height:54px;border:1.5px solid var(--border);border-radius:15px;
+      background:#f8fbf9;color:var(--green-deep);text-align:center;font-family:"Cairo",sans-serif;
+      font-size:23px;font-weight:900;letter-spacing:7px;outline:none;padding:0 18px;transition:.2s ease
+    }
+    .access-input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(11,138,80,.11);background:#fff}
+    .access-submit{
+      height:51px;border:0;border-radius:15px;background:linear-gradient(135deg,var(--green-dark),var(--green));
+      color:#fff;font-family:"Cairo",sans-serif;font-size:14px;font-weight:900;cursor:pointer;
+      box-shadow:0 12px 25px rgba(7,95,57,.22);transition:.2s ease
+    }
+    .access-submit:hover{transform:translateY(-1px);box-shadow:0 15px 30px rgba(7,95,57,.28)}
+    .access-error{min-height:20px;margin:0;color:#b42318;font-size:12.5px;font-weight:800}
+    .access-box.is-error{animation:accessShake .35s ease}
+    @keyframes accessShake{0%,100%{transform:translateX(0)}25%{transform:translateX(7px)}50%{transform:translateX(-7px)}75%{transform:translateX(4px)}}
+    @media(max-width:520px){
+      .access-box{padding:25px 19px 22px;border-radius:24px}
+      .access-logo{width:88px;height:88px;border-radius:20px}
+      .access-box h2{font-size:21px}
+      .access-input{height:52px;font-size:21px}
+    }
+
+  </style>
+</head>
+<body>
+
+  <section class="access-gate" id="accessGate" aria-label="بوابة الدخول">
+    <div class="access-box" id="accessBox">
+      <img class="access-logo" src="data:image/png;base64,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" alt="شعار جامعة تبوك">
+      <div class="access-kicker">جامعة تبوك</div>
+      <h2>بوابة عمادة شؤون الطلاب</h2>
+      <p>يرجى إدخال رمز الدخول للمتابعة إلى الأنظمة واللوحات.</p>
+      <form class="access-form" id="accessForm" autocomplete="off">
+        <div class="access-input-wrap">
+          <input class="access-input" id="accessCode" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="5" aria-label="رمز الدخول" placeholder="•••••" autofocus>
+        </div>
+        <button class="access-submit" type="submit">دخول البوابة</button>
+        <p class="access-error" id="accessError" role="alert" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html" aria-label="الصفحة الرئيسية">
+        <img class="brand-logo" src="data:image/png;base64,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" alt="شعار جامعة تبوك" />
+        <div class="brand-text">
+          <strong>عمادة شؤون الطلاب</strong>
+          <span>جامعة تبوك</span>
+        </div>
+      </a>
+      <div class="top-note">البوابة الموحدة للملفات واللوحات</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <div class="eyebrow">منصة موحدة بهوية عمادة شؤون الطلاب</div>
+            <h1>بوابة الأداء والجودة<br>لعمادة شؤون الطلاب</h1>
+            <p>صفحة رئيسية تجمع لوحات الأداء، تقييم الإدارات، أهداف الجودة، ميثاق الأداء الوظيفي، ودليل نظام الجودة في مكان واحد بتصميم مستوحى من هوية جامعة تبوك.</p>
+            <div class="hero-actions">
+              <a class="hero-btn" href="#systems">استعراض الأنظمة</a>
+              <a class="hero-btn secondary" href="departments-performance.html">فتح لوحة الأداء الرئيسية</a>
+            </div>
+          </div>
+          <div class="hero-logo-wrap">
+            <div class="hero-logo-box">
+              <img src="data:image/png;base64,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" alt="شعار جامعة تبوك" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="systems">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">الأنظمة واللوحات</h2>
+            <p class="section-sub">اختر الملف المطلوب للانتقال إليه مباشرة، ويمكنك العودة إلى هذه الصفحة من زر «الرئيسية» داخل كل ملف.</p>
+          </div>
+          <div class="count-pill">6 ملفات مترابطة</div>
+        </div>
+
+        <div class="grid">
+          <article class="portal-card">
+            <div class="card-top">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="m3 7 6-4 6 5 6-4"/></svg>
+              </div>
+              <span class="card-badge">الأداء التشغيلي</span>
+            </div>
+            <h3>لوحة أداء الإدارات والتقارير الأسبوعية</h3>
+            <p>متابعة أداء إدارات العمادة، المؤشرات التشغيلية، المقارنات، والتقارير الأسبوعية ضمن لوحة شاملة.</p>
+            <a class="card-link" href="departments-performance.html">فتح الملف <span>←</span></a>
+          </article>
+
+          <article class="portal-card">
+            <div class="card-top">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M12 3 14.7 8.5l6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>
+              </div>
+              <span class="card-badge">التقييم</span>
+            </div>
+            <h3>تقييم إدارات العمادة</h3>
+            <p>واجهة مخصصة لتقييم الإدارات وفق معايير واضحة وإضافة الملاحظات بطريقة سهلة ومتوافقة مع الجوال.</p>
+            <a class="card-link" href="departments-evaluation.html">فتح الملف <span>←</span></a>
+          </article>
+
+          <article class="portal-card">
+            <div class="card-top">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              </div>
+              <span class="card-badge">لوحة الإدارات</span>
+            </div>
+            <h3>داشبورد الإدارات</h3>
+            <p>عرض مركزي لبطاقات الإدارات ونسب الأداء وحالة كل إدارة، مع تنقل واضح وسريع بين التفاصيل.</p>
+            <a class="card-link" href="departments-dashboard.html">فتح الملف <span>←</span></a>
+          </article>
+
+          <article class="portal-card">
+            <div class="card-top">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M15 3v4h4M9 11h6M9 15h6"/></svg>
+              </div>
+              <span class="card-badge">نظام الجودة</span>
+            </div>
+            <h3>دليل نظام إدارة الجودة</h3>
+            <p>دليل شامل لهيكل نظام الجودة، السياسات والإجراءات، المسؤوليات، المخاطر، ومؤشرات المتابعة.</p>
+            <a class="card-link" href="quality-system-guide.html">فتح الملف <span>←</span></a>
+          </article>
+
+          <article class="portal-card">
+            <div class="card-top">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg>
+              </div>
+              <span class="card-badge">أهداف 2026</span>
+            </div>
+            <h3>لوحة أهداف الجودة 2026</h3>
+            <p>تحليل أهداف الجودة ومؤشراتها ومستهدفاتها، مع الرسوم البيانية والمرشحات ولوحات القياس التنفيذية.</p>
+            <a class="card-link" href="quality-goals-2026.html">فتح الملف <span>←</span></a>
+          </article>
+
+          <article class="portal-card">
+            <div class="card-top">
+              <div class="icon">
+                <svg viewBox="0 0 24 24"><path d="M8 4h8M9 2h6v4H9z"/><rect x="5" y="5" width="14" height="17" rx="2"/><path d="M9 11h6M9 15h6M9 19h4"/></svg>
+              </div>
+              <span class="card-badge">الأداء الوظيفي</span>
+            </div>
+            <h3>لوحة ميثاق الأداء الوظيفي</h3>
+            <p>عرض تحليلي لمواثيق الأداء الوظيفي، الأهداف والجدارات والمستهدفات على مستوى الإدارات والوحدات.</p>
+            <a class="card-link" href="performance-charter.html">فتح الملف <span>←</span></a>
+          </article>
+        </div>
+
+        <div class="quick-panel">
+          <div>
+            <strong>وصول سريع</strong>
+            <p>روابط مباشرة لأكثر الملفات استخدامًا.</p>
+          </div>
+          <div class="quick-links">
+            <a href="departments-performance.html">الأداء العام</a>
+            <a href="quality-goals-2026.html">أهداف الجودة</a>
+            <a href="quality-system-guide.html">دليل الجودة</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div class="footer-brand">
+        <img src="data:image/png;base64,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" alt="شعار جامعة تبوك" />
+        <div>
+          <strong>عمادة شؤون الطلاب — جامعة تبوك</strong>
+          <span>بوابة الأداء والجودة الموحدة</span>
+        </div>
+      </div>
+      <div class="footer-copy">جميع الملفات مترابطة ضمن مشروع واحد وجاهزة للرفع على GitHub Pages.</div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var form = document.getElementById('accessForm');
+      var input = document.getElementById('accessCode');
+      var error = document.getElementById('accessError');
+      var box = document.getElementById('accessBox');
+      if (!form || document.documentElement.classList.contains('access-granted')) return;
+
+      function showError(message){
+        error.textContent = message;
+        box.classList.remove('is-error');
+        void box.offsetWidth;
+        box.classList.add('is-error');
+        input.value = '';
+        input.focus();
+      }
+
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        if (input.value.trim() === '43100') {
+          try { sessionStorage.setItem('ut_student_affairs_access', 'granted'); } catch (e) {}
+          if (window.name.indexOf('UT_STUDENT_AFFAIRS_ACCESS') === -1) {
+            window.name += '|UT_STUDENT_AFFAIRS_ACCESS|';
+          }
+          document.documentElement.classList.add('access-granted');
+          document.body.style.overflow = '';
+          error.textContent = '';
+        } else {
+          showError('رمز الدخول غير صحيح، حاول مرة أخرى.');
+        }
+      });
+
+      input.addEventListener('input', function(){
+        this.value = this.value.replace(/\D/g, '').slice(0, 5);
+        error.textContent = '';
+      });
+    })();
+  </script>
+  <!-- UT_ACCESS_GATE_END -->
+</body>
+</html>

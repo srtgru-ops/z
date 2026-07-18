@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script>
+(function(){
+  var granted = false;
+  try { granted = sessionStorage.getItem('ut_student_affairs_access') === 'granted'; } catch (e) {}
+  if (!granted && window.name.indexOf('UT_STUDENT_AFFAIRS_ACCESS') === -1) {
+    window.location.replace('index.html');
+  }
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ميثاق الأداء الوظيفي | عمادة شؤون الطلاب</title>
+<style>
+:root{
+  --primary:#123b67; --primary2:#1d5b91; --accent:#2f80ed;
+  --bg:#f3f6fa; --card:#ffffff; --text:#172033; --muted:#6b778c;
+  --line:#e3e9f1; --good:#14804a; --warn:#c47b00; --bad:#c23b3b;
+  --shadow:0 10px 25px rgba(22,50,86,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Tahoma","Arial",sans-serif;background:var(--bg);color:var(--text)}
+header{
+  background:linear-gradient(135deg,var(--primary),#0c2947);
+  color:#fff;padding:26px 30px 22px;position:relative;overflow:hidden
+}
+header:after{content:"";position:absolute;left:-70px;top:-90px;width:240px;height:240px;border:35px solid rgba(255,255,255,.06);border-radius:50%}
+.header-wrap{max-width:1500px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.title h1{margin:0 0 8px;font-size:28px}
+.title p{margin:0;color:#d8e6f5;font-size:14px}
+.badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:10px 15px;border-radius:12px;font-size:13px}
+.container{max-width:1500px;margin:auto;padding:22px}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:8px 0 14px}
+.section-title h2{font-size:18px;margin:0}
+.small-note{font-size:12px;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.kpi{padding:17px;position:relative;overflow:hidden;min-height:115px}
+.kpi:before{content:"";position:absolute;right:0;top:0;width:5px;height:100%;background:var(--accent)}
+.kpi .label{font-size:12px;color:var(--muted);margin-bottom:10px}
+.kpi .value{font-size:27px;font-weight:700;color:var(--primary)}
+.kpi .sub{font-size:11px;color:var(--muted);margin-top:8px}
+.filters{padding:16px;display:grid;grid-template-columns:repeat(5,1fr) auto;gap:12px;align-items:end}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+select,input{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px;color:var(--text);outline:none}
+button{border:0;border-radius:10px;padding:12px 18px;background:var(--primary);color:#fff;cursor:pointer;font-weight:700}
+button:hover{background:var(--primary2)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.grid-3{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:16px;margin-top:16px}
+.chart-card{padding:18px;min-height:330px}
+.chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.chart-head h3{margin:0;font-size:15px}
+.chart-head span{font-size:11px;color:var(--muted)}
+canvas{width:100%;height:260px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;font-size:11px;color:var(--muted)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-left:5px}
+.radar-wrap{display:flex;justify-content:center;align-items:center;height:255px}
+svg{max-width:100%}
+.table-card{padding:18px;margin-top:16px}
+.table-tools{display:flex;gap:10px;margin-bottom:12px}
+.table-tools input{max-width:320px}
+.table-wrap{overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th{position:sticky;top:0;background:#edf3f9;color:var(--primary);font-size:12px;padding:12px;border-bottom:1px solid var(--line)}
+td{font-size:12px;padding:11px;border-bottom:1px solid var(--line);text-align:center}
+tr:hover td{background:#f8fbff}
+.pill{display:inline-block;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:700}
+.good{background:#e8f6ee;color:var(--good)}
+.warn{background:#fff4dc;color:var(--warn)}
+.bad{background:#fdecec;color:var(--bad)}
+.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.insight{padding:16px;border-right:5px solid var(--accent)}
+.insight h4{margin:0 0 8px;font-size:14px}
+.insight p{margin:0;color:var(--muted);font-size:12px;line-height:1.8}
+.progress{height:9px;background:#edf1f6;border-radius:20px;overflow:hidden}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--primary2),var(--accent));border-radius:20px}
+.gauge{position:relative;width:210px;height:115px;margin:38px auto 0;overflow:hidden}
+.gauge .arc{width:210px;height:210px;border-radius:50%;background:conic-gradient(from 270deg,var(--good) 0 72%,#e8edf3 72% 100%);position:absolute;top:0}
+.gauge .cut{position:absolute;width:145px;height:145px;border-radius:50%;background:#fff;right:32.5px;top:32.5px}
+.gauge .num{position:absolute;top:58px;width:100%;text-align:center;font-size:27px;font-weight:700;color:var(--primary)}
+.gauge .txt{position:absolute;top:92px;width:100%;text-align:center;font-size:11px;color:var(--muted)}
+.footer{padding:25px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:1100px){
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .filters{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .header-wrap{align-items:flex-start;flex-direction:column}
+  .kpis,.grid-2,.insights{grid-template-columns:1fr}
+  .filters{grid-template-columns:1fr}
+  .container{padding:12px}
+  .title h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-wrap">
+    <div class="title">
+      <h1>لوحة ميثاق الأداء الوظيفي</h1>
+      <p>عمادة شؤون الطلاب — تحليل الأهداف الموزونة، الجدارات، المستهدفات، والشواهد</p>
+    </div>
+    <div class="badge">الإصدار التنفيذي • 2026</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="section-title"><h2>المؤشرات الرئيسية</h2><span class="small-note">تتحدث تلقائيًا حسب الفلاتر</span></div>
+  <section class="kpis">
+    <div class="card kpi"><div class="label">الإدارات والوحدات</div><div class="value" id="kpiDepartments">14</div><div class="sub">ضمن 3 مراحل تنظيمية</div></div>
+    <div class="card kpi"><div class="label">إجمالي الأدوار</div><div class="value" id="kpiRoles">56</div><div class="sub">إشرافي + R1 + R2 + R3</div></div>
+    <div class="card kpi"><div class="label">متوسط المستهدف</div><div class="value" id="kpiTarget">92%</div><div class="sub">عبر جميع الأهداف</div></div>
+    <div class="card kpi"><div class="label">مؤشر جودة الخدمة</div><div class="value" id="kpiQuality">88%</div><div class="sub">وزن الرضا × مستوى التحقيق</div></div>
+    <div class="card kpi"><div class="label">نضج الأداء</div><div class="value" id="kpiMaturity">86%</div><div class="sub">الأهداف + الجدارات + الشواهد</div></div>
+    <div class="card kpi"><div class="label">الإدارات عالية الأداء</div><div class="value" id="kpiHigh">64%</div><div class="sub">أداء 90% فأعلى</div></div>
+  </section>
+
+  <div class="section-title" style="margin-top:22px"><h2>الفلاتر</h2></div>
+  <section class="card filters">
+    <div><label>مرحلة الرحلة</label><select id="stageFilter"><option value="all">جميع المراحل</option><option>الدعم والاستقرار</option><option>التنمية والمشاركة</option><option>التمكين المهني والخريجين</option></select></div>
+    <div><label>الإدارة / الوحدة</label><select id="deptFilter"><option value="all">جميع الإدارات</option></select></div>
+    <div><label>نوع الوظيفة</label><select id="roleFilter"><option value="all">جميع الوظائف</option><option>إشرافية</option><option>R1</option><option>R2</option><option>R3</option></select></div>
+    <div><label>نطاق المستهدف</label><select id="targetFilter"><option value="0">جميع المستهدفات</option><option value="85">85% فأعلى</option><option value="90">90% فأعلى</option><option value="95">95% فأعلى</option></select></div>
+    <div><label>البحث في الهدف</label><input id="goalSearch" placeholder="مثال: رضا المستفيد"></div>
+    <button id="resetBtn">إعادة الضبط</button>
+  </section>
+
+  <section class="grid-2">
+    <div class="card chart-card">
+      <div class="chart-head"><h3>توزيع الإدارات حسب مراحل الرحلة</h3><span>Donut</span></div>
+      <canvas id="donut"></canvas>
+      <div class="legend"><span><i style="background:#123b67"></i>الدعم والاستقرار</span><span><i style="background:#2f80ed"></i>التنمية والمشاركة</span><span><i style="background:#73a8df"></i>التمكين المهني</span></div>
+    </div>
+    <div class="card chart-card">
+      <div class="chart-head"><h3>متوسط المستهدف حسب الإدارة</h3><span>ترتيب تنازلي</span></div>
+      <canvas id="bars"></canvas>
+    </div>
+  </section>
+
+  <section class="grid-3">
+    <div class="card chart-card">
+      <div class="chart-head"><h3>توزيع أوزان الأهداف</h3><span>أهداف الميثاق</span></div>
+      <canvas id="stacked"></canvas>
+      <div class="legend">
+        <span><i style="background:#123b67"></i>رضا المستفيد</span><span><i style="background:#2f80ed"></i>SLA</span>
+        <span><i style="background:#73a8df"></i>الشواهد</span><span><i style="background:#9dbddd"></i>المخاطر</span>
+        <span><i style="background:#c8d9eb"></i>قيادة الفريق</span>
+      </div>
+    </div>
+    <div class="card chart-card">
+      <div class="chart-head"><h3>الجدارات السلوكية</h3><span>Radar</span></div>
+      <div class="radar-wrap" id="radar"></div>
+    </div>
+    <div class="card chart-card">
+      <div class="chart-head"><h3>اكتمال الشواهد الربع سنوية</h3><span>Gauge</span></div>
+      <div class="gauge"><div class="arc" id="gaugeArc"></div><div class="cut"></div><div class="num" id="gaugeNum">72%</div><div class="txt">مستوى اكتمال التوثيق</div></div>
+    </div>
+  </section>
+
+  <section class="grid-2">
+    <div class="card chart-card">
+      <div class="chart-head"><h3>توزيع المستهدفات الرقمية</h3><span>Histogram</span></div>
+      <canvas id="histogram"></canvas>
+    </div>
+    <div class="card chart-card">
+      <div class="chart-head"><h3>مقارنة الأدوار R1 / R2 / R3</h3><span>تركيز الأوزان</span></div>
+      <canvas id="rolesChart"></canvas>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="chart-head"><h3>جدول مواثيق الأداء</h3><span id="rowCount">0 سجل</span></div>
+    <div class="table-tools"><input id="tableSearch" placeholder="بحث سريع في الجدول..."></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>المرحلة</th><th>الإدارة</th><th>الوظيفة</th><th>الهدف</th><th>الوزن</th><th>المستهدف</th><th>اكتمال الشواهد</th><th>الحالة</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="section-title" style="margin-top:22px"><h2>الرؤى التحليلية</h2></div>
+  <section class="insights" id="insights">
+    <div class="card insight"><h4>تركيز القيادة</h4><p>وزن القيادة ثابت عند 20% في الوظائف الإشرافية، ما يعكس توحيدًا واضحًا لمتطلبات القيادة.</p></div>
+    <div class="card insight"><h4>مستهدفات مرتفعة</h4><p>تظهر الإدارات المهنية والخدمية اعتمادًا أكبر على مستهدفات 95% و100%.</p></div>
+    <div class="card insight"><h4>مخاطر التوثيق</h4><p>أي إدارة تقل نسبة اكتمال شواهدها عن 75% تحتاج خطة تحسين ومتابعة ربع سنوية.</p></div>
+  </section>
+</div>
+<div class="footer">لوحة تحليلية قابلة للربط لاحقًا ببيانات الأداء الفعلية — عمادة شؤون الطلاب</div>
+
+<script>
+const departments = [
+["التوجيه وحقوق الطالب","الدعم والاستقرار"],["التغذية والإعاشة","الدعم والاستقرار"],["السكن الطلابي","الدعم والاستقرار"],
+["النقل الطلابي","الدعم والاستقرار"],["الخدمات المالية","الدعم والاستقرار"],["ذوي الإعاقة","الدعم والاستقرار"],["المنح الطلابية","الدعم والاستقرار"],
+["الأنشطة الطلابية","التنمية والمشاركة"],["النشاط الرياضي","التنمية والمشاركة"],["عشائر الجوالة","التنمية والمشاركة"],["العمل التطوعي","التنمية والمشاركة"],
+["مركز محترف","التمكين المهني والخريجين"],["مكتب التوظيف","التمكين المهني والخريجين"],["الإرشاد المهني","التمكين المهني والخريجين"]
+];
+const roles=["إشرافية","R1","R2","R3"];
+const goals=[
+["رضا المستفيد / جودة الخدمة",25],["الالتزام باتفاقية مستوى الخدمة SLA",20],["اكتمال الشواهد الربعية",20],["إدارة المخاطر والتحسين",15],["قيادة الفريق وتحقيق النتائج",20]
+];
+let data=[];
+departments.forEach((d,di)=>roles.forEach((r,ri)=>goals.forEach((g,gi)=>{
+  const target=[85,90,95,100][(di+ri+gi)%4];
+  const evidence=62+((di*7+ri*9+gi*5)%39);
+  data.push({dept:d[0],stage:d[1],role:r,goal:g[0],weight:g[1],target,evidence});
+})));
+
+const deptFilter=document.getElementById("deptFilter");
+departments.forEach(d=>{let o=document.createElement("option");o.textContent=d[0];deptFilter.appendChild(o)});
+
+function filteredData(){
+ const st=stageFilter.value, dp=deptFilter.value, rl=roleFilter.value, tg=+targetFilter.value, gs=goalSearch.value.trim();
+ return data.filter(x=>(st==="all"||x.stage===st)&&(dp==="all"||x.dept===dp)&&(rl==="all"||x.role===rl)&&x.target>=tg&&(!gs||x.goal.includes(gs)));
+}
+function resizeCanvas(c){
+ const r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+ c.width=r.width*d;c.height=r.height*d;let ctx=c.getContext("2d");ctx.setTransform(d,0,0,d,0,0);return [ctx,r.width,r.height];
+}
+function clear(ctx,w,h){ctx.clearRect(0,0,w,h)}
+function drawDonut(fd){
+ const c=donut,[ctx,w,h]=resizeCanvas(c);clear(ctx,w,h);
+ const stages=["الدعم والاستقرار","التنمية والمشاركة","التمكين المهني والخريجين"];
+ const colors=["#123b67","#2f80ed","#73a8df"];
+ const counts=stages.map(s=>new Set(fd.filter(x=>x.stage===s).map(x=>x.dept)).size);
+ const total=counts.reduce((a,b)=>a+b,0)||1;let a=-Math.PI/2, cx=w/2,cy=h/2-5,r=Math.min(w,h)*.34;
+ counts.forEach((v,i)=>{let b=a+v/total*Math.PI*2;ctx.beginPath();ctx.arc(cx,cy,r,a,b);ctx.arc(cx,cy,r*.58,b,a,true);ctx.closePath();ctx.fillStyle=colors[i];ctx.fill();a=b});
+ ctx.fillStyle="#123b67";ctx.textAlign="center";ctx.font="bold 27px Tahoma";ctx.fillText(total,cx,cy+4);ctx.font="11px Tahoma";ctx.fillStyle="#6b778c";ctx.fillText("إدارة / وحدة",cx,cy+25);
+}
+function drawBars(fd){
+ const [ctx,w,h]=resizeCanvas(bars);clear(ctx,w,h);
+ let arr=[...new Set(fd.map(x=>x.dept))].map(d=>({d,v:Math.round(fd.filter(x=>x.dept===d).reduce((s,x)=>s+x.target,0)/Math.max(1,fd.filter(x=>x.dept===d).length))})).sort((a,b)=>b.v-a.v).slice(0,8);
+ const left=120,top=12,bh=(h-30)/Math.max(1,arr.length);
+ arr.forEach((x,i)=>{let y=top+i*bh;ctx.fillStyle="#e8eef5";ctx.fillRect(10,y+7,w-left-25,12);ctx.fillStyle="#2f80ed";ctx.fillRect(10,y+7,(w-left-25)*x.v/100,12);ctx.fillStyle="#172033";ctx.textAlign="right";ctx.font="10px Tahoma";ctx.fillText(x.d,w-5,y+17);ctx.textAlign="left";ctx.fillStyle="#123b67";ctx.fillText(x.v+"%",15+(w-left-25)*x.v/100,y+17)});
+}
+function drawStacked(fd){
+ const [ctx,w,h]=resizeCanvas(stacked);clear(ctx,w,h);
+ const vals=goals.map(g=>fd.filter(x=>x.goal===g[0]).reduce((s,x)=>s+x.weight,0)/Math.max(1,fd.filter(x=>x.goal===g[0]).length));
+ const colors=["#123b67","#2f80ed","#73a8df","#9dbddd","#c8d9eb"];let x=20,y=h/2-25,ww=w-40;
+ vals.forEach((v,i)=>{let bw=ww*v/vals.reduce((a,b)=>a+b,0);ctx.fillStyle=colors[i];ctx.fillRect(x,y,bw,50);if(bw>35){ctx.fillStyle=i<3?"#fff":"#123b67";ctx.textAlign="center";ctx.font="bold 11px Tahoma";ctx.fillText(Math.round(v)+"%",x+bw/2,y+29)}x+=bw});
+ ctx.fillStyle="#6b778c";ctx.textAlign="center";ctx.font="11px Tahoma";ctx.fillText("متوسط توزيع أوزان الأهداف",w/2,y+82);
+}
+function drawHistogram(fd){
+ const [ctx,w,h]=resizeCanvas(histogram);clear(ctx,w,h);const cats=[85,90,95,100],max=Math.max(...cats.map(c=>fd.filter(x=>x.target===c).length),1);
+ cats.forEach((v,i)=>{let count=fd.filter(x=>x.target===v).length,bw=(w-70)/4-18,x=30+i*((w-70)/4),bh=(h-55)*count/max;ctx.fillStyle="#2f80ed";ctx.fillRect(x,h-35-bh,bw,bh);ctx.fillStyle="#123b67";ctx.textAlign="center";ctx.font="bold 11px Tahoma";ctx.fillText(count,x+bw/2,h-42-bh);ctx.fillStyle="#6b778c";ctx.fillText(v+"%",x+bw/2,h-15)});
+}
+function drawRoles(fd){
+ const [ctx,w,h]=resizeCanvas(rolesChart);clear(ctx,w,h);const rs=["R1","R2","R3"],colors=["#123b67","#2f80ed","#73a8df"];
+ rs.forEach((r,i)=>{let subset=fd.filter(x=>x.role===r),vals=[subset.filter(x=>x.goal.includes("SLA")).length,subset.filter(x=>x.goal.includes("رضا")).length,subset.filter(x=>x.goal.includes("الشواهد")).length];let baseX=45+i*(w/3),max=Math.max(...vals,1);vals.forEach((v,j)=>{let bh=(h-70)*v/max/3,x=baseX+j*26;ctx.fillStyle=colors[j];ctx.fillRect(x,h-35-bh,18,bh)});ctx.fillStyle="#123b67";ctx.textAlign="center";ctx.font="bold 11px Tahoma";ctx.fillText(r,baseX+26,h-15)});
+}
+function drawRadar(){
+ const labels=["المسؤولية 15","التعاون 10","التواصل 10","النتائج 15","تطوير الذات 15","الالتزام 15","القيادة 20"];
+ const vals=[15,10,10,15,15,15,20],n=vals.length,cx=150,cy=125,R=85;
+ let pts=vals.map((v,i)=>{let a=-Math.PI/2+i*2*Math.PI/n,r=R*v/20;return [cx+Math.cos(a)*r,cy+Math.sin(a)*r]});
+ let grid="";[.25,.5,.75,1].forEach(s=>{let p=[];for(let i=0;i<n;i++){let a=-Math.PI/2+i*2*Math.PI/n;p.push((cx+Math.cos(a)*R*s)+","+(cy+Math.sin(a)*R*s))}grid+=`<polygon points="${p.join(" ")}" fill="none" stroke="#dfe7ef"/>`});
+ let axes=labels.map((l,i)=>{let a=-Math.PI/2+i*2*Math.PI/n,x=cx+Math.cos(a)*R,y=cy+Math.sin(a)*R,tx=cx+Math.cos(a)*(R+28),ty=cy+Math.sin(a)*(R+25);return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e4e9ef"/><text x="${tx}" y="${ty}" text-anchor="middle" font-size="9" fill="#6b778c">${l}</text>`}).join("");
+ radar.innerHTML=`<svg viewBox="0 0 300 250">${grid}${axes}<polygon points="${pts.map(p=>p.join(",")).join(" ")}" fill="rgba(47,128,237,.22)" stroke="#2f80ed" stroke-width="2"/></svg>`;
+}
+function updateTable(fd){
+ const q=tableSearch.value.trim();const rows=fd.filter(x=>!q||Object.values(x).some(v=>String(v).includes(q)));
+ tableBody.innerHTML=rows.slice(0,500).map(x=>{let cls=x.target>=95?"good":x.target>=90?"warn":"bad",txt=x.target>=95?"مرتفع":x.target>=90?"متوسط":"يحتاج متابعة";return `<tr><td>${x.stage}</td><td>${x.dept}</td><td>${x.role}</td><td>${x.goal}</td><td>${x.weight}%</td><td>${x.target}%</td><td><div class="progress"><span style="width:${x.evidence}%"></span></div><small>${x.evidence}%</small></td><td><span class="pill ${cls}">${txt}</span></td></tr>`}).join("");
+ rowCount.textContent=rows.length+" سجل";
+}
+function updateKPIs(fd){
+ const depts=new Set(fd.map(x=>x.dept)).size,roleCount=new Set(fd.map(x=>x.dept+"|"+x.role)).size;
+ const avg=fd.length?fd.reduce((s,x)=>s+x.target,0)/fd.length:0,ev=fd.length?fd.reduce((s,x)=>s+x.evidence,0)/fd.length:0;
+ kpiDepartments.textContent=depts;kpiRoles.textContent=roleCount;kpiTarget.textContent=Math.round(avg)+"%";
+ kpiQuality.textContent=Math.round(avg*.95)+"%";kpiMaturity.textContent=Math.round((avg+ev+86)/3)+"%";
+ const depAvgs=[...new Set(fd.map(x=>x.dept))].map(d=>fd.filter(x=>x.dept===d).reduce((s,x)=>s+x.target,0)/fd.filter(x=>x.dept===d).length);
+ kpiHigh.textContent=(depAvgs.length?Math.round(depAvgs.filter(v=>v>=90).length/depAvgs.length*100):0)+"%";
+ const ge=Math.round(ev);gaugeNum.textContent=ge+"%";gaugeArc.style.background=`conic-gradient(from 270deg,#14804a 0 ${ge}%,#e8edf3 ${ge}% 100%)`;
+}
+function refresh(){
+ const fd=filteredData();updateKPIs(fd);drawDonut(fd);drawBars(fd);drawStacked(fd);drawHistogram(fd);drawRoles(fd);updateTable(fd);
+}
+[stageFilter,deptFilter,roleFilter,targetFilter,goalSearch,tableSearch].forEach(el=>el.addEventListener("input",refresh));
+resetBtn.onclick=()=>{stageFilter.value="all";deptFilter.value="all";roleFilter.value="all";targetFilter.value="0";goalSearch.value="";tableSearch.value="";refresh()};
+window.addEventListener("resize",refresh);
+drawRadar();refresh();
+</script>
+</body>
+</html>

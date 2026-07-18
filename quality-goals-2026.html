@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script>
+(function(){
+  var granted = false;
+  try { granted = sessionStorage.getItem('ut_student_affairs_access') === 'granted'; } catch (e) {}
+  if (!granted && window.name.indexOf('UT_STUDENT_AFFAIRS_ACCESS') === -1) {
+    window.location.replace('index.html');
+  }
+})();
+</script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة أهداف الجودة 2026 - عمادة شؤون الطلاب</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#f5f8f6;
+      --surface:#ffffff;
+      --surface-2:#f7fbf9;
+      --text:#15342d;
+      --muted:#64756f;
+      --border:#dce8e3;
+      --primary:#00ad83;
+      --primary-dark:#007b61;
+      --primary-soft:#dff7ef;
+      --accent:#ffc20e;
+      --danger:#d94d4d;
+      --success:#119d73;
+      --shadow:0 12px 32px rgba(18,79,64,.09);
+      --radius:20px;
+      --grid:rgba(70,110,98,.12);
+    }
+    [data-theme="dark"]{
+      --bg:#091713;
+      --surface:#10241e;
+      --surface-2:#173029;
+      --text:#effcf7;
+      --muted:#a4bbb2;
+      --border:#28443a;
+      --primary:#1bd3a6;
+      --primary-dark:#0eb58e;
+      --primary-soft:#173d33;
+      --accent:#ffd23f;
+      --danger:#ff7777;
+      --success:#4ee0b3;
+      --shadow:0 16px 36px rgba(0,0,0,.28);
+      --grid:rgba(170,210,195,.12);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(0,173,131,.08), transparent 28rem),
+        var(--bg);
+      color:var(--text);
+      font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    }
+    button,input,select{font:inherit}
+    .container{width:min(1480px,95%);margin:auto;padding:22px 0 48px}
+    .hero{
+      position:relative;overflow:hidden;
+      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+      color:#fff;border-radius:28px;padding:28px;
+      box-shadow:var(--shadow);margin-bottom:18px;
+      display:flex;justify-content:space-between;align-items:center;gap:20px;
+    }
+    .hero::after{
+      content:"2026";position:absolute;left:24px;bottom:-34px;
+      font-size:8rem;font-weight:900;opacity:.09;line-height:1;
+    }
+    .hero h1{margin:0;font-size:clamp(1.55rem,2.8vw,2.45rem);font-weight:900}
+    .hero p{margin:9px 0 0;max-width:850px;line-height:1.75;opacity:.9}
+    .hero-actions{display:flex;gap:9px;flex-wrap:wrap;position:relative;z-index:2}
+    .hero-btn{
+      border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);
+      color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:800
+    }
+    .hero-btn.accent{background:var(--accent);border-color:var(--accent);color:#2d2a18}
+    .note{
+      background:var(--surface);border:1px solid var(--border);border-right:5px solid var(--accent);
+      border-radius:15px;padding:13px 16px;color:var(--muted);line-height:1.7;margin-bottom:18px;
+      box-shadow:var(--shadow);font-size:.9rem
+    }
+    .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}
+    .kpi{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden
+    }
+    .kpi::before{
+      content:"";position:absolute;right:0;top:0;width:5px;height:100%;background:var(--primary)
+    }
+    .kpi-label{font-size:.82rem;color:var(--muted);font-weight:800;margin-bottom:8px}
+    .kpi-value{font-size:1.75rem;font-weight:900}
+    .kpi-sub{font-size:.78rem;color:var(--muted);margin-top:8px}
+    .filters{
+      display:grid;grid-template-columns:1.5fr 1fr 1fr 1.25fr auto;
+      gap:11px;align-items:end;background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-bottom:18px
+    }
+    label{display:block;font-size:.78rem;color:var(--muted);font-weight:800;margin-bottom:6px}
+    input,select{
+      width:100%;background:var(--surface-2);color:var(--text);
+      border:1px solid var(--border);border-radius:11px;padding:10px 12px;outline:none
+    }
+    input:focus,select:focus{border-color:var(--primary)}
+    .reset{
+      border:0;border-radius:11px;padding:11px 17px;background:var(--accent);
+      color:#252617;font-weight:900;cursor:pointer;white-space:nowrap
+    }
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;min-height:330px
+    }
+    .span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-7{grid-column:span 7}
+    .span-6{grid-column:span 6}.span-5{grid-column:span 5}.span-4{grid-column:span 4}
+    .card h2{margin:0;font-size:1rem;font-weight:900}
+    .sub{font-size:.78rem;color:var(--muted);margin-top:5px}
+    .chart-wrap{height:275px;margin-top:12px;position:relative}
+    .section-title{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      margin:24px 2px 12px
+    }
+    .section-title h2{margin:0;font-size:1.25rem}
+    .count-badge{
+      background:var(--primary-soft);color:var(--primary-dark);
+      border-radius:999px;padding:7px 11px;font-size:.8rem;font-weight:900
+    }
+    .indicator-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+    .indicator{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden
+    }
+    .indicator::after{
+      content:"";position:absolute;top:0;right:0;left:0;height:4px;background:var(--primary)
+    }
+    .indicator-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .indicator-no{
+      min-width:35px;height:35px;border-radius:11px;background:var(--primary-soft);
+      color:var(--primary-dark);display:grid;place-items:center;font-weight:900
+    }
+    .indicator h3{margin:0;font-size:1.02rem;line-height:1.55}
+    .category{
+      display:inline-flex;margin-top:7px;background:var(--surface-2);border:1px solid var(--border);
+      color:var(--muted);border-radius:999px;padding:5px 9px;font-size:.72rem;font-weight:800
+    }
+    .target-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
+    .target-box{background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:11px}
+    .target-box span{display:block;font-size:.72rem;color:var(--muted);font-weight:800}
+    .target-box strong{display:block;margin-top:5px;font-size:.98rem}
+    .mini-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .mini-info div{font-size:.8rem;color:var(--muted);line-height:1.55}
+    .mini-info strong{color:var(--text)}
+    .details-btn{
+      width:100%;border:1px solid var(--primary);background:transparent;color:var(--primary-dark);
+      border-radius:11px;padding:9px;font-weight:900;cursor:pointer
+    }
+    .details-btn:hover{background:var(--primary-soft)}
+    .empty{
+      grid-column:1/-1;text-align:center;background:var(--surface);border:1px dashed var(--border);
+      border-radius:var(--radius);padding:34px;color:var(--muted)
+    }
+    .table-card{min-height:auto;margin-top:16px}
+    .table-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:13px;max-height:600px}
+    table{border-collapse:collapse;width:100%;min-width:1300px}
+    th,td{padding:12px 13px;text-align:right;border-bottom:1px solid var(--border);vertical-align:top;font-size:.8rem;line-height:1.65}
+    th{position:sticky;top:0;background:var(--surface-2);z-index:1;font-weight:900}
+    tbody tr:hover td{background:rgba(0,173,131,.04)}
+    .pill{
+      display:inline-flex;background:var(--primary-soft);color:var(--primary-dark);
+      border-radius:999px;padding:4px 8px;font-size:.72rem;font-weight:900
+    }
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:50;
+      display:none;align-items:center;justify-content:center;padding:18px
+    }
+    .modal.show{display:flex}
+    .modal-box{
+      width:min(900px,100%);max-height:90vh;overflow:auto;background:var(--surface);
+      color:var(--text);border-radius:24px;border:1px solid var(--border);box-shadow:0 24px 70px rgba(0,0,0,.28)
+    }
+    .modal-top{
+      position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);
+      padding:18px 20px;display:flex;justify-content:space-between;gap:15px;align-items:flex-start
+    }
+    .modal-top h3{margin:0;line-height:1.55}
+    .close{
+      border:0;background:var(--surface-2);color:var(--text);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:1.2rem
+    }
+    .modal-content{padding:20px}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .detail{
+      background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:13px
+    }
+    .detail.wide{grid-column:1/-1}
+    .detail span{font-size:.73rem;color:var(--muted);font-weight:900}
+    .detail p{margin:7px 0 0;line-height:1.75;font-size:.88rem}
+    .footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:24px}
+    @media(max-width:1150px){
+      .kpis{grid-template-columns:repeat(3,1fr)}
+      .filters{grid-template-columns:repeat(2,1fr)}
+      .span-8,.span-7,.span-6,.span-5,.span-4{grid-column:span 6}
+    }
+    @media(max-width:760px){
+      .container{width:94%;padding-top:12px}
+      .hero{flex-direction:column;align-items:flex-start;padding:20px;border-radius:20px}
+      .hero::after{font-size:5rem}
+      .kpis{grid-template-columns:1fr 1fr}
+      .filters{grid-template-columns:1fr}
+      .span-8,.span-7,.span-6,.span-5,.span-4,.span-12{grid-column:span 12}
+      .indicator-grid{grid-template-columns:1fr}
+      .detail-grid{grid-template-columns:1fr}
+      .detail.wide{grid-column:auto}
+    }
+    @media(max-width:480px){.kpis{grid-template-columns:1fr}.target-row,.mini-info{grid-template-columns:1fr}}
+    @media print{
+      .hero-actions,.filters,.details-btn,.modal{display:none!important}
+      body{background:#fff}.container{width:100%;padding:0}.hero,.card,.indicator,.kpi{box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <div>
+        <h1>لوحة أهداف الجودة 2026</h1>
+        <p>لوحة مرجعية تنفيذية لأهداف الجودة في عمادة شؤون الطلاب، تشمل المؤشرات والمستهدفات وحدود القبول وطرق القياس ومصادر البيانات ومسؤوليات المتابعة.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="hero-btn accent" onclick="window.print()">طباعة اللوحة</button>
+        <button class="hero-btn" id="themeToggle">الوضع الداكن</button>
+      </div>
+    </header>
+
+    <div class="note">
+      البيانات الواردة في الملف تمثل <strong>تعريف المؤشرات ومستهدفاتها لعام 2026</strong>، ولا تتضمن نتائج أداء فعلية؛ لذلك تعرض اللوحة الخطة المعتمدة دون افتراض نسب إنجاز غير موجودة.
+    </div>
+
+    <section class="kpis">
+      <article class="kpi"><div class="kpi-label">إجمالي مؤشرات الجودة</div><div class="kpi-value" id="totalIndicators">8</div><div class="kpi-sub">مؤشرات معتمدة لعام 2026</div></article>
+      <article class="kpi"><div class="kpi-label">القياس الشهري</div><div class="kpi-value" id="monthlyCount">5</div><div class="kpi-sub">من إجمالي المؤشرات</div></article>
+      <article class="kpi"><div class="kpi-label">التقرير الربع سنوي</div><div class="kpi-value" id="quarterReportCount">7</div><div class="kpi-sub">ومؤشر واحد بتقرير فصلي</div></article>
+      <article class="kpi"><div class="kpi-label">متوسط المستهدفات النسبية</div><div class="kpi-value">93.6٪</div><div class="kpi-sub">باستثناء مؤشر خفض التكرار</div></article>
+      <article class="kpi"><div class="kpi-label">مجالات المؤشرات</div><div class="kpi-value" id="categoryCount">6</div><div class="kpi-sub">تجربة، شكاوى، امتثال، تشغيل، موردون، تحسين</div></article>
+    </section>
+
+    <section class="filters">
+      <div><label for="search">بحث في المؤشرات</label><input id="search" placeholder="ابحث باسم المؤشر أو الهدف أو المالك"></div>
+      <div><label for="categoryFilter">المجال</label><select id="categoryFilter"><option value="all">جميع المجالات</option></select></div>
+      <div><label for="measureFilter">تواتر القياس</label><select id="measureFilter"><option value="all">جميع الفترات</option><option>شهري</option><option>ربع سنوي</option></select></div>
+      <div><label for="ownerFilter">مالك البيانات</label><select id="ownerFilter"><option value="all">جميع الملاك</option></select></div>
+      <button class="reset" id="reset">إعادة تعيين</button>
+    </section>
+
+    <section class="grid">
+      <article class="card span-7">
+        <h2>المستهدف وحد القبول لكل مؤشر</h2>
+        <div class="sub">القيم الرقمية تمثل النسب المئوية؛ مؤشر تكرار الشكاوى يمثل نسبة الخفض عن خط الأساس</div>
+        <div class="chart-wrap"><canvas id="targetChart"></canvas></div>
+      </article>
+      <article class="card span-5">
+        <h2>توزيع تواتر القياس</h2>
+        <div class="sub">عدد المؤشرات بحسب دورية القياس</div>
+        <div class="chart-wrap"><canvas id="frequencyChart"></canvas></div>
+      </article>
+      <article class="card span-6">
+        <h2>توزيع المؤشرات حسب المجال</h2>
+        <div class="sub">التغطية الموضوعية لأهداف الجودة</div>
+        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+      </article>
+      <article class="card span-6">
+        <h2>توزيع مسؤولية ملكية البيانات</h2>
+        <div class="sub">عدد المؤشرات المرتبطة بكل جهة أو دور مسؤول</div>
+        <div class="chart-wrap"><canvas id="ownerChart"></canvas></div>
+      </article>
+    </section>
+
+    <div class="section-title">
+      <h2>بطاقات المؤشرات</h2>
+      <span class="count-badge" id="visibleCount">8 مؤشرات</span>
+    </div>
+    <section class="indicator-grid" id="indicatorGrid"></section>
+
+    <article class="card table-card">
+      <div class="table-head">
+        <div><h2>الجدول التفصيلي لأهداف الجودة</h2><div class="sub">جميع المعلومات المستخلصة من ملف أهداف الجودة 2026</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>اسم المؤشر</th>
+              <th>الهدف</th>
+              <th>طريقة الاحتساب</th>
+              <th>المصدر</th>
+              <th>مالك البيانات</th>
+              <th>القياس</th>
+              <th>التقرير</th>
+              <th>خط الأساس</th>
+              <th>المستهدف</th>
+              <th>حد القبول</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <div class="footer">المصدر: ملف «أهداف الجودة 2026» - وحدة التطوير والجودة، عمادة شؤون الطلاب.</div>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <div><span class="category" id="modalCategory"></span><h3 id="modalTitle"></h3></div>
+        <button class="close" id="closeModal">×</button>
+      </div>
+      <div class="modal-content"><div class="detail-grid" id="modalDetails"></div></div>
+    </div>
+  </div>
+
+<script>
+const indicators = [
+  {
+    id:1,
+    category:"تجربة المستفيد",
+    name:"متوسط رضا المستفيدين عن خدمات العمادة عبر مراحل رحلة الطالب",
+    goal:"رفع رضا المستفيدين عن خدمات العمادة وتعزيز جودة تجربة الطالب.",
+    formula:"متوسط درجات الرضا لكافة الاستبيانات المجمعة خلال الفترة لكل خدمة، ثم حساب متوسط المرحلة.",
+    source:"أداة قياس رضا المستفيدين المعتمدة وسجل نتائج الاستبيانات.",
+    owner:"منسق القياس والبيانات بالتعاون مع مالك الخدمات",
+    measure:"شهري",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق آخر دورة قياس معتمدة",
+    target:"لا يقل عن 85٪",
+    acceptance:"لا يقل عن 80٪",
+    targetValue:85,
+    acceptanceValue:80,
+    deviation:"تحليل النتائج وتحديد الأسباب وتطبيق إجراء تصحيحي أو خطة تحسين، ثم إعادة القياس والتحقق من الفاعلية.",
+    evidence:"نموذج قياس رضا المستفيدين، سجل النتائج، تقرير تحليل الاتجاهات، خطة تحسين، محاضر متابعة.",
+    iso:"6.2، 9.1.2، 9.1.3، 9.3، 10.2، 7.5"
+  },
+  {
+    id:2,
+    category:"الشكاوى والبلاغات",
+    name:"نسبة إغلاق الشكاوى والبلاغات ضمن المدة المعتمدة",
+    goal:"تحسين جودة معالجة الشكاوى والبلاغات وضمان الإغلاق ضمن مدد معتمدة.",
+    formula:"عدد الشكاوى المغلقة ضمن المدة المعتمدة ÷ إجمالي الشكاوى المغلقة خلال الفترة × 100.",
+    source:"سجل الشكاوى والبلاغات ونظام المتابعة المعتمد.",
+    owner:"مسؤول الشكاوى وحقوق الطالب بالتعاون مع مالك الخدمات",
+    measure:"شهري",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق آخر ربع سنوي معتمد",
+    target:"لا يقل عن 90٪",
+    acceptance:"لا يقل عن 85٪",
+    targetValue:90,
+    acceptanceValue:85,
+    deviation:"تصنيف أسباب التأخير وتنفيذ إجراء تصحيحي، وتحديث آلية المتابعة ومسار التصعيد، ثم التحقق من الفاعلية.",
+    evidence:"سجل الشكاوى، تقارير زمن الإغلاق، محاضر لجان معالجة، قرارات وتوصيات، سجل متابعة تنفيذ التوصيات.",
+    iso:"8.2، 9.1.2، 9.1.3، 10.2، 7.5"
+  },
+  {
+    id:3,
+    category:"الشكاوى والبلاغات",
+    name:"معدل تكرار الشكاوى لنفس السبب خلال الفترة",
+    goal:"تقليل الشكاوى المتكررة عبر معالجة السبب الجذري وتحسين العملية.",
+    formula:"عدد الشكاوى المتكررة لنفس السبب ÷ إجمالي الشكاوى خلال الفترة × 100.",
+    source:"سجل الشكاوى مصنفة حسب الأسباب وتحليل الاتجاهات.",
+    owner:"مسؤول الشكاوى وحقوق الطالب مع ممثل الجودة",
+    measure:"ربع سنوي",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق آخر دورة قياس سنوي معتمدة",
+    target:"خفض بمقدار 20٪ عن خط الأساس",
+    acceptance:"خفض بمقدار 10٪ عن خط الأساس",
+    targetValue:20,
+    acceptanceValue:10,
+    deviation:"تنفيذ تحليل السبب الجذري وتحديث الإجراء أو الضابط التشغيلي، وتعميم الدروس المستفادة ثم متابعة الأثر.",
+    evidence:"تحليل أسباب تكرار الشكاوى، سجل إجراءات تصحيحية، محاضر متابعة، تقارير أثر.",
+    iso:"9.1.3، 10.2، 10.3، 7.5"
+  },
+  {
+    id:4,
+    category:"التوثيق والامتثال",
+    name:"نسبة اكتمال حزمة الشواهد الإلزامية لكل مرحلة من رحلة الطالب",
+    goal:"ضمان اكتمال الشواهد وضبط المعلومات الموثقة وقابلية التتبع للتدقيق.",
+    formula:"عدد الشواهد المكتملة والمعتمدة ÷ إجمالي الشواهد الإلزامية خلال الفترة × 100.",
+    source:"قائمة الشواهد المعتمدة ومستودع الشواهد وسجل مراجعة الالتزام.",
+    owner:"مدير الجودة بالعمادة بالتعاون مع مالك الشواهد",
+    measure:"ربع سنوي",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق آخر دورة قياس معتمدة",
+    target:"اكتمال 100٪",
+    acceptance:"لا يقل عن 95٪",
+    targetValue:100,
+    acceptanceValue:95,
+    deviation:"تحديد الفجوات وتكليف المالك بخطة استكمال وضبط الإصدارات، ثم إعادة المراجعة.",
+    evidence:"قائمة الشواهد، سجل مراجعة الالتزام، محاضر متابعة، خطة استكمال، سجلات اعتماد.",
+    iso:"4.4، 7.5، 9.2، 9.3، 10.2"
+  },
+  {
+    id:5,
+    category:"التشغيل والبرامج",
+    name:"نسبة تنفيذ الخطة التشغيلية للبرامج والأنشطة مع توثيق التقييم",
+    goal:"رفع انضباط تنفيذ الخطة التشغيلية وتحسين جودة البرامج والأنشطة.",
+    formula:"عدد البرامج والأنشطة المنفذة والمغلقة بتقرير تقييم ÷ إجمالي البرامج المعتمدة خلال الفترة × 100.",
+    source:"التقويم التشغيلي، سجل الفعاليات، تقارير بعد الفعالية، ونتائج التقييم.",
+    owner:"مالك البرامج بإدارات العمادة بالتنسيق مع منسق القياس",
+    measure:"شهري",
+    report:"فصلي",
+    baseline:"يعتمد وفق نتائج آخر فصل دراسي معتمد",
+    target:"لا يقل عن 95٪",
+    acceptance:"لا يقل عن 90٪",
+    targetValue:95,
+    acceptanceValue:90,
+    deviation:"تحليل أسباب عدم التنفيذ أو نقص التقييم، وتعديل الجدولة والموارد، ثم متابعة الإغلاق.",
+    evidence:"تقويم تشغيلي، سجل تنفيذ، تقارير بعد الفعالية، أدوات تقييم، محاضر متابعة.",
+    iso:"6.2، 8.1، 9.1، 7.5، 10.3"
+  },
+  {
+    id:6,
+    category:"إدارة الموردين",
+    name:"نسبة التزام الموردين الخارجيين بمستوى الخدمة للخدمات الحرجة",
+    goal:"رفع كفاءة إدارة الموردين الخارجيين وضمان استمرارية وجودة الخدمات المقدمة للطالب.",
+    formula:"عدد التزامات مستوى الخدمة المتحققة من المورد خلال الفترة ÷ إجمالي التزامات مستوى الخدمة خلال الفترة × 100.",
+    source:"تقارير أداء المورد، محاضر متابعة العقد، سجلات البلاغات والملاحظات.",
+    owner:"مالك العقد والإدارة المستفيدة بالتنسيق مع مدير الجودة",
+    measure:"شهري",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق متوسط آخر ثلاثة أشهر معتمدة",
+    target:"لا يقل عن 95٪",
+    acceptance:"لا يقل عن 90٪",
+    targetValue:95,
+    acceptanceValue:90,
+    deviation:"إشعار المورد بخطة تصحيح ومتابعة تنفيذها، وفرض الجزاءات عند الحاجة، وتقييم الاستمرارية.",
+    evidence:"عقد وخطة مستوى خدمة، محاضر متابعة، تقارير أداء، مراسلات، خطة تصحيح للمورد.",
+    iso:"8.4، 8.1، 9.1، 10.2، 7.5"
+  },
+  {
+    id:7,
+    category:"التحسين المستمر",
+    name:"نسبة إغلاق الإجراءات التصحيحية ضمن المدة المعتمدة",
+    goal:"رفع فاعلية التحسين عبر إغلاق الإجراءات التصحيحية في وقتها ومعالجة الأسباب الجذرية.",
+    formula:"عدد الإجراءات التصحيحية المغلقة ضمن المدة المعتمدة ÷ إجمالي الإجراءات التصحيحية المغلقة خلال الفترة × 100.",
+    source:"سجل عدم المطابقة والإجراءات التصحيحية.",
+    owner:"مدير الجودة بالتعاون مع مالك العمليات",
+    measure:"شهري",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق آخر ربع سنوي معتمد",
+    target:"لا يقل عن 90٪",
+    acceptance:"لا يقل عن 85٪",
+    targetValue:90,
+    acceptanceValue:85,
+    deviation:"تحليل أسباب التأخر وإزالة العوائق وتعديل الموارد أو الخطة، وتفعيل التصعيد، ثم إعادة المتابعة.",
+    evidence:"سجل إجراءات تصحيحية، تقارير متابعة، محاضر تصعيد، قرارات إغلاق.",
+    iso:"9.3، 7.5، 9.1، 10.2"
+  },
+  {
+    id:8,
+    category:"التحسين المستمر",
+    name:"نسبة التحقق من فاعلية الإجراءات التصحيحية بعد الإغلاق",
+    goal:"ضمان أن الإجراءات التصحيحية فعالة وتمنع تكرار عدم المطابقة.",
+    formula:"عدد الإجراءات التصحيحية التي تم التحقق من فاعليتها ÷ إجمالي الإجراءات التصحيحية المغلقة خلال الفترة × 100.",
+    source:"سجل التحقق من الفاعلية، تقارير إعادة القياس، وسجل عدم المطابقة.",
+    owner:"مدير الجودة",
+    measure:"ربع سنوي",
+    report:"ربع سنوي",
+    baseline:"يعتمد وفق آخر ربع سنوي معتمد",
+    target:"تحقق من الفاعلية بنسبة 100٪",
+    acceptance:"لا يقل عن 95٪",
+    targetValue:100,
+    acceptanceValue:95,
+    deviation:"إعادة فتح الإجراء التصحيحي وتحديث تحليل السبب، وتطبيق إجراء إضافي، ثم إعادة التحقق.",
+    evidence:"نماذج تحقق فاعلية، نتائج إعادة قياس، تقارير تدقيق داخلي، محاضر متابعة.",
+    iso:"10.2، 9.2، 9.1.3، 7.5"
+  }
+];
+
+const colors=["#00ad83","#ffc20e","#2980b9","#8e63ce","#e67e22","#16a085"];
+const grid=document.getElementById("indicatorGrid");
+const tbody=document.getElementById("tableBody");
+const search=document.getElementById("search");
+const categoryFilter=document.getElementById("categoryFilter");
+const measureFilter=document.getElementById("measureFilter");
+const ownerFilter=document.getElementById("ownerFilter");
+const modal=document.getElementById("modal");
+
+const categories=[...new Set(indicators.map(x=>x.category))];
+const owners=[...new Set(indicators.map(x=>x.owner))];
+categories.forEach(x=>categoryFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
+owners.forEach(x=>ownerFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
+
+function filtered(){
+  const q=search.value.trim().toLowerCase();
+  return indicators.filter(x =>
+    (!q || `${x.name} ${x.goal} ${x.owner} ${x.source}`.toLowerCase().includes(q)) &&
+    (categoryFilter.value==="all" || x.category===categoryFilter.value) &&
+    (measureFilter.value==="all" || x.measure===measureFilter.value) &&
+    (ownerFilter.value==="all" || x.owner===ownerFilter.value)
+  );
+}
+
+function render(){
+  const data=filtered();
+  document.getElementById("visibleCount").textContent=`${data.length} ${data.length===1?"مؤشر":"مؤشرات"}`;
+  grid.innerHTML=data.length?data.map(x=>`
+    <article class="indicator">
+      <div class="indicator-head">
+        <div><h3>${x.name}</h3><span class="category">${x.category}</span></div>
+        <div class="indicator-no">${x.id}</div>
+      </div>
+      <div class="target-row">
+        <div class="target-box"><span>المستهدف</span><strong>${x.target}</strong></div>
+        <div class="target-box"><span>حد القبول</span><strong>${x.acceptance}</strong></div>
+      </div>
+      <div class="mini-info">
+        <div><strong>القياس:</strong> ${x.measure}</div>
+        <div><strong>التقرير:</strong> ${x.report}</div>
+        <div><strong>مالك البيانات:</strong> ${x.owner}</div>
+        <div><strong>خط الأساس:</strong> ${x.baseline}</div>
+      </div>
+      <button class="details-btn" onclick="openDetails(${x.id})">عرض جميع التفاصيل</button>
+    </article>`).join(""):`<div class="empty">لا توجد مؤشرات مطابقة للفلاتر الحالية.</div>`;
+
+  tbody.innerHTML=data.length?data.map(x=>`
+    <tr>
+      <td><strong>${x.name}</strong><br><span class="pill">${x.category}</span></td>
+      <td>${x.goal}</td>
+      <td>${x.formula}</td>
+      <td>${x.source}</td>
+      <td>${x.owner}</td>
+      <td>${x.measure}</td>
+      <td>${x.report}</td>
+      <td>${x.baseline}</td>
+      <td><strong>${x.target}</strong></td>
+      <td>${x.acceptance}</td>
+    </tr>`).join(""):`<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:28px">لا توجد نتائج.</td></tr>`;
+}
+
+window.openDetails=id=>{
+  const x=indicators.find(i=>i.id===id);
+  document.getElementById("modalCategory").textContent=x.category;
+  document.getElementById("modalTitle").textContent=x.name;
+  const fields=[
+    ["الهدف من المؤشر",x.goal,true],
+    ["طريقة الاحتساب",x.formula,true],
+    ["مصدر البيانات",x.source,false],
+    ["مالك البيانات",x.owner,false],
+    ["تواتر القياس",x.measure,false],
+    ["تواتر التقرير",x.report,false],
+    ["خط الأساس",x.baseline,false],
+    ["المستهدف",x.target,false],
+    ["حدود القبول",x.acceptance,false],
+    ["الإجراء عند الانحراف",x.deviation,true],
+    ["الشواهد الداعمة",x.evidence,true],
+    ["ارتباط ISO 9001:2015",x.iso,true]
+  ];
+  document.getElementById("modalDetails").innerHTML=fields.map(f=>`
+    <div class="detail ${f[2]?"wide":""}"><span>${f[0]}</span><p>${f[1]}</p></div>`).join("");
+  modal.classList.add("show");
+};
+document.getElementById("closeModal").onclick=()=>modal.classList.remove("show");
+modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("show")});
+
+[search,categoryFilter,measureFilter,ownerFilter].forEach(el=>el.addEventListener(el===search?"input":"change",render));
+document.getElementById("reset").onclick=()=>{
+  search.value="";categoryFilter.value="all";measureFilter.value="all";ownerFilter.value="all";render();
+};
+document.getElementById("themeToggle").onclick=()=>{
+  const root=document.documentElement;
+  const dark=root.dataset.theme==="dark";
+  root.dataset.theme=dark?"":"dark";
+  document.getElementById("themeToggle").textContent=dark?"الوضع الداكن":"الوضع الفاتح";
+  Object.values(charts).forEach(c=>c.update());
+};
+
+Chart.defaults.font.family='"Segoe UI",Tahoma,Arial,sans-serif';
+Chart.defaults.color=getComputedStyle(document.documentElement).getPropertyValue("--muted").trim();
+const commonGrid=()=>getComputedStyle(document.documentElement).getPropertyValue("--grid").trim();
+const charts={};
+
+charts.target=new Chart(document.getElementById("targetChart"),{
+  type:"bar",
+  data:{
+    labels:indicators.map(x=>`م${x.id}`),
+    datasets:[
+      {label:"المستهدف",data:indicators.map(x=>x.targetValue),backgroundColor:"#00ad83",borderRadius:7},
+      {label:"حد القبول",data:indicators.map(x=>x.acceptanceValue),backgroundColor:"#ffc20e",borderRadius:7}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:"index",intersect:false},
+    plugins:{
+      legend:{labels:{usePointStyle:true,boxWidth:9}},
+      tooltip:{callbacks:{
+        title:items=>indicators[items[0].dataIndex].name,
+        label:c=>`${c.dataset.label}: ${c.raw}٪`
+      }}
+    },
+    scales:{
+      x:{grid:{display:false}},
+      y:{beginAtZero:true,max:105,ticks:{callback:v=>v+"٪"},grid:{color:commonGrid()}}
+    }
+  }
+});
+
+const freqCounts=["شهري","ربع سنوي"].map(f=>indicators.filter(x=>x.measure===f).length);
+charts.frequency=new Chart(document.getElementById("frequencyChart"),{
+  type:"doughnut",
+  data:{labels:["شهري","ربع سنوي"],datasets:[{data:freqCounts,backgroundColor:["#00ad83","#ffc20e"],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true}}}}
+});
+
+const categoryCounts=categories.map(c=>indicators.filter(x=>x.category===c).length);
+charts.category=new Chart(document.getElementById("categoryChart"),{
+  type:"bar",
+  data:{labels:categories,datasets:[{label:"عدد المؤشرات",data:categoryCounts,backgroundColor:categories.map((_,i)=>colors[i%colors.length]),borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1},grid:{color:commonGrid()}},y:{grid:{display:false}}}}
+});
+
+const ownerGroups=[
+  ["إدارة الجودة",indicators.filter(x=>x.owner.includes("مدير الجودة")).length],
+  ["الشكاوى وحقوق الطالب",indicators.filter(x=>x.owner.includes("الشكاوى")).length],
+  ["القياس والبيانات",indicators.filter(x=>x.owner.includes("القياس")).length],
+  ["البرامج",indicators.filter(x=>x.owner.includes("مالك البرامج")).length],
+  ["العقود والموردون",indicators.filter(x=>x.owner.includes("مالك العقد")).length]
+];
+charts.owner=new Chart(document.getElementById("ownerChart"),{
+  type:"bar",
+  data:{labels:ownerGroups.map(x=>x[0]),datasets:[{label:"عدد المؤشرات",data:ownerGroups.map(x=>x[1]),backgroundColor:"#007b61",borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:commonGrid()}}}}
+});
+
+render();
+</script>
+</body>
+</html>
