@@ -237,7 +237,7 @@
         <p>تم نقل الرسوم البيانية إلى صفحة مستقلة لتكون القراءة أوضح وأسهل، مع عرض أكبر لكل رسم.</p>
       </div>
       <div class="hero-actions">
-        <a class="hero-btn" href="quality-goals-2026-main.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">العودة للوحة الرئيسية</a>
+        <button class="hero-btn" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية</button>
         <button class="hero-btn accent" onclick="window.print()">طباعة الرسوم</button>
         <button class="hero-btn" id="themeToggle">الوضع الداكن</button>
       </div>
@@ -503,6 +503,14 @@ charts.category=new Chart(document.getElementById("categoryChart"),{
   options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1,color:commonText()},grid:{color:commonGrid()}},y:{grid:{display:false},ticks:{color:commonText()}}}}
 });
 
+
+function goBackToMain(){
+  if (document.referrer && document.referrer !== window.location.href) {
+    window.history.back();
+    return;
+  }
+  window.location.href = "quality-goals-2026-main.html";
+}
 applyChartTheme();
 document.getElementById("themeToggle").onclick=()=>{
   const root=document.documentElement;
