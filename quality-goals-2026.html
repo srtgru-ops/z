@@ -12,7 +12,8 @@
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة أهداف الجودة 2026 - عمادة شؤون الطلاب</title>
+  <title>الرسوم البيانية - أهداف الجودة 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     :root{
       --bg:#f5f8f6;
@@ -221,81 +222,54 @@
       .hero-actions,.filters,.details-btn,.modal{display:none!important}
       body{background:#fff}.container{width:100%;padding:0}.hero,.card,.indicator,.kpi{box-shadow:none}
     }
+  
+.page-note{background:var(--surface);border:1px solid var(--border);border-right:5px solid var(--primary);border-radius:15px;padding:14px 16px;color:var(--muted);line-height:1.8;margin-bottom:18px;box-shadow:var(--shadow);font-size:.92rem}
+.chart-wrap{height:360px}
+.card{min-height:430px}
+@media(max-width:760px){.chart-wrap{height:300px}.card{min-height:360px}}
   </style>
 </head>
 <body>
   <main class="container">
     <header class="hero">
       <div>
-        <h1>لوحة أهداف الجودة 2026</h1>
-        <p>لوحة مرجعية تنفيذية لأهداف الجودة في عمادة شؤون الطلاب، تشمل المؤشرات والمستهدفات وحدود القبول وطرق القياس ومصادر البيانات ومسؤوليات المتابعة.</p>
+        <h1>الرسوم البيانية لأهداف الجودة 2026</h1>
+        <p>تم نقل الرسوم البيانية إلى صفحة مستقلة لتكون القراءة أوضح وأسهل، مع عرض أكبر لكل رسم.</p>
       </div>
       <div class="hero-actions">
-        <a class="hero-btn" href="quality-goals-2026-charts.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">عرض الرسوم البيانية</a>
-        <button class="hero-btn accent" onclick="window.print()">طباعة اللوحة</button>
+        <button class="hero-btn" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية</button>
+        <button class="hero-btn accent" onclick="window.print()">طباعة الرسوم</button>
         <button class="hero-btn" id="themeToggle">الوضع الداكن</button>
       </div>
     </header>
 
-    <section class="kpis">
-      <article class="kpi"><div class="kpi-label">إجمالي مؤشرات الجودة</div><div class="kpi-value" id="totalIndicators">8</div><div class="kpi-sub">مؤشرات معتمدة لعام 2026</div></article>
-      <article class="kpi"><div class="kpi-label">القياس الشهري</div><div class="kpi-value" id="monthlyCount">5</div><div class="kpi-sub">من إجمالي المؤشرات</div></article>
-      <article class="kpi"><div class="kpi-label">التقرير الربع سنوي</div><div class="kpi-value" id="quarterReportCount">7</div><div class="kpi-sub">ومؤشر واحد بتقرير فصلي</div></article>
-      <article class="kpi"><div class="kpi-label">متوسط المستهدفات النسبية</div><div class="kpi-value">93.6٪</div><div class="kpi-sub">باستثناء مؤشر خفض التكرار</div></article>
-      <article class="kpi"><div class="kpi-label">مجالات المؤشرات</div><div class="kpi-value" id="categoryCount">6</div><div class="kpi-sub">تجربة، شكاوى، امتثال، تشغيل، موردون، تحسين</div></article>
+    <div class="page-note">هذه الصفحة مخصصة للرسوم البيانية فقط، حتى تظهر المؤشرات والتحليلات البصرية بشكل أكبر وأسهل في القراءة.</div>
+
+    <section class="grid">
+      <article class="card span-7">
+        <h2>المستهدف وحد القبول لكل مؤشر</h2>
+        <div class="sub">القيم الرقمية تمثل النسب المئوية؛ مؤشر تكرار الشكاوى يمثل نسبة الخفض عن خط الأساس</div>
+        <div class="chart-wrap"><canvas id="targetChart"></canvas></div>
+      </article>
+      <article class="card span-5">
+        <h2>توزيع تواتر القياس</h2>
+        <div class="sub">عدد المؤشرات بحسب دورية القياس</div>
+        <div class="chart-wrap"><canvas id="frequencyChart"></canvas></div>
+      </article>
+      <article class="card span-6">
+        <h2>توزيع مسؤولية ملكية البيانات</h2>
+        <div class="sub">عدد المؤشرات المرتبطة بكل جهة أو دور مسؤول</div>
+        <div class="chart-wrap"><canvas id="ownerChart"></canvas></div>
+      </article>
+      <article class="card span-6">
+        <h2>توزيع المؤشرات حسب المجال</h2>
+        <div class="sub">التغطية الموضوعية لأهداف الجودة</div>
+        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+      </article>
     </section>
-
-    <section class="filters">
-      <div><label for="search">بحث في المؤشرات</label><input id="search" placeholder="ابحث باسم المؤشر أو الهدف أو المالك"></div>
-      <div><label for="categoryFilter">المجال</label><select id="categoryFilter"><option value="all">جميع المجالات</option></select></div>
-      <div><label for="measureFilter">تواتر القياس</label><select id="measureFilter"><option value="all">جميع الفترات</option><option>شهري</option><option>ربع سنوي</option></select></div>
-      <div><label for="ownerFilter">مالك البيانات</label><select id="ownerFilter"><option value="all">جميع الملاك</option></select></div>
-      <button class="reset" id="reset">إعادة تعيين</button>
-    </section>
-
-    <div class="section-title">
-      <h2>بطاقات المؤشرات</h2>
-      <span class="count-badge" id="visibleCount">8 مؤشرات</span>
-    </div>
-    <section class="indicator-grid" id="indicatorGrid"></section>
-
-    <article class="card table-card">
-      <div class="table-head">
-        <div><h2>الجدول التفصيلي لأهداف الجودة</h2><div class="sub">جميع المعلومات المستخلصة من ملف أهداف الجودة 2026</div></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>اسم المؤشر</th>
-              <th>الهدف</th>
-              <th>طريقة الاحتساب</th>
-              <th>المصدر</th>
-              <th>مالك البيانات</th>
-              <th>القياس</th>
-              <th>التقرير</th>
-              <th>خط الأساس</th>
-              <th>المستهدف</th>
-              <th>حد القبول</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </article>
 
     <div class="footer">المصدر: ملف «أهداف الجودة 2026» - وحدة التطوير والجودة، عمادة شؤون الطلاب.</div>
   </main>
-
-  <div class="modal" id="modal">
-    <div class="modal-box">
-      <div class="modal-top">
-        <div><span class="category" id="modalCategory"></span><h3 id="modalTitle"></h3></div>
-        <button class="close" id="closeModal">×</button>
-      </div>
-      <div class="modal-content"><div class="detail-grid" id="modalDetails"></div></div>
-    </div>
-  </div>
 
 <script>
 const indicators = [
@@ -452,112 +426,99 @@ const indicators = [
     iso:"10.2، 9.2، 9.1.3، 7.5"
   }
 ];
-
-const grid=document.getElementById("indicatorGrid");
-const tbody=document.getElementById("tableBody");
-const search=document.getElementById("search");
-const categoryFilter=document.getElementById("categoryFilter");
-const measureFilter=document.getElementById("measureFilter");
-const ownerFilter=document.getElementById("ownerFilter");
-const modal=document.getElementById("modal");
-
+const colors=["#00ad83","#ffc20e","#2980b9","#8e63ce","#e67e22","#16a085"];
 const categories=[...new Set(indicators.map(x=>x.category))];
-const owners=[...new Set(indicators.map(x=>x.owner))];
-categories.forEach(x=>categoryFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
-owners.forEach(x=>ownerFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
 
-document.getElementById("totalIndicators").textContent = indicators.length;
-document.getElementById("monthlyCount").textContent = indicators.filter(x=>x.measure==="شهري").length;
-document.getElementById("quarterReportCount").textContent = indicators.filter(x=>x.report==="ربع سنوي").length;
-document.getElementById("categoryCount").textContent = categories.length;
+Chart.defaults.font.family='"Segoe UI",Tahoma,Arial,sans-serif';
+const commonGrid=()=>getComputedStyle(document.documentElement).getPropertyValue("--grid").trim();
+const commonText=()=>getComputedStyle(document.documentElement).getPropertyValue("--muted").trim();
+const charts={};
 
-function filtered(){
-  const q=search.value.trim().toLowerCase();
-  return indicators.filter(x =>
-    (!q || `${x.name} ${x.goal} ${x.owner} ${x.source}`.toLowerCase().includes(q)) &&
-    (categoryFilter.value==="all" || x.category===categoryFilter.value) &&
-    (measureFilter.value==="all" || x.measure===measureFilter.value) &&
-    (ownerFilter.value==="all" || x.owner===ownerFilter.value)
-  );
+function applyChartTheme(){
+  Chart.defaults.color = commonText();
+  Object.values(charts).forEach(chart=>{
+    if(chart.options.scales){
+      Object.values(chart.options.scales).forEach(scale=>{
+        if(scale.grid) scale.grid.color = commonGrid();
+        if(scale.ticks) scale.ticks.color = commonText();
+      });
+    }
+    if(chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels){
+      chart.options.plugins.legend.labels.color = commonText();
+    }
+    chart.update();
+  });
 }
 
-function render(){
-  const data=filtered();
-  document.getElementById("visibleCount").textContent=`${data.length} ${data.length===1?"مؤشر":"مؤشرات"}`;
-  grid.innerHTML=data.length?data.map(x=>`
-    <article class="indicator">
-      <div class="indicator-head">
-        <div><h3>${x.name}</h3><span class="category">${x.category}</span></div>
-        <div class="indicator-no">${x.id}</div>
-      </div>
-      <div class="target-row">
-        <div class="target-box"><span>المستهدف</span><strong>${x.target}</strong></div>
-        <div class="target-box"><span>حد القبول</span><strong>${x.acceptance}</strong></div>
-      </div>
-      <div class="mini-info">
-        <div><strong>القياس:</strong> ${x.measure}</div>
-        <div><strong>التقرير:</strong> ${x.report}</div>
-        <div><strong>مالك البيانات:</strong> ${x.owner}</div>
-        <div><strong>خط الأساس:</strong> ${x.baseline}</div>
-      </div>
-      <button class="details-btn" onclick="openDetails(${x.id})">عرض جميع التفاصيل</button>
-    </article>`).join(""):`<div class="empty">لا توجد مؤشرات مطابقة للفلاتر الحالية.</div>`;
+charts.target=new Chart(document.getElementById("targetChart"),{
+  type:"bar",
+  data:{
+    labels:indicators.map(x=>`م${x.id}`),
+    datasets:[
+      {label:"المستهدف",data:indicators.map(x=>x.targetValue),backgroundColor:"#00ad83",borderRadius:7},
+      {label:"حد القبول",data:indicators.map(x=>x.acceptanceValue),backgroundColor:"#ffc20e",borderRadius:7}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:"index",intersect:false},
+    plugins:{
+      legend:{labels:{usePointStyle:true,boxWidth:9,color:commonText()}},
+      tooltip:{callbacks:{
+        title:items=>indicators[items[0].dataIndex].name,
+        label:c=>`${c.dataset.label}: ${c.raw}٪`
+      }}
+    },
+    scales:{
+      x:{grid:{display:false},ticks:{color:commonText()}},
+      y:{beginAtZero:true,max:105,ticks:{callback:v=>v+"٪",color:commonText()},grid:{color:commonGrid()}}
+    }
+  }
+});
 
-  tbody.innerHTML=data.length?data.map(x=>`
-    <tr>
-      <td><strong>${x.name}</strong><br><span class="pill">${x.category}</span></td>
-      <td>${x.goal}</td>
-      <td>${x.formula}</td>
-      <td>${x.source}</td>
-      <td>${x.owner}</td>
-      <td>${x.measure}</td>
-      <td>${x.report}</td>
-      <td>${x.baseline}</td>
-      <td><strong>${x.target}</strong></td>
-      <td>${x.acceptance}</td>
-    </tr>`).join(""):`<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:28px">لا توجد نتائج.</td></tr>`;
+const freqCounts=["شهري","ربع سنوي"].map(f=>indicators.filter(x=>x.measure===f).length);
+charts.frequency=new Chart(document.getElementById("frequencyChart"),{
+  type:"doughnut",
+  data:{labels:["شهري","ربع سنوي"],datasets:[{data:freqCounts,backgroundColor:["#00ad83","#ffc20e"],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true,color:commonText()}}}}
+});
+
+const ownerGroups=[
+  ["إدارة الجودة",indicators.filter(x=>x.owner.includes("مدير الجودة")).length],
+  ["الشكاوى وحقوق الطالب",indicators.filter(x=>x.owner.includes("الشكاوى")).length],
+  ["القياس والبيانات",indicators.filter(x=>x.owner.includes("القياس")).length],
+  ["البرامج",indicators.filter(x=>x.owner.includes("مالك البرامج")).length],
+  ["العقود والموردون",indicators.filter(x=>x.owner.includes("مالك العقد")).length]
+];
+charts.owner=new Chart(document.getElementById("ownerChart"),{
+  type:"bar",
+  data:{labels:ownerGroups.map(x=>x[0]),datasets:[{label:"عدد المؤشرات",data:ownerGroups.map(x=>x[1]),backgroundColor:"#007b61",borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:commonText()}},y:{beginAtZero:true,ticks:{stepSize:1,color:commonText()},grid:{color:commonGrid()}}}}
+});
+
+const categoryCounts=categories.map(c=>indicators.filter(x=>x.category===c).length);
+charts.category=new Chart(document.getElementById("categoryChart"),{
+  type:"bar",
+  data:{labels:categories,datasets:[{label:"عدد المؤشرات",data:categoryCounts,backgroundColor:categories.map((_,i)=>colors[i%colors.length]),borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1,color:commonText()},grid:{color:commonGrid()}},y:{grid:{display:false},ticks:{color:commonText()}}}}
+});
+
+
+function goBackToMain(){
+  if (document.referrer && document.referrer !== window.location.href) {
+    window.history.back();
+    return;
+  }
+  window.location.href = "quality-goals-2026-main.html";
 }
-
-window.openDetails=id=>{
-  const x=indicators.find(i=>i.id===id);
-  document.getElementById("modalCategory").textContent=x.category;
-  document.getElementById("modalTitle").textContent=x.name;
-  const fields=[
-    ["الهدف من المؤشر",x.goal,true],
-    ["طريقة الاحتساب",x.formula,true],
-    ["مصدر البيانات",x.source,false],
-    ["مالك البيانات",x.owner,false],
-    ["تواتر القياس",x.measure,false],
-    ["تواتر التقرير",x.report,false],
-    ["خط الأساس",x.baseline,false],
-    ["المستهدف",x.target,false],
-    ["حدود القبول",x.acceptance,false],
-    ["الإجراء عند الانحراف",x.deviation,true],
-    ["الشواهد الداعمة",x.evidence,true],
-    ["ارتباط ISO 9001:2015",x.iso,true]
-  ];
-  document.getElementById("modalDetails").innerHTML=fields.map(f=>`
-    <div class="detail ${f[2]?"wide":""}"><span>${f[0]}</span><p>${f[1]}</p></div>`).join("");
-  modal.classList.add("show");
-};
-
-document.getElementById("closeModal").onclick=()=>modal.classList.remove("show");
-modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("show")});
-
-[search,categoryFilter,measureFilter,ownerFilter].forEach(el=>el.addEventListener(el===search?"input":"change",render));
-document.getElementById("reset").onclick=()=>{
-  search.value="";categoryFilter.value="all";measureFilter.value="all";ownerFilter.value="all";render();
-};
-
+applyChartTheme();
 document.getElementById("themeToggle").onclick=()=>{
   const root=document.documentElement;
   const dark=root.dataset.theme==="dark";
   root.dataset.theme=dark?"":"dark";
   document.getElementById("themeToggle").textContent=dark?"الوضع الداكن":"الوضع الفاتح";
+  applyChartTheme();
 };
-
-render();
 </script>
 </body>
 </html>
