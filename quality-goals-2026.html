@@ -129,34 +129,38 @@
       background:var(--primary-soft);color:var(--primary-dark);
       border-radius:999px;padding:7px 11px;font-size:.8rem;font-weight:900
     }
-    .indicator-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+    .indicator-grid{display:grid;grid-template-columns:1fr;gap:18px;max-width:1100px;margin:0 auto}
     .indicator{
       background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden
+      box-shadow:var(--shadow);padding:22px;position:relative;overflow:hidden
     }
+    .indicator-body{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}
+    .indicator-main{min-width:0}
+    .indicator-side{display:flex;flex-direction:column;gap:12px}
+    .info-panel{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:12px}
     .indicator::after{
       content:"";position:absolute;top:0;right:0;left:0;height:4px;background:var(--primary)
     }
-    .indicator-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .indicator-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:8px}
     .indicator-no{
       min-width:35px;height:35px;border-radius:11px;background:var(--primary-soft);
       color:var(--primary-dark);display:grid;place-items:center;font-weight:900
     }
-    .indicator h3{margin:0;font-size:1.02rem;line-height:1.55}
+    .indicator h3{margin:0;font-size:1.12rem;line-height:1.9;font-weight:900}
     .category{
-      display:inline-flex;margin-top:7px;background:var(--surface-2);border:1px solid var(--border);
-      color:var(--muted);border-radius:999px;padding:5px 9px;font-size:.72rem;font-weight:800
+      display:inline-flex;margin-top:8px;background:var(--surface-2);border:1px solid var(--border);
+      color:var(--muted);border-radius:999px;padding:6px 11px;font-size:.76rem;font-weight:800
     }
-    .target-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
-    .target-box{background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:11px}
-    .target-box span{display:block;font-size:.72rem;color:var(--muted);font-weight:800}
-    .target-box strong{display:block;margin-top:5px;font-size:.98rem}
-    .mini-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-    .mini-info div{font-size:.8rem;color:var(--muted);line-height:1.55}
+    .target-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0}
+    .target-box{background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:13px 12px}
+    .target-box span{display:block;font-size:.76rem;color:var(--muted);font-weight:800;margin-bottom:4px}
+    .target-box strong{display:block;margin-top:4px;font-size:1rem;line-height:1.8}
+    .mini-info{display:grid;grid-template-columns:1fr;gap:10px;margin:0}
+    .mini-info div{font-size:.86rem;color:var(--muted);line-height:1.8;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
     .mini-info strong{color:var(--text)}
     .details-btn{
       width:100%;border:1px solid var(--primary);background:transparent;color:var(--primary-dark);
-      border-radius:11px;padding:9px;font-weight:900;cursor:pointer
+      border-radius:11px;padding:11px 12px;font-weight:900;cursor:pointer;margin-top:14px
     }
     .details-btn:hover{background:var(--primary-soft)}
     .empty{
@@ -213,6 +217,7 @@
       .filters{grid-template-columns:1fr}
       .span-8,.span-7,.span-6,.span-5,.span-4,.span-12{grid-column:span 12}
       .indicator-grid{grid-template-columns:1fr}
+      .indicator-body{grid-template-columns:1fr}
       .detail-grid{grid-template-columns:1fr}
       .detail.wide{grid-column:auto}
     }
@@ -487,20 +492,33 @@ function render(){
   grid.innerHTML=data.length?data.map(x=>`
     <article class="indicator">
       <div class="indicator-head">
-        <div><h3>${x.name}</h3><span class="category">${x.category}</span></div>
+        <div class="indicator-main">
+          <h3>${x.name}</h3>
+          <span class="category">${x.category}</span>
+        </div>
         <div class="indicator-no">${x.id}</div>
       </div>
-      <div class="target-row">
-        <div class="target-box"><span>المستهدف</span><strong>${x.target}</strong></div>
-        <div class="target-box"><span>حد القبول</span><strong>${x.acceptance}</strong></div>
+      <div class="indicator-body">
+        <div class="indicator-main">
+          <div class="info-panel" style="margin-bottom:12px">
+            <div style="font-size:.78rem;color:var(--muted);font-weight:800;margin-bottom:6px">الهدف من المؤشر</div>
+            <div style="line-height:1.9;font-size:.93rem">${x.goal}</div>
+          </div>
+          <div class="mini-info">
+            <div><strong>القياس:</strong> ${x.measure}</div>
+            <div><strong>التقرير:</strong> ${x.report}</div>
+            <div><strong>مالك البيانات:</strong> ${x.owner}</div>
+            <div><strong>خط الأساس:</strong> ${x.baseline}</div>
+          </div>
+        </div>
+        <div class="indicator-side">
+          <div class="target-row">
+            <div class="target-box"><span>المستهدف</span><strong>${x.target}</strong></div>
+            <div class="target-box"><span>حد القبول</span><strong>${x.acceptance}</strong></div>
+          </div>
+          <button class="details-btn" onclick="openDetails(${x.id})">عرض جميع التفاصيل</button>
+        </div>
       </div>
-      <div class="mini-info">
-        <div><strong>القياس:</strong> ${x.measure}</div>
-        <div><strong>التقرير:</strong> ${x.report}</div>
-        <div><strong>مالك البيانات:</strong> ${x.owner}</div>
-        <div><strong>خط الأساس:</strong> ${x.baseline}</div>
-      </div>
-      <button class="details-btn" onclick="openDetails(${x.id})">عرض جميع التفاصيل</button>
     </article>`).join(""):`<div class="empty">لا توجد مؤشرات مطابقة للفلاتر الحالية.</div>`;
 
   tbody.innerHTML=data.length?data.map(x=>`
