@@ -10,11 +10,9 @@
   }
 })();
 </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>لوحة أهداف الجودة 2026 - عمادة شؤون الطلاب</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     :root{
       --bg:#f5f8f6;
@@ -233,14 +231,11 @@
         <p>لوحة مرجعية تنفيذية لأهداف الجودة في عمادة شؤون الطلاب، تشمل المؤشرات والمستهدفات وحدود القبول وطرق القياس ومصادر البيانات ومسؤوليات المتابعة.</p>
       </div>
       <div class="hero-actions">
+        <a class="hero-btn" href="quality-goals-2026-charts.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">عرض الرسوم البيانية</a>
         <button class="hero-btn accent" onclick="window.print()">طباعة اللوحة</button>
         <button class="hero-btn" id="themeToggle">الوضع الداكن</button>
       </div>
     </header>
-
-    <div class="note">
-      البيانات الواردة في الملف تمثل <strong>تعريف المؤشرات ومستهدفاتها لعام 2026</strong>، ولا تتضمن نتائج أداء فعلية؛ لذلك تعرض اللوحة الخطة المعتمدة دون افتراض نسب إنجاز غير موجودة.
-    </div>
 
     <section class="kpis">
       <article class="kpi"><div class="kpi-label">إجمالي مؤشرات الجودة</div><div class="kpi-value" id="totalIndicators">8</div><div class="kpi-sub">مؤشرات معتمدة لعام 2026</div></article>
@@ -256,29 +251,6 @@
       <div><label for="measureFilter">تواتر القياس</label><select id="measureFilter"><option value="all">جميع الفترات</option><option>شهري</option><option>ربع سنوي</option></select></div>
       <div><label for="ownerFilter">مالك البيانات</label><select id="ownerFilter"><option value="all">جميع الملاك</option></select></div>
       <button class="reset" id="reset">إعادة تعيين</button>
-    </section>
-
-    <section class="grid">
-      <article class="card span-7">
-        <h2>المستهدف وحد القبول لكل مؤشر</h2>
-        <div class="sub">القيم الرقمية تمثل النسب المئوية؛ مؤشر تكرار الشكاوى يمثل نسبة الخفض عن خط الأساس</div>
-        <div class="chart-wrap"><canvas id="targetChart"></canvas></div>
-      </article>
-      <article class="card span-5">
-        <h2>توزيع تواتر القياس</h2>
-        <div class="sub">عدد المؤشرات بحسب دورية القياس</div>
-        <div class="chart-wrap"><canvas id="frequencyChart"></canvas></div>
-      </article>
-      <article class="card span-6">
-        <h2>توزيع المؤشرات حسب المجال</h2>
-        <div class="sub">التغطية الموضوعية لأهداف الجودة</div>
-        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
-      </article>
-      <article class="card span-6">
-        <h2>توزيع مسؤولية ملكية البيانات</h2>
-        <div class="sub">عدد المؤشرات المرتبطة بكل جهة أو دور مسؤول</div>
-        <div class="chart-wrap"><canvas id="ownerChart"></canvas></div>
-      </article>
     </section>
 
     <div class="section-title">
@@ -481,7 +453,6 @@ const indicators = [
   }
 ];
 
-const colors=["#00ad83","#ffc20e","#2980b9","#8e63ce","#e67e22","#16a085"];
 const grid=document.getElementById("indicatorGrid");
 const tbody=document.getElementById("tableBody");
 const search=document.getElementById("search");
@@ -494,6 +465,11 @@ const categories=[...new Set(indicators.map(x=>x.category))];
 const owners=[...new Set(indicators.map(x=>x.owner))];
 categories.forEach(x=>categoryFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
 owners.forEach(x=>ownerFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
+
+document.getElementById("totalIndicators").textContent = indicators.length;
+document.getElementById("monthlyCount").textContent = indicators.filter(x=>x.measure==="شهري").length;
+document.getElementById("quarterReportCount").textContent = indicators.filter(x=>x.report==="ربع سنوي").length;
+document.getElementById("categoryCount").textContent = categories.length;
 
 function filtered(){
   const q=search.value.trim().toLowerCase();
@@ -564,6 +540,7 @@ window.openDetails=id=>{
     <div class="detail ${f[2]?"wide":""}"><span>${f[0]}</span><p>${f[1]}</p></div>`).join("");
   modal.classList.add("show");
 };
+
 document.getElementById("closeModal").onclick=()=>modal.classList.remove("show");
 modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("show")});
@@ -572,71 +549,13 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remo
 document.getElementById("reset").onclick=()=>{
   search.value="";categoryFilter.value="all";measureFilter.value="all";ownerFilter.value="all";render();
 };
+
 document.getElementById("themeToggle").onclick=()=>{
   const root=document.documentElement;
   const dark=root.dataset.theme==="dark";
   root.dataset.theme=dark?"":"dark";
   document.getElementById("themeToggle").textContent=dark?"الوضع الداكن":"الوضع الفاتح";
-  Object.values(charts).forEach(c=>c.update());
 };
-
-Chart.defaults.font.family='"Segoe UI",Tahoma,Arial,sans-serif';
-Chart.defaults.color=getComputedStyle(document.documentElement).getPropertyValue("--muted").trim();
-const commonGrid=()=>getComputedStyle(document.documentElement).getPropertyValue("--grid").trim();
-const charts={};
-
-charts.target=new Chart(document.getElementById("targetChart"),{
-  type:"bar",
-  data:{
-    labels:indicators.map(x=>`م${x.id}`),
-    datasets:[
-      {label:"المستهدف",data:indicators.map(x=>x.targetValue),backgroundColor:"#00ad83",borderRadius:7},
-      {label:"حد القبول",data:indicators.map(x=>x.acceptanceValue),backgroundColor:"#ffc20e",borderRadius:7}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    interaction:{mode:"index",intersect:false},
-    plugins:{
-      legend:{labels:{usePointStyle:true,boxWidth:9}},
-      tooltip:{callbacks:{
-        title:items=>indicators[items[0].dataIndex].name,
-        label:c=>`${c.dataset.label}: ${c.raw}٪`
-      }}
-    },
-    scales:{
-      x:{grid:{display:false}},
-      y:{beginAtZero:true,max:105,ticks:{callback:v=>v+"٪"},grid:{color:commonGrid()}}
-    }
-  }
-});
-
-const freqCounts=["شهري","ربع سنوي"].map(f=>indicators.filter(x=>x.measure===f).length);
-charts.frequency=new Chart(document.getElementById("frequencyChart"),{
-  type:"doughnut",
-  data:{labels:["شهري","ربع سنوي"],datasets:[{data:freqCounts,backgroundColor:["#00ad83","#ffc20e"],borderWidth:0}]},
-  options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true}}}}
-});
-
-const categoryCounts=categories.map(c=>indicators.filter(x=>x.category===c).length);
-charts.category=new Chart(document.getElementById("categoryChart"),{
-  type:"bar",
-  data:{labels:categories,datasets:[{label:"عدد المؤشرات",data:categoryCounts,backgroundColor:categories.map((_,i)=>colors[i%colors.length]),borderRadius:8}]},
-  options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1},grid:{color:commonGrid()}},y:{grid:{display:false}}}}
-});
-
-const ownerGroups=[
-  ["إدارة الجودة",indicators.filter(x=>x.owner.includes("مدير الجودة")).length],
-  ["الشكاوى وحقوق الطالب",indicators.filter(x=>x.owner.includes("الشكاوى")).length],
-  ["القياس والبيانات",indicators.filter(x=>x.owner.includes("القياس")).length],
-  ["البرامج",indicators.filter(x=>x.owner.includes("مالك البرامج")).length],
-  ["العقود والموردون",indicators.filter(x=>x.owner.includes("مالك العقد")).length]
-];
-charts.owner=new Chart(document.getElementById("ownerChart"),{
-  type:"bar",
-  data:{labels:ownerGroups.map(x=>x[0]),datasets:[{label:"عدد المؤشرات",data:ownerGroups.map(x=>x[1]),backgroundColor:"#007b61",borderRadius:8}]},
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:commonGrid()}}}}
-});
 
 render();
 </script>
