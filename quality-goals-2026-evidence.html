@@ -330,8 +330,51 @@
 @media(max-width:760px){.evidence-list{grid-template-columns:1fr}.evidence-kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.evidence-kpis{grid-template-columns:1fr}}
 </style>
+<style>
+
+  /* زر العودة الموحد */
+  .portal-home-btn{
+    position:fixed;
+    top:18px;
+    left:18px;
+    z-index:10000;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:42px;
+    padding:0 15px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#087a45,#0b8a50);
+    color:#fff !important;
+    border:1px solid rgba(255,255,255,.35);
+    box-shadow:0 10px 24px rgba(5,78,46,.20);
+    text-decoration:none !important;
+    font-family:"Tajawal","Segoe UI",Tahoma,Arial,sans-serif;
+    font-size:13px;
+    font-weight:900;
+    line-height:1;
+    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
+  }
+  .portal-home-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px rgba(5,78,46,.28);
+    filter:brightness(1.04);
+  }
+  .portal-home-btn:focus-visible{
+    outline:3px solid rgba(201,168,76,.45);
+    outline-offset:3px;
+  }
+  .portal-home-btn .portal-home-icon{font-size:17px;line-height:1}
+  @media(max-width:650px){
+    .portal-home-btn{top:10px;left:10px;min-height:39px;padding:0 12px;font-size:12px;border-radius:11px}
+  }
+  @media print{.portal-home-btn{display:none!important}}
+
+</style>
 </head>
 <body>
+  <a class="portal-home-btn" href="index.html" aria-label="العودة للصفحة الرئيسية"><span class="portal-home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
   <div class="side-menu-backdrop" id="menuBackdrop"></div>
   <aside class="side-menu" id="sideMenu">
     <div class="side-menu-header">
