@@ -306,6 +306,7 @@
     </div>
     <div class="menu-list">
       <button class="menu-item" type="button" onclick="goToCharts()">عرض الرسوم البيانية <span class="alert-count" id="menuAlertCount" style="display:none">0</span></button>
+      <button class="menu-item" type="button" onclick="goToEvidence()">الشواهد</button>
       <button class="menu-item accent" type="button" onclick="window.print();closeMenu()">طباعة اللوحة</button>
       <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
       <button class="menu-item" type="button" onclick="openDataEntry()">إدخال البيانات</button>
@@ -702,6 +703,10 @@ document.getElementById('menuBackdrop').onclick=closeMenu;
 function goToCharts(){
   try { sessionStorage.setItem('qualityGoalsMainUrl', window.location.href); } catch(e) {}
   window.location.href = new URL('quality-goals-2026-charts.html', window.location.href).href;
+}
+function goToEvidence(){
+  try { sessionStorage.setItem('qualityGoalsMainUrl', window.location.href); } catch(e) {}
+  window.location.href = new URL('quality-goals-2026-evidence.html', window.location.href).href;
 }
 render();
 </script>
