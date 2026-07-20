@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script>
+(function(){
+  var granted = false;
+  try { granted = sessionStorage.getItem('ut_student_affairs_access') === 'granted'; } catch (e) {}
+  if (!granted && window.name.indexOf('UT_STUDENT_AFFAIRS_ACCESS') === -1) {
+    window.location.replace('index.html');
+  }
+})();
+</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>دليل الشواهد 2026 - عمادة شؤون الطلاب</title>
+<style>
+
+    :root{
+      --bg:#f5f8f6;
+      --surface:#ffffff;
+      --surface-2:#f7fbf9;
+      --text:#15342d;
+      --muted:#64756f;
+      --border:#dce8e3;
+      --primary:#00ad83;
+      --primary-dark:#007b61;
+      --primary-soft:#dff7ef;
+      --accent:#ffc20e;
+      --danger:#d94d4d;
+      --success:#119d73;
+      --shadow:0 12px 32px rgba(18,79,64,.09);
+      --radius:20px;
+      --grid:rgba(70,110,98,.12);
+    }
+    [data-theme="dark"]{
+      --bg:#091713;
+      --surface:#10241e;
+      --surface-2:#173029;
+      --text:#effcf7;
+      --muted:#a4bbb2;
+      --border:#28443a;
+      --primary:#1bd3a6;
+      --primary-dark:#0eb58e;
+      --primary-soft:#173d33;
+      --accent:#ffd23f;
+      --danger:#ff7777;
+      --success:#4ee0b3;
+      --shadow:0 16px 36px rgba(0,0,0,.28);
+      --grid:rgba(170,210,195,.12);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(0,173,131,.08), transparent 28rem),
+        var(--bg);
+      color:var(--text);
+      font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    }
+    button,input,select{font:inherit}
+    .container{position:relative;width:min(1480px,95%);margin:auto;padding:22px 0 48px}
+    .hero{
+      position:relative;overflow:hidden;
+      background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+      color:#fff;border-radius:28px;padding:76px 28px 28px;
+      min-height:150px;box-shadow:var(--shadow);margin-bottom:18px;
+      display:flex;align-items:flex-start;gap:20px;
+    }
+    .hero-content{position:relative;z-index:2;max-width:880px;padding-top:0}
+    .hero::after{
+      content:"2026";position:absolute;left:24px;bottom:-34px;
+      font-size:8rem;font-weight:900;opacity:.09;line-height:1;
+    }
+    .hero h1{margin:0;font-size:clamp(1.55rem,2.8vw,2.45rem);font-weight:900}
+    .hero p{margin:9px 0 0;max-width:850px;line-height:1.75;opacity:.9}
+    .hero-actions{display:flex;gap:9px;flex-wrap:wrap;position:relative;z-index:2}
+    .hero-btn{
+      border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);
+      color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:800
+    }
+    .hero-btn.accent{background:var(--accent);border-color:var(--accent);color:#2d2a18}
+    .note{
+      background:var(--surface);border:1px solid var(--border);border-right:5px solid var(--accent);
+      border-radius:15px;padding:13px 16px;color:var(--muted);line-height:1.7;margin-bottom:18px;
+      box-shadow:var(--shadow);font-size:.9rem
+    }
+    .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}
+    .kpi{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden
+    }
+    .kpi::before{
+      content:"";position:absolute;right:0;top:0;width:5px;height:100%;background:var(--primary)
+    }
+    .kpi-label{font-size:.82rem;color:var(--muted);font-weight:800;margin-bottom:8px}
+    .kpi-value{font-size:1.75rem;font-weight:900}
+    .kpi-sub{font-size:.78rem;color:var(--muted);margin-top:8px}
+    .filters{
+      display:grid;grid-template-columns:1.5fr 1fr 1fr 1.25fr auto;
+      gap:11px;align-items:end;background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);margin-bottom:18px
+    }
+    label{display:block;font-size:.78rem;color:var(--muted);font-weight:800;margin-bottom:6px}
+    input,select{
+      width:100%;background:var(--surface-2);color:var(--text);
+      border:1px solid var(--border);border-radius:11px;padding:10px 12px;outline:none
+    }
+    input:focus,select:focus{border-color:var(--primary)}
+    .reset{
+      border:0;border-radius:11px;padding:11px 17px;background:var(--accent);
+      color:#252617;font-weight:900;cursor:pointer;white-space:nowrap
+    }
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;min-height:330px
+    }
+    .span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-7{grid-column:span 7}
+    .span-6{grid-column:span 6}.span-5{grid-column:span 5}.span-4{grid-column:span 4}
+    .card h2{margin:0;font-size:1rem;font-weight:900}
+    .sub{font-size:.78rem;color:var(--muted);margin-top:5px}
+    .chart-wrap{height:275px;margin-top:12px;position:relative}
+    .section-title{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      margin:24px 2px 12px
+    }
+    .section-title h2{margin:0;font-size:1.25rem}
+    .count-badge{
+      background:var(--primary-soft);color:var(--primary-dark);
+      border-radius:999px;padding:7px 11px;font-size:.8rem;font-weight:900
+    }
+    .indicator-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+    .indicator{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden
+    }
+    .indicator::after{
+      content:"";position:absolute;top:0;right:0;left:0;height:4px;background:var(--primary)
+    }
+    .indicator-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .indicator-no{
+      min-width:35px;height:35px;border-radius:11px;background:var(--primary-soft);
+      color:var(--primary-dark);display:grid;place-items:center;font-weight:900
+    }
+    .indicator h3{margin:0;font-size:1.02rem;line-height:1.55}
+    .category{
+      display:inline-flex;margin-top:7px;background:var(--surface-2);border:1px solid var(--border);
+      color:var(--muted);border-radius:999px;padding:5px 9px;font-size:.72rem;font-weight:800
+    }
+    .target-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
+    .target-box{background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:11px}
+    .target-box span{display:block;font-size:.72rem;color:var(--muted);font-weight:800}
+    .target-box strong{display:block;margin-top:5px;font-size:.98rem}
+    .mini-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .mini-info div{font-size:.8rem;color:var(--muted);line-height:1.55}
+    .mini-info strong{color:var(--text)}
+    .details-btn{
+      width:100%;border:1px solid var(--primary);background:transparent;color:var(--primary-dark);
+      border-radius:11px;padding:9px;font-weight:900;cursor:pointer
+    }
+    .details-btn:hover{background:var(--primary-soft)}
+    .empty{
+      grid-column:1/-1;text-align:center;background:var(--surface);border:1px dashed var(--border);
+      border-radius:var(--radius);padding:34px;color:var(--muted)
+    }
+    .table-card{min-height:auto;margin-top:16px}
+    .table-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:13px;max-height:600px}
+    table{border-collapse:collapse;width:100%;min-width:1300px}
+    th,td{padding:12px 13px;text-align:right;border-bottom:1px solid var(--border);vertical-align:top;font-size:.8rem;line-height:1.65}
+    th{position:sticky;top:0;background:var(--surface-2);z-index:1;font-weight:900}
+    tbody tr:hover td{background:rgba(0,173,131,.04)}
+    .pill{
+      display:inline-flex;background:var(--primary-soft);color:var(--primary-dark);
+      border-radius:999px;padding:4px 8px;font-size:.72rem;font-weight:900
+    }
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:50;
+      display:none;align-items:center;justify-content:center;padding:18px
+    }
+    .modal.show{display:flex}
+    .modal-box{
+      width:min(900px,100%);max-height:90vh;overflow:auto;background:var(--surface);
+      color:var(--text);border-radius:24px;border:1px solid var(--border);box-shadow:0 24px 70px rgba(0,0,0,.28)
+    }
+    .modal-top{
+      position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--border);
+      padding:18px 20px;display:flex;justify-content:space-between;gap:15px;align-items:flex-start
+    }
+    .modal-top h3{margin:0;line-height:1.55}
+    .close{
+      border:0;background:var(--surface-2);color:var(--text);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:1.2rem
+    }
+    .modal-content{padding:20px}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .detail{
+      background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:13px
+    }
+    .detail.wide{grid-column:1/-1}
+    .detail span{font-size:.73rem;color:var(--muted);font-weight:900}
+    .detail p{margin:7px 0 0;line-height:1.75;font-size:.88rem}
+    .footer{text-align:center;color:var(--muted);font-size:.82rem;margin-top:24px}
+    .footer a{color:var(--primary-dark);font-weight:900;text-decoration:none;border-bottom:1px dashed currentColor;padding-bottom:2px}
+    .footer a:hover{color:var(--primary);border-bottom-style:solid}
+    @media(max-width:1150px){
+      .kpis{grid-template-columns:repeat(3,1fr)}
+      .filters{grid-template-columns:repeat(2,1fr)}
+      .span-8,.span-7,.span-6,.span-5,.span-4{grid-column:span 6}
+    }
+    @media(max-width:760px){
+      .container{width:94%;padding-top:78px}
+      .hero{flex-direction:column;align-items:flex-start;padding:72px 20px 20px;border-radius:20px}
+      .hero-content{padding-top:0}
+      .menu-toggle{top:14px;right:14px}
+      .hero::after{font-size:5rem}
+      .kpis{grid-template-columns:1fr 1fr}
+      .filters{grid-template-columns:1fr}
+      .span-8,.span-7,.span-6,.span-5,.span-4,.span-12{grid-column:span 12}
+      .indicator-grid{grid-template-columns:1fr}
+      .detail-grid{grid-template-columns:1fr}
+      .detail.wide{grid-column:auto}
+    }
+    @media(max-width:480px){.kpis{grid-template-columns:1fr}.target-row,.mini-info{grid-template-columns:1fr}}
+    @media print{
+      .hero-actions,.filters,.details-btn,.modal{display:none!important}
+      body{background:#fff}.container{width:100%;padding:0}.hero,.card,.indicator,.kpi{box-shadow:none}
+    }
+  
+
+.menu-toggle{
+  border:1px solid rgba(255,255,255,.38);
+  background:rgba(255,255,255,.14);color:#fff;
+  padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
+  align-items:center;gap:10px;position:absolute;top:18px;right:18px;z-index:65;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);backdrop-filter:blur(8px)
+}
+.menu-toggle .bars{font-size:1.15rem;line-height:1}
+.side-menu-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.38);backdrop-filter:blur(2px);display:none;z-index:70
+}
+.side-menu-backdrop.show{display:block}
+.side-menu{
+  position:fixed;top:0;right:-360px;width:min(340px,88vw);height:100vh;background:var(--surface);
+  border-left:1px solid var(--border);box-shadow:-18px 0 40px rgba(0,0,0,.16);z-index:80;
+  transition:right .25s ease;display:flex;flex-direction:column;padding:18px
+}
+.side-menu.show{right:0}
+.side-menu-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.side-menu-title{font-size:1.1rem;font-weight:900}
+.side-menu-close{border:0;background:var(--surface-2);color:var(--text);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:1.1rem}
+.menu-list{display:flex;flex-direction:column;gap:10px}
+.menu-item{
+  width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+  border-radius:14px;padding:12px 14px;text-align:right;cursor:pointer;font-weight:900
+}
+.menu-item:hover{border-color:var(--primary);background:var(--primary-soft)}
+.menu-item.accent{background:var(--accent);border-color:var(--accent);color:#2d2a18}
+.menu-help{margin-top:auto;color:var(--muted);font-size:.78rem;line-height:1.7;padding-top:16px}
+.data-entry-modal .modal-box{width:min(1100px,100%)}
+.data-entry-actions{display:flex;gap:10px;flex-wrap:wrap}
+.data-entry-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.entry-card{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:14px}
+.entry-card h4{margin:0 0 6px;font-size:.95rem;line-height:1.7}
+.entry-meta{font-size:.76rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.entry-card input{margin-top:8px}
+.entry-status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:.74rem;font-weight:900;margin-top:10px}
+.entry-status.good,.actual-line.good{background:#e3f7ef;color:#0a7a58}
+.entry-status.accept,.actual-line.accept{background:#fff3cf;color:#8a6a00}
+.entry-status.bad,.actual-line.bad{background:#fde4e4;color:#b13f3f}
+.entry-status.na,.actual-line.na{background:var(--surface-2);color:var(--muted)}
+.actual-line{display:block;border-radius:12px;padding:8px 10px;font-size:.76rem;font-weight:800;margin-bottom:12px}
+.modal-note{color:var(--muted);font-size:.82rem;line-height:1.7;margin-top:6px}
+.secondary-btn{border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:11px;padding:10px 14px;font-weight:800;cursor:pointer}
+.primary-btn{border:0;background:var(--primary);color:#fff;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}
+.danger-btn{border:0;background:var(--danger);color:#fff;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}
+.save-status{font-size:.82rem;color:var(--muted);line-height:1.7}
+.dashboard-kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:18px}
+.kpi.status-good::before{background:#12a36f}.kpi.status-accept::before{background:#d8a100}.kpi.status-bad::before{background:#d94d4d}.kpi.status-na::before{background:#93a59e}
+.no-data-banner{background:var(--surface);border:1px dashed var(--border);border-radius:16px;padding:16px;color:var(--muted);line-height:1.8;margin-bottom:18px;text-align:center}
+@media(max-width:760px){
+  .data-entry-grid{grid-template-columns:1fr}
+}
+@media print{
+  .menu-toggle,.side-menu,.side-menu-backdrop,.data-entry-modal{display:none!important}
+}
+
+
+.priority-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+.priority-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:.74rem;font-weight:900}
+.priority-badge.high{background:#fde4e4;color:#b13f3f}
+.priority-badge.medium{background:#fff3cf;color:#8a6a00}
+.priority-badge.low{background:#e3f7ef;color:#0a7a58}
+.priority-badge.na{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.alert-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--danger);color:#fff;font-size:.72rem;font-weight:900;margin-inline-start:6px}
+
+
+
+.evidence-intro{background:var(--surface);border:1px solid var(--border);border-right:5px solid var(--accent);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:18px;line-height:1.9;color:var(--muted)}
+.evidence-intro strong{color:var(--text)}
+.evidence-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+.stage-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
+.stage-card::before{content:"";position:absolute;top:0;right:0;left:0;height:4px;background:var(--primary)}
+.stage-card h2{margin:0 0 6px;font-size:1.05rem}
+.stage-card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.75}
+.stage-progress{height:9px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;overflow:hidden;margin:14px 0 8px}
+.stage-progress span{display:block;height:100%;width:0;background:var(--primary);transition:width .2s ease}
+.stage-percent{font-size:.78rem;color:var(--muted);font-weight:800}
+.tracker{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:18px}
+.tracker-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.tracker-head h2{margin:0;font-size:1.2rem}
+.tracker-actions{display:flex;gap:9px;flex-wrap:wrap}
+.evidence-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.evidence-item{background:var(--surface-2);border:1px solid var(--border);border-radius:15px;padding:13px}
+.evidence-item-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}
+.evidence-item h3{margin:0;font-size:.92rem;line-height:1.65}
+.evidence-stage{display:inline-flex;border-radius:999px;padding:4px 8px;background:var(--primary-soft);color:var(--primary-dark);font-size:.68rem;font-weight:900;white-space:nowrap}
+.evidence-item select{margin-top:8px}
+.status-text{display:inline-flex;margin-top:8px;border-radius:999px;padding:5px 9px;font-size:.72rem;font-weight:900}
+.status-text.complete{background:#e3f7ef;color:#0a7a58}
+.status-text.progress{background:#fff3cf;color:#8a6a00}
+.status-text.none{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+.use-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.use-card{background:var(--surface);border:1px solid var(--border);border-radius:17px;padding:16px;box-shadow:var(--shadow)}
+.use-card h3{margin:0 0 7px;font-size:.95rem}
+.use-card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.8}
+.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.pdf-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.pdf-card-head h2{margin:0;font-size:1.15rem}
+.pdf-viewer{width:100%;height:760px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2)}
+.link-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:12px;padding:10px 14px;background:var(--primary);color:#fff;font-weight:900}
+@media(max-width:1150px){.stage-grid,.use-grid{grid-template-columns:1fr}.evidence-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.evidence-list{grid-template-columns:1fr}.pdf-viewer{height:520px}.evidence-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.evidence-kpis{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <div class="side-menu-backdrop" id="menuBackdrop"></div>
+  <aside class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+      <div class="side-menu-title">القائمة</div>
+      <button class="side-menu-close" type="button" onclick="closeMenu()">×</button>
+    </div>
+    <div class="menu-list">
+      <button class="menu-item" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية</button>
+      <button class="menu-item" type="button" onclick="goToCharts()">عرض الرسوم البيانية</button>
+      <a class="menu-item accent" href="quality-goals-2026-evidence.pdf" target="_blank" rel="noopener" style="text-decoration:none;display:block">فتح ملف الشواهد PDF</a>
+      <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
+    </div>
+    <div class="menu-help">هذه الصفحة تساعدك على متابعة جاهزية الشواهد، بينما يحتوي ملف PDF على التفاصيل الكاملة لكل حزمة.</div>
+  </aside>
+
+  <main class="container">
+    <header class="hero">
+      <div class="hero-content">
+        <h1>دليل الشواهد 2026</h1>
+      </div>
+      <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
+    </header>
+
+    <div class="evidence-intro">
+      <strong>كيف نستفيد من ملف الشواهد؟</strong><br>
+      الملف يحول كل هدف أو مؤشر إلى إثبات قابل للمراجعة، من خلال تحديد حزمة الشواهد، والسجلات أو النماذج الإلزامية، والمؤشرات المرتبطة، ووتيرة التحديث، ومالك الشاهد، وارتباطه بـ ISO 9001:2015. كما يوضح أن اكتمال الشواهد يدخل ضمن تقييم الأداء السنوي.
+    </div>
+
+    <section class="evidence-kpis">
+      <article class="kpi"><div class="kpi-label">إجمالي حزم الشواهد</div><div class="kpi-value">25</div><div class="kpi-sub">موزعة على ثلاث مراحل</div></article>
+      <article class="kpi"><div class="kpi-label">الحزم المكتملة</div><div class="kpi-value" id="completeCount">0</div><div class="kpi-sub">تم تجهيزها بالكامل</div></article>
+      <article class="kpi"><div class="kpi-label">قيد الاستكمال</div><div class="kpi-value" id="progressCount">0</div><div class="kpi-sub">تحتاج متابعة</div></article>
+      <article class="kpi"><div class="kpi-label">نسبة اكتمال الشواهد</div><div class="kpi-value" id="completionRate">0٪</div><div class="kpi-sub">من إجمالي الحزم</div></article>
+    </section>
+
+    <section class="stage-grid">
+      <article class="stage-card" data-stage="الدعم والاستقرار">
+        <h2>مرحلة الدعم والاستقرار</h2>
+        <p>تشمل الخدمات والطلبات والشكاوى والسلامة والموردين والمخاطر والتحسين.</p>
+        <div class="stage-progress"><span></span></div>
+        <div class="stage-percent">0٪ مكتمل</div>
+      </article>
+      <article class="stage-card" data-stage="التنمية والمشاركة">
+        <h2>مرحلة التنمية والمشاركة</h2>
+        <p>تشمل الأنشطة والمشاركة العلمية والاستدامة والبرامج والشراكات والتطوع والهوية.</p>
+        <div class="stage-progress"><span></span></div>
+        <div class="stage-percent">0٪ مكتمل</div>
+      </article>
+      <article class="stage-card" data-stage="التمكين المهني والخريجين">
+        <h2>مرحلة التمكين المهني والخريجين</h2>
+        <p>تشمل التدريب المهني والتوظيف ومنصة الخريجين وتحديث البيانات ورضا الخريجين.</p>
+        <div class="stage-progress"><span></span></div>
+        <div class="stage-percent">0٪ مكتمل</div>
+      </article>
+    </section>
+
+    <section class="use-grid">
+      <article class="use-card"><h3>1. ربط المؤشر بالشاهد</h3><p>عند تحديث أي مؤشر، يتم إرفاق السجل أو النموذج المحدد في الدليل بدل الاكتفاء بالنسبة الرقمية.</p></article>
+      <article class="use-card"><h3>2. توزيع المسؤولية</h3><p>يساعد عمود «مالك الشاهد» في تحديد الجهة المسؤولة عن التجهيز والتحديث والمتابعة.</p></article>
+      <article class="use-card"><h3>3. مراجعة دورية</h3><p>تُراجع الحزم حسب وتيرة التحديث الواردة في الدليل، وتُعالج الفجوات قبل التقارير الدورية والتقييم السنوي.</p></article>
+    </section>
+
+    <section class="tracker">
+      <div class="tracker-head">
+        <div><h2>متابعة اكتمال حزم الشواهد</h2><div class="sub">اختاري حالة كل حزمة، وسيتم حفظها على هذا الجهاز تلقائيًا.</div></div>
+        <div class="tracker-actions"><button class="secondary-btn" type="button" onclick="resetEvidence()">إعادة تعيين المتابعة</button></div>
+      </div>
+      <div class="evidence-list" id="evidenceList"></div>
+    </section>
+
+    <section class="pdf-card">
+      <div class="pdf-card-head">
+        <div><h2>ملف الشواهد الأصلي</h2><div class="sub">التفاصيل الكاملة للسجلات والنماذج، المؤشرات المرتبطة، وتيرة التحديث، المالك، وبنود ISO.</div></div>
+        <a class="link-btn" href="quality-goals-2026-evidence.pdf" target="_blank" rel="noopener">فتح الملف في صفحة مستقلة</a>
+      </div>
+      <iframe class="pdf-viewer" src="quality-goals-2026-evidence.pdf" title="ملف الشواهد 2026"></iframe>
+    </section>
+
+    <div class="footer">المصدر: <a href="quality-goals-2026-evidence.pdf" target="_blank" rel="noopener">ملف «الشواهد 2026» - وحدة التطوير والجودة، عمادة شؤون الطلاب.</a></div>
+  </main>
+
+<script>
+const evidencePackages = [
+  {id:1,stage:'الدعم والاستقرار',name:'SLA + دليل خدمات المرحلة'},
+  {id:2,stage:'الدعم والاستقرار',name:'سجل الطلبات والمعاملات الموحد'},
+  {id:3,stage:'الدعم والاستقرار',name:'الشكاوى والتظلمات وحقوق الطالب'},
+  {id:4,stage:'الدعم والاستقرار',name:'سلامة الخدمة والحوادث (نقل/سكن/إعاشة)'},
+  {id:5,stage:'الدعم والاستقرار',name:'الموردون والمتعهدون (نقل/إعاشة/تشغيل)'},
+  {id:6,stage:'الدعم والاستقرار',name:'المخاطر التشغيلية للمرحلة'},
+  {id:7,stage:'الدعم والاستقرار',name:'التحسين وعدم المطابقة'},
+  {id:8,stage:'التنمية والمشاركة',name:'الأندية والأنشطة الطلابية'},
+  {id:9,stage:'التنمية والمشاركة',name:'المشاركة العلمية (داخلية/دولية)'},
+  {id:10,stage:'التنمية والمشاركة',name:'الاستدامة البيئية'},
+  {id:11,stage:'التنمية والمشاركة',name:'البرامج المجتمعية'},
+  {id:12,stage:'التنمية والمشاركة',name:'المشاركة المجتمعية لمنسوبي الجامعة'},
+  {id:13,stage:'التنمية والمشاركة',name:'الشراكات المجتمعية'},
+  {id:14,stage:'التنمية والمشاركة',name:'رضا الشركاء'},
+  {id:15,stage:'التنمية والمشاركة',name:'التطوع'},
+  {id:16,stage:'التنمية والمشاركة',name:'المواطنة والهوية'},
+  {id:17,stage:'التمكين المهني والخريجين',name:'البرامج التدريبية المهنية'},
+  {id:18,stage:'التمكين المهني والخريجين',name:'الشراكات المهنية والتوظيف'},
+  {id:19,stage:'التمكين المهني والخريجين',name:'مخرجات التدريب والتوظيف'},
+  {id:20,stage:'التمكين المهني والخريجين',name:'يوم التوظيف'},
+  {id:21,stage:'التمكين المهني والخريجين',name:'منصة الخريجين'},
+  {id:22,stage:'التمكين المهني والخريجين',name:'استفادة الخريجين'},
+  {id:23,stage:'التمكين المهني والخريجين',name:'تحديث بيانات الخريجين'},
+  {id:24,stage:'التمكين المهني والخريجين',name:'رضا الخريجين'},
+  {id:25,stage:'التمكين المهني والخريجين',name:'توظيف بعد التخرج'}
+];
+const EVIDENCE_KEY = 'quality_goals_evidence_status_v1';
+function getEvidenceStatus(){ try { return JSON.parse(localStorage.getItem(EVIDENCE_KEY) || '{}'); } catch(e) { return {}; } }
+function setEvidenceStatus(data){ localStorage.setItem(EVIDENCE_KEY, JSON.stringify(data)); }
+function labelFor(status){ return status==='complete'?'مكتمل':status==='progress'?'قيد الاستكمال':'لم يبدأ'; }
+function classFor(status){ return status==='complete'?'complete':status==='progress'?'progress':'none'; }
+function renderEvidence(){
+  const statuses = getEvidenceStatus();
+  const holder = document.getElementById('evidenceList');
+  holder.innerHTML = evidencePackages.map(item=>{
+    const status = statuses[item.id] || 'none';
+    return `<article class="evidence-item">
+      <div class="evidence-item-head"><h3>${item.id}. ${item.name}</h3><span class="evidence-stage">${item.stage}</span></div>
+      <label for="evidence-${item.id}">حالة التجهيز</label>
+      <select id="evidence-${item.id}" onchange="updateEvidence(${item.id}, this.value)">
+        <option value="none" ${status==='none'?'selected':''}>لم يبدأ</option>
+        <option value="progress" ${status==='progress'?'selected':''}>قيد الاستكمال</option>
+        <option value="complete" ${status==='complete'?'selected':''}>مكتمل</option>
+      </select>
+      <span class="status-text ${classFor(status)}">${labelFor(status)}</span>
+    </article>`;
+  }).join('');
+  updateSummary();
+}
+function updateEvidence(id, status){
+  const statuses = getEvidenceStatus();
+  statuses[id] = status;
+  setEvidenceStatus(statuses);
+  renderEvidence();
+}
+function updateSummary(){
+  const statuses = getEvidenceStatus();
+  const complete = evidencePackages.filter(x=>statuses[x.id]==='complete').length;
+  const progress = evidencePackages.filter(x=>statuses[x.id]==='progress').length;
+  const rate = Math.round((complete/evidencePackages.length)*100);
+  document.getElementById('completeCount').textContent = complete;
+  document.getElementById('progressCount').textContent = progress;
+  document.getElementById('completionRate').textContent = rate+'٪';
+  document.querySelectorAll('.stage-card').forEach(card=>{
+    const stage = card.dataset.stage;
+    const items = evidencePackages.filter(x=>x.stage===stage);
+    const done = items.filter(x=>statuses[x.id]==='complete').length;
+    const percent = Math.round((done/items.length)*100);
+    card.querySelector('.stage-progress span').style.width = percent+'%';
+    card.querySelector('.stage-percent').textContent = percent+'٪ مكتمل';
+  });
+}
+function resetEvidence(){
+  if(!confirm('هل تريد مسح جميع حالات متابعة الشواهد؟')) return;
+  localStorage.removeItem(EVIDENCE_KEY);
+  renderEvidence();
+}
+function openMenu(){ document.getElementById('sideMenu').classList.add('show'); document.getElementById('menuBackdrop').classList.add('show'); }
+function closeMenu(){ document.getElementById('sideMenu').classList.remove('show'); document.getElementById('menuBackdrop').classList.remove('show'); }
+document.getElementById('menuBackdrop').onclick=closeMenu;
+function goBackToMain(){
+  let stored=''; try { stored=sessionStorage.getItem('qualityGoalsMainUrl')||''; } catch(e){}
+  window.location.href = stored || new URL('quality-goals-2026-main.html', window.location.href).href;
+}
+function goToCharts(){ window.location.href = new URL('quality-goals-2026-charts.html', window.location.href).href; }
+function applyTheme(){
+  const root=document.documentElement; const dark=root.dataset.theme==='dark';
+  root.dataset.theme=dark?'':'dark';
+  document.getElementById('themeToggleMenu').textContent=dark?'الوضع الداكن':'الوضع الفاتح';
+}
+document.getElementById('themeToggleMenu').onclick=()=>{applyTheme();closeMenu();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
+renderEvidence();
+</script>
+</body>
+</html>
