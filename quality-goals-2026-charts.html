@@ -10,11 +10,12 @@
   }
 })();
 </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الرسوم البيانية - أهداف الجودة 2026</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>الرسوم البيانية - أهداف الجودة 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+
     :root{
       --bg:#f5f8f6;
       --surface:#ffffff;
@@ -225,53 +226,162 @@
       body{background:#fff}.container{width:100%;padding:0}.hero,.card,.indicator,.kpi{box-shadow:none}
     }
   
+
+.menu-toggle{
+  border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;
+  padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
+  align-items:center;gap:10px;position:relative;z-index:2
+}
+.menu-toggle .bars{font-size:1.15rem;line-height:1}
+.side-menu-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.38);backdrop-filter:blur(2px);display:none;z-index:70
+}
+.side-menu-backdrop.show{display:block}
+.side-menu{
+  position:fixed;top:0;right:-360px;width:min(340px,88vw);height:100vh;background:var(--surface);
+  border-left:1px solid var(--border);box-shadow:-18px 0 40px rgba(0,0,0,.16);z-index:80;
+  transition:right .25s ease;display:flex;flex-direction:column;padding:18px
+}
+.side-menu.show{right:0}
+.side-menu-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.side-menu-title{font-size:1.1rem;font-weight:900}
+.side-menu-close{border:0;background:var(--surface-2);color:var(--text);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:1.1rem}
+.menu-list{display:flex;flex-direction:column;gap:10px}
+.menu-item{
+  width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+  border-radius:14px;padding:12px 14px;text-align:right;cursor:pointer;font-weight:900
+}
+.menu-item:hover{border-color:var(--primary);background:var(--primary-soft)}
+.menu-item.accent{background:var(--accent);border-color:var(--accent);color:#2d2a18}
+.menu-help{margin-top:auto;color:var(--muted);font-size:.78rem;line-height:1.7;padding-top:16px}
+.data-entry-modal .modal-box{width:min(1100px,100%)}
+.data-entry-actions{display:flex;gap:10px;flex-wrap:wrap}
+.data-entry-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.entry-card{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:14px}
+.entry-card h4{margin:0 0 6px;font-size:.95rem;line-height:1.7}
+.entry-meta{font-size:.76rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.entry-card input{margin-top:8px}
+.entry-status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:.74rem;font-weight:900;margin-top:10px}
+.entry-status.good,.actual-line.good{background:#e3f7ef;color:#0a7a58}
+.entry-status.accept,.actual-line.accept{background:#fff3cf;color:#8a6a00}
+.entry-status.bad,.actual-line.bad{background:#fde4e4;color:#b13f3f}
+.entry-status.na,.actual-line.na{background:var(--surface-2);color:var(--muted)}
+.actual-line{display:block;border-radius:12px;padding:8px 10px;font-size:.76rem;font-weight:800;margin-bottom:12px}
+.modal-note{color:var(--muted);font-size:.82rem;line-height:1.7;margin-top:6px}
+.secondary-btn{border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:11px;padding:10px 14px;font-weight:800;cursor:pointer}
+.primary-btn{border:0;background:var(--primary);color:#fff;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}
+.danger-btn{border:0;background:var(--danger);color:#fff;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}
+.save-status{font-size:.82rem;color:var(--muted);line-height:1.7}
+.dashboard-kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:18px}
+.kpi.status-good::before{background:#12a36f}.kpi.status-accept::before{background:#d8a100}.kpi.status-bad::before{background:#d94d4d}.kpi.status-na::before{background:#93a59e}
+.no-data-banner{background:var(--surface);border:1px dashed var(--border);border-radius:16px;padding:16px;color:var(--muted);line-height:1.8;margin-bottom:18px;text-align:center}
+@media(max-width:760px){
+  .data-entry-grid{grid-template-columns:1fr}
+}
+@media print{
+  .menu-toggle,.side-menu,.side-menu-backdrop,.data-entry-modal{display:none!important}
+}
+
 .page-note{background:var(--surface);border:1px solid var(--border);border-right:5px solid var(--primary);border-radius:15px;padding:14px 16px;color:var(--muted);line-height:1.8;margin-bottom:18px;box-shadow:var(--shadow);font-size:.92rem}
 .chart-wrap{height:360px}
 .card{min-height:430px}
+.status-note{font-size:.82rem;color:var(--muted);margin-top:6px;line-height:1.7}
 @media(max-width:760px){.chart-wrap{height:300px}.card{min-height:360px}}
-  </style>
+</style>
 </head>
 <body>
+  <div class="side-menu-backdrop" id="menuBackdrop"></div>
+  <aside class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+      <div class="side-menu-title">القائمة</div>
+      <button class="side-menu-close" type="button" onclick="closeMenu()">×</button>
+    </div>
+    <div class="menu-list">
+      <button class="menu-item" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية</button>
+      <button class="menu-item accent" type="button" onclick="window.print();closeMenu()">طباعة الرسوم</button>
+      <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
+      <button class="menu-item" type="button" onclick="openDataEntry()">إدخال البيانات</button>
+    </div>
+    <div class="menu-help">بعد إدخال النتائج الفعلية، ستظهر لكِ لوحة متابعة توضّح عدد المؤشرات المحققة والمتأخرة ومتوسط الأداء الحالي.</div>
+  </aside>
+
   <main class="container">
     <header class="hero">
       <div>
         <h1>الرسوم البيانية لأهداف الجودة 2026</h1>
-        <p>تم نقل الرسوم البيانية إلى صفحة مستقلة لتكون القراءة أوضح وأسهل، مع عرض أكبر لكل رسم.</p>
+        <p>صفحة مخصصة لعرض الرسوم البيانية ومتابعة مكانك الحالي في كل مؤشر بناءً على البيانات التي تقومين بإدخالها.</p>
       </div>
-      <div class="hero-actions">
-        <button class="hero-btn" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية</button>
-        <button class="hero-btn accent" onclick="window.print()">طباعة الرسوم</button>
-        <button class="hero-btn" id="themeToggle">الوضع الداكن</button>
-      </div>
+      <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
     </header>
 
-    <div class="page-note">هذه الصفحة مخصصة للرسوم البيانية فقط، حتى تظهر المؤشرات والتحليلات البصرية بشكل أكبر وأسهل في القراءة.</div>
+    <div class="page-note">هذه الصفحة تعرض المستهدفات المعتمدة، ومعها النتائج الحالية المدخلة من قبلك حتى تعرفي أين وصلتِ في كل مؤشر.</div>
+    <div class="no-data-banner" id="noDataBanner">لم يتم إدخال أي نتائج فعلية بعد. من القائمة ← <strong>إدخال البيانات</strong> أضيفي القيم لتظهر لوحة المتابعة.</div>
+
+    <section class="kpis dashboard-kpis">
+      <article class="kpi" id="kpiEntered"><div class="kpi-label">المؤشرات المدخلة</div><div class="kpi-value">0</div><div class="kpi-sub">من أصل 8 مؤشرات</div></article>
+      <article class="kpi" id="kpiAverage"><div class="kpi-label">متوسط النتيجة الحالية</div><div class="kpi-value">—</div><div class="kpi-sub">للمؤشرات التي تم إدخالها</div></article>
+      <article class="kpi status-good" id="kpiGood"><div class="kpi-label">محقق للمستهدف</div><div class="kpi-value">0</div><div class="kpi-sub">عدد المؤشرات الملتزمة</div></article>
+      <article class="kpi status-accept" id="kpiAccept"><div class="kpi-label">ضمن حد القبول</div><div class="kpi-value">0</div><div class="kpi-sub">بحاجة متابعة خفيفة</div></article>
+      <article class="kpi status-bad" id="kpiBad"><div class="kpi-label">أقل من حد القبول</div><div class="kpi-value">0</div><div class="kpi-sub">بحاجة معالجة</div></article>
+      <article class="kpi status-na" id="kpiMissing"><div class="kpi-label">غير مدخل</div><div class="kpi-value">8</div><div class="kpi-sub">مؤشرات بلا نتيجة فعلية</div></article>
+    </section>
 
     <section class="grid">
       <article class="card span-7">
-        <h2>المستهدف وحد القبول لكل مؤشر</h2>
-        <div class="sub">القيم الرقمية تمثل النسب المئوية؛ مؤشر تكرار الشكاوى يمثل نسبة الخفض عن خط الأساس</div>
+        <h2>المستهدف وحد القبول والنتيجة الحالية لكل مؤشر</h2>
+        <div class="sub">الأخضر = المستهدف، الأصفر = حد القبول، الأزرق = النتيجة الحالية المدخلة</div>
         <div class="chart-wrap"><canvas id="targetChart"></canvas></div>
       </article>
       <article class="card span-5">
+        <h2>الحالة الحالية للمؤشرات</h2>
+        <div class="sub">توزيع المؤشرات بحسب وضعها الحالي</div>
+        <div class="chart-wrap"><canvas id="statusChart"></canvas></div>
+      </article>
+      <article class="card span-4">
         <h2>توزيع تواتر القياس</h2>
         <div class="sub">عدد المؤشرات بحسب دورية القياس</div>
         <div class="chart-wrap"><canvas id="frequencyChart"></canvas></div>
       </article>
-      <article class="card span-6">
+      <article class="card span-4">
+        <h2>توزيع المؤشرات حسب المجال</h2>
+        <div class="sub">التغطية الموضوعية لأهداف الجودة</div>
+        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+      </article>
+      <article class="card span-4">
         <h2>توزيع مسؤولية ملكية البيانات</h2>
         <div class="sub">عدد المؤشرات المرتبطة بكل جهة أو دور مسؤول</div>
         <div class="chart-wrap"><canvas id="ownerChart"></canvas></div>
       </article>
-      <article class="card span-6">
-        <h2>توزيع المؤشرات حسب المجال</h2>
-        <div class="sub">التغطية الموضوعية لأهداف الجودة</div>
-        <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
+      <article class="card span-12">
+        <h2>الفجوة عن المستهدف</h2>
+        <div class="sub">القيمة السالبة تعني أنك ما زلت أقل من المستهدف، والقيمة الموجبة تعني أنك تجاوزت المستهدف</div>
+        <div class="chart-wrap"><canvas id="gapChart"></canvas></div>
       </article>
     </section>
 
     <div class="footer">المصدر: <a href="quality-goals-2026.pdf" target="_blank" rel="noopener">ملف «أهداف الجودة 2026» - وحدة التطوير والجودة، عمادة شؤون الطلاب.</a></div>
   </main>
+
+  <div class="modal data-entry-modal" id="dataEntryModal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <div>
+          <h3 style="margin:0">إدخال البيانات الفعلية للمؤشرات</h3>
+          <div class="modal-note">أدخلي النتيجة الحالية لكل مؤشر كنسبة مئوية، وسيتم تحديث لوحة الرسوم مباشرة.</div>
+        </div>
+        <button class="close" type="button" onclick="closeDataEntry()">×</button>
+      </div>
+      <div class="modal-content">
+        <div class="data-entry-actions" style="margin-bottom:14px">
+          <button class="primary-btn" type="button" onclick="saveActualData()">حفظ البيانات</button>
+          <button class="danger-btn" type="button" onclick="clearActualData()">مسح البيانات</button>
+          <button class="secondary-btn" type="button" onclick="closeDataEntry()">إغلاق</button>
+          <div class="save-status" id="saveStatus"></div>
+        </div>
+        <div class="data-entry-grid" id="dataEntryGrid"></div>
+      </div>
+    </div>
+  </div>
 
 <script>
 const indicators = [
@@ -428,14 +538,49 @@ const indicators = [
     iso:"10.2، 9.2، 9.1.3، 7.5"
   }
 ];
+const ACTUALS_KEY = 'quality_goals_actual_values_v1';
 const colors=["#00ad83","#ffc20e","#2980b9","#8e63ce","#e67e22","#16a085"];
 const categories=[...new Set(indicators.map(x=>x.category))];
-
 Chart.defaults.font.family='"Segoe UI",Tahoma,Arial,sans-serif';
 const commonGrid=()=>getComputedStyle(document.documentElement).getPropertyValue("--grid").trim();
 const commonText=()=>getComputedStyle(document.documentElement).getPropertyValue("--muted").trim();
 const charts={};
 
+function getActualData(){
+  try { return JSON.parse(localStorage.getItem(ACTUALS_KEY) || '{}'); } catch(e){ return {}; }
+}
+function setActualData(data){ localStorage.setItem(ACTUALS_KEY, JSON.stringify(data)); }
+function evaluateIndicator(ind, actual){
+  if(actual === undefined || actual === null || actual === '' || isNaN(actual)) return {label:'غير مدخل', className:'na'};
+  const value = Number(actual);
+  if(value >= ind.targetValue) return {label:'محقق للمستهدف', className:'good'};
+  if(value >= ind.acceptanceValue) return {label:'ضمن حد القبول', className:'accept'};
+  return {label:'أقل من حد القبول', className:'bad'};
+}
+function actualValueFor(ind){
+  const val = getActualData()[ind.id];
+  return (val === undefined || val === null || val === '') ? null : Number(val);
+}
+function ownerGroups(){
+  return [
+    ["إدارة الجودة",indicators.filter(x=>x.owner.includes("مدير الجودة")).length],
+    ["الشكاوى وحقوق الطالب",indicators.filter(x=>x.owner.includes("الشكاوى")).length],
+    ["القياس والبيانات",indicators.filter(x=>x.owner.includes("القياس")).length],
+    ["البرامج",indicators.filter(x=>x.owner.includes("مالك البرامج")).length],
+    ["العقود والموردون",indicators.filter(x=>x.owner.includes("مالك العقد")).length]
+  ];
+}
+function statusCounts(){
+  let good=0, accept=0, bad=0, missing=0;
+  indicators.forEach(ind=>{
+    const st = evaluateIndicator(ind, actualValueFor(ind)).className;
+    if(st==='good') good++;
+    else if(st==='accept') accept++;
+    else if(st==='bad') bad++;
+    else missing++;
+  });
+  return {good, accept, bad, missing};
+}
 function applyChartTheme(){
   Chart.defaults.color = commonText();
   Object.values(charts).forEach(chart=>{
@@ -454,73 +599,117 @@ function applyChartTheme(){
 
 charts.target=new Chart(document.getElementById("targetChart"),{
   type:"bar",
-  data:{
-    labels:indicators.map(x=>`م${x.id}`),
-    datasets:[
-      {label:"المستهدف",data:indicators.map(x=>x.targetValue),backgroundColor:"#00ad83",borderRadius:7},
-      {label:"حد القبول",data:indicators.map(x=>x.acceptanceValue),backgroundColor:"#ffc20e",borderRadius:7}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    interaction:{mode:"index",intersect:false},
-    plugins:{
-      legend:{labels:{usePointStyle:true,boxWidth:9,color:commonText()}},
-      tooltip:{callbacks:{
-        title:items=>indicators[items[0].dataIndex].name,
-        label:c=>`${c.dataset.label}: ${c.raw}٪`
-      }}
-    },
-    scales:{
-      x:{grid:{display:false},ticks:{color:commonText()}},
-      y:{beginAtZero:true,max:105,ticks:{callback:v=>v+"٪",color:commonText()},grid:{color:commonGrid()}}
-    }
-  }
+  data:{labels:indicators.map(x=>`م${x.id}`),datasets:[
+    {label:"المستهدف",data:indicators.map(x=>x.targetValue),backgroundColor:"#00ad83",borderRadius:7},
+    {label:"حد القبول",data:indicators.map(x=>x.acceptanceValue),backgroundColor:"#ffc20e",borderRadius:7},
+    {label:"النتيجة الحالية",data:indicators.map(x=>actualValueFor(x)),backgroundColor:"#2d7ff9",borderRadius:7}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{labels:{usePointStyle:true,boxWidth:9,color:commonText()}},tooltip:{callbacks:{title:items=>indicators[items[0].dataIndex].name,label:c=>`${c.dataset.label}: ${c.raw ?? '—'}${c.raw==null?'':'٪'}`}}},scales:{x:{grid:{display:false},ticks:{color:commonText()}},y:{beginAtZero:true,max:105,ticks:{callback:v=>v+"٪",color:commonText()},grid:{color:commonGrid()}}}}
 });
-
+charts.status=new Chart(document.getElementById("statusChart"),{
+  type:"doughnut",
+  data:{labels:["محقق للمستهدف","ضمن حد القبول","أقل من حد القبول","غير مدخل"],datasets:[{data:[0,0,0,8],backgroundColor:["#12a36f","#d8a100","#d94d4d","#93a59e"],borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true,color:commonText()}}}}
+});
 const freqCounts=["شهري","ربع سنوي"].map(f=>indicators.filter(x=>x.measure===f).length);
 charts.frequency=new Chart(document.getElementById("frequencyChart"),{
   type:"doughnut",
   data:{labels:["شهري","ربع سنوي"],datasets:[{data:freqCounts,backgroundColor:["#00ad83","#ffc20e"],borderWidth:0}]},
   options:{responsive:true,maintainAspectRatio:false,cutout:"62%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true,color:commonText()}}}}
 });
-
-const ownerGroups=[
-  ["إدارة الجودة",indicators.filter(x=>x.owner.includes("مدير الجودة")).length],
-  ["الشكاوى وحقوق الطالب",indicators.filter(x=>x.owner.includes("الشكاوى")).length],
-  ["القياس والبيانات",indicators.filter(x=>x.owner.includes("القياس")).length],
-  ["البرامج",indicators.filter(x=>x.owner.includes("مالك البرامج")).length],
-  ["العقود والموردون",indicators.filter(x=>x.owner.includes("مالك العقد")).length]
-];
-charts.owner=new Chart(document.getElementById("ownerChart"),{
-  type:"bar",
-  data:{labels:ownerGroups.map(x=>x[0]),datasets:[{label:"عدد المؤشرات",data:ownerGroups.map(x=>x[1]),backgroundColor:"#007b61",borderRadius:8}]},
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:commonText()}},y:{beginAtZero:true,ticks:{stepSize:1,color:commonText()},grid:{color:commonGrid()}}}}
-});
-
 const categoryCounts=categories.map(c=>indicators.filter(x=>x.category===c).length);
 charts.category=new Chart(document.getElementById("categoryChart"),{
   type:"bar",
   data:{labels:categories,datasets:[{label:"عدد المؤشرات",data:categoryCounts,backgroundColor:categories.map((_,i)=>colors[i%colors.length]),borderRadius:8}]},
   options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{stepSize:1,color:commonText()},grid:{color:commonGrid()}},y:{grid:{display:false},ticks:{color:commonText()}}}}
 });
+charts.owner=new Chart(document.getElementById("ownerChart"),{
+  type:"bar",
+  data:{labels:ownerGroups().map(x=>x[0]),datasets:[{label:"عدد المؤشرات",data:ownerGroups().map(x=>x[1]),backgroundColor:"#007b61",borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:commonText()}},y:{beginAtZero:true,ticks:{stepSize:1,color:commonText()},grid:{color:commonGrid()}}}}
+});
+charts.gap=new Chart(document.getElementById("gapChart"),{
+  type:"bar",
+  data:{labels:indicators.map(x=>`م${x.id}`),datasets:[{label:"الفجوة عن المستهدف",data:indicators.map(x=>null),backgroundColor:indicators.map(()=>"#2d7ff9"),borderRadius:8}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:items=>indicators[items[0].dataIndex].name,label:c=>`${c.raw==null?'لا توجد نتيجة مدخلة':'الفجوة: '+c.raw.toFixed(1)+'٪'}`}}},scales:{x:{grid:{display:false},ticks:{color:commonText()}},y:{ticks:{color:commonText(),callback:v=>v+"٪"},grid:{color:commonGrid()}}}}
+});
 
-
-function goBackToMain(){
-  if (document.referrer && document.referrer !== window.location.href) {
-    window.history.back();
-    return;
-  }
-  window.location.href = "quality-goals-2026-main.html";
+function refreshDashboard(){
+  const actuals = getActualData();
+  const enteredValues = indicators.map(x=>actualValueFor(x)).filter(v=>v !== null);
+  const counts = statusCounts();
+  const average = enteredValues.length ? (enteredValues.reduce((a,b)=>a+b,0)/enteredValues.length).toFixed(1)+"٪" : '—';
+  document.querySelector('#kpiEntered .kpi-value').textContent = enteredValues.length;
+  document.querySelector('#kpiAverage .kpi-value').textContent = average;
+  document.querySelector('#kpiGood .kpi-value').textContent = counts.good;
+  document.querySelector('#kpiAccept .kpi-value').textContent = counts.accept;
+  document.querySelector('#kpiBad .kpi-value').textContent = counts.bad;
+  document.querySelector('#kpiMissing .kpi-value').textContent = counts.missing;
+  document.getElementById('noDataBanner').style.display = enteredValues.length ? 'none' : 'block';
+  charts.target.data.datasets[2].data = indicators.map(x=>actualValueFor(x));
+  charts.status.data.datasets[0].data = [counts.good, counts.accept, counts.bad, counts.missing];
+  const gapData = indicators.map(x=>{
+    const val = actualValueFor(x); return val===null ? null : Number((val - x.targetValue).toFixed(1));
+  });
+  charts.gap.data.datasets[0].data = gapData;
+  charts.gap.data.datasets[0].backgroundColor = gapData.map(v=> v===null ? '#93a59e' : (v>=0 ? '#12a36f' : '#d94d4d'));
+  applyChartTheme();
 }
-applyChartTheme();
-document.getElementById("themeToggle").onclick=()=>{
+
+function renderDataEntryGrid(){
+  const actuals = getActualData();
+  const holder = document.getElementById('dataEntryGrid');
+  holder.innerHTML = indicators.map(ind=>{
+    const status = evaluateIndicator(ind, actuals[ind.id]);
+    const value = actuals[ind.id] ?? '';
+    return `
+      <div class="entry-card">
+        <h4>${ind.id}. ${ind.name}</h4>
+        <div class="entry-meta">المستهدف: ${ind.target} | حد القبول: ${ind.acceptance}</div>
+        <label for="actual-${ind.id}">النتيجة الحالية (%)</label>
+        <input id="actual-${ind.id}" type="number" min="0" max="100" step="0.1" value="${value}" placeholder="مثال: 88">
+        <span class="entry-status ${status.className}">${status.label}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('saveStatus').textContent = '';
+}
+function openDataEntry(){ closeMenu(); renderDataEntryGrid(); document.getElementById('dataEntryModal').classList.add('show'); }
+function closeDataEntry(){ document.getElementById('dataEntryModal').classList.remove('show'); }
+function saveActualData(){
+  const values = {};
+  indicators.forEach(ind=>{
+    const el = document.getElementById(`actual-${ind.id}`);
+    if(!el) return;
+    const raw = el.value.trim();
+    if(raw !== '') values[ind.id] = Number(raw);
+  });
+  setActualData(values);
+  document.getElementById('saveStatus').textContent = 'تم حفظ البيانات بنجاح.';
+  renderDataEntryGrid();
+  refreshDashboard();
+}
+function clearActualData(){
+  if(!confirm('هل تريدين مسح جميع البيانات المدخلة؟')) return;
+  localStorage.removeItem(ACTUALS_KEY);
+  renderDataEntryGrid();
+  refreshDashboard();
+  document.getElementById('saveStatus').textContent = 'تم مسح البيانات.';
+}
+function applyThemeToggle(){
   const root=document.documentElement;
   const dark=root.dataset.theme==="dark";
   root.dataset.theme=dark?"":"dark";
-  document.getElementById("themeToggle").textContent=dark?"الوضع الداكن":"الوضع الفاتح";
+  document.getElementById('themeToggleMenu').textContent = dark?"الوضع الداكن":"الوضع الفاتح";
   applyChartTheme();
-};
+}
+document.getElementById('themeToggleMenu').onclick=()=>{ applyThemeToggle(); closeMenu(); };
+function openMenu(){ document.getElementById('sideMenu').classList.add('show'); document.getElementById('menuBackdrop').classList.add('show'); }
+function closeMenu(){ document.getElementById('sideMenu').classList.remove('show'); document.getElementById('menuBackdrop').classList.remove('show'); }
+document.getElementById('menuBackdrop').onclick=closeMenu;
+function goBackToMain(){ window.location.href='quality-goals-2026-main.html'; }
+document.getElementById('dataEntryModal').addEventListener('click', e=>{ if(e.target.id === 'dataEntryModal') closeDataEntry(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); closeDataEntry(); } });
+refreshDashboard();
 </script>
 </body>
 </html>
