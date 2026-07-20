@@ -65,9 +65,11 @@
       position:relative;overflow:hidden;
       background:linear-gradient(135deg,var(--primary-dark),var(--primary));
       color:#fff;border-radius:28px;padding:28px;
+      padding-left:28px;padding-right:28px;padding-top:34px;
       box-shadow:var(--shadow);margin-bottom:18px;
-      display:flex;justify-content:space-between;align-items:center;gap:20px;
+      display:flex;align-items:flex-start;gap:20px;
     }
+    .hero-content{position:relative;z-index:2;max-width:880px;padding-top:8px}
     .hero::after{
       content:"2026";position:absolute;left:24px;bottom:-34px;
       font-size:8rem;font-weight:900;opacity:.09;line-height:1;
@@ -210,7 +212,9 @@
     }
     @media(max-width:760px){
       .container{width:94%;padding-top:12px}
-      .hero{flex-direction:column;align-items:flex-start;padding:20px;border-radius:20px}
+      .hero{flex-direction:column;align-items:flex-start;padding:20px;padding-top:72px;border-radius:20px}
+      .hero-content{padding-top:0}
+      .menu-toggle{top:14px;right:14px}
       .hero::after{font-size:5rem}
       .kpis{grid-template-columns:1fr 1fr}
       .filters{grid-template-columns:1fr}
@@ -229,7 +233,7 @@
 .menu-toggle{
   border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;
   padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
-  align-items:center;gap:10px;position:relative;z-index:2
+  align-items:center;gap:10px;position:absolute;top:18px;right:18px;z-index:2
 }
 .menu-toggle .bars{font-size:1.15rem;line-height:1}
 .side-menu-backdrop{
@@ -281,6 +285,15 @@
   .menu-toggle,.side-menu,.side-menu-backdrop,.data-entry-modal{display:none!important}
 }
 
+
+.priority-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+.priority-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:.74rem;font-weight:900}
+.priority-badge.high{background:#fde4e4;color:#b13f3f}
+.priority-badge.medium{background:#fff3cf;color:#8a6a00}
+.priority-badge.low{background:#e3f7ef;color:#0a7a58}
+.priority-badge.na{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.alert-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--danger);color:#fff;font-size:.72rem;font-weight:900;margin-inline-start:6px}
+
 </style>
 </head>
 <body>
@@ -291,7 +304,7 @@
       <button class="side-menu-close" type="button" onclick="closeMenu()">×</button>
     </div>
     <div class="menu-list">
-      <button class="menu-item" type="button" onclick="goToCharts()">عرض الرسوم البيانية</button>
+      <button class="menu-item" type="button" onclick="goToCharts()">عرض الرسوم البيانية <span class="alert-count" id="menuAlertCount" style="display:none">0</span></button>
       <button class="menu-item accent" type="button" onclick="window.print();closeMenu()">طباعة اللوحة</button>
       <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
       <button class="menu-item" type="button" onclick="openDataEntry()">إدخال البيانات</button>
@@ -301,9 +314,8 @@
 
   <main class="container">
     <header class="hero">
-      <div>
+      <div class="hero-content">
         <h1>لوحة أهداف الجودة 2026</h1>
-        <p>لوحة مرجعية تنفيذية لأهداف الجودة في عمادة شؤون الطلاب، تشمل المؤشرات والمستهدفات وحدود القبول وطرق القياس ومصادر البيانات ومسؤوليات المتابعة.</p>
       </div>
       <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
     </header>
@@ -546,6 +558,13 @@ function evaluateIndicator(ind, actual){
   if(value >= ind.acceptanceValue) return {label:'ضمن حد القبول', className:'accept'};
   return {label:'أقل من حد القبول', className:'bad'};
 }
+function getPriority(ind, actual){
+  const status = evaluateIndicator(ind, actual).className;
+  if(status === 'bad') return {label:'أولوية عالية', className:'high'};
+  if(status === 'accept') return {label:'أولوية متوسطة', className:'medium'};
+  if(status === 'good') return {label:'أولوية منخفضة', className:'low'};
+  return {label:'الأولوية غير محددة', className:'na'};
+}
 function filtered(){
   const q=search.value.trim().toLowerCase();
   return indicators.filter(x =>
@@ -559,9 +578,14 @@ function render(){
   const data=filtered();
   const actuals = getActualData();
   document.getElementById("visibleCount").textContent=`${data.length} ${data.length===1?"مؤشر":"مؤشرات"}`;
+  const highCount = indicators.filter(ind=>getPriority(ind, actuals[ind.id]).className === 'high').length;
+  const menuAlert = document.getElementById('menuAlertCount');
+  menuAlert.textContent = highCount;
+  menuAlert.style.display = highCount ? 'inline-grid' : 'none';
   grid.innerHTML=data.length?data.map(x=>{
     const actual = actuals[x.id];
     const status = evaluateIndicator(x, actual);
+    const priority = getPriority(x, actual);
     const actualText = actual === undefined || actual === null || actual === '' ? '—' : `${Number(actual)}٪`;
     return `
     <article class="indicator">
@@ -579,7 +603,10 @@ function render(){
         <div><strong>مالك البيانات:</strong> ${x.owner}</div>
         <div><strong>خط الأساس:</strong> ${x.baseline}</div>
       </div>
-      <span class="actual-line ${status.className}">النتيجة الحالية: ${actualText} — ${status.label}</span>
+      <div class="priority-row">
+        <span class="actual-line ${status.className}" style="margin:0;flex:1">النتيجة الحالية: ${actualText} — ${status.label}</span>
+        <span class="priority-badge ${priority.className}">${priority.label}</span>
+      </div>
       <button class="details-btn" onclick="openDetails(${x.id})">عرض جميع التفاصيل</button>
     </article>`;
   }).join(""):`<div class="empty">لا توجد مؤشرات مطابقة للفلاتر الحالية.</div>`;
@@ -629,6 +656,7 @@ window.openDetails=id=>{
   const x=indicators.find(i=>i.id===id);
   const actual = getActualData()[x.id];
   const status = evaluateIndicator(x, actual);
+  const priority = getPriority(x, actual);
   const actualText = actual === undefined || actual === null || actual === '' ? 'غير مدخل' : `${Number(actual)}٪`;
   document.getElementById("modalCategory").textContent=x.category;
   document.getElementById("modalTitle").textContent=x.name;
@@ -643,6 +671,7 @@ window.openDetails=id=>{
     ["المستهدف",x.target,false],
     ["حدود القبول",x.acceptance,false],
     ["النتيجة الحالية",`${actualText} — ${status.label}`,false],
+    ["ترتيب الأولوية",priority.label,false],
     ["الإجراء عند الانحراف",x.deviation,true],
     ["الشواهد الداعمة",x.evidence,true],
     ["ارتباط ISO 9001:2015",x.iso,true]
