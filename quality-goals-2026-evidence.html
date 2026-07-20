@@ -326,13 +326,8 @@
 .use-card{background:var(--surface);border:1px solid var(--border);border-radius:17px;padding:16px;box-shadow:var(--shadow)}
 .use-card h3{margin:0 0 7px;font-size:.95rem}
 .use-card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.8}
-.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
-.pdf-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.pdf-card-head h2{margin:0;font-size:1.15rem}
-.pdf-viewer{width:100%;height:760px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2)}
-.link-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:12px;padding:10px 14px;background:var(--primary);color:#fff;font-weight:900}
 @media(max-width:1150px){.stage-grid,.use-grid{grid-template-columns:1fr}.evidence-kpis{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.evidence-list{grid-template-columns:1fr}.pdf-viewer{height:520px}.evidence-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.evidence-list{grid-template-columns:1fr}.evidence-kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.evidence-kpis{grid-template-columns:1fr}}
 </style>
 </head>
@@ -406,15 +401,6 @@
       </div>
       <div class="evidence-list" id="evidenceList"></div>
     </section>
-
-    <section class="pdf-card">
-      <div class="pdf-card-head">
-        <div><h2>ملف الشواهد الأصلي</h2><div class="sub">التفاصيل الكاملة للسجلات والنماذج، المؤشرات المرتبطة، وتيرة التحديث، المالك، وبنود ISO.</div></div>
-        <a class="link-btn" href="quality-goals-2026-evidence.pdf" target="_blank" rel="noopener">فتح الملف في صفحة مستقلة</a>
-      </div>
-      <iframe class="pdf-viewer" src="quality-goals-2026-evidence.pdf" title="ملف الشواهد 2026"></iframe>
-    </section>
-
     <div class="footer">المصدر: <a href="quality-goals-2026-evidence.pdf" target="_blank" rel="noopener">ملف «الشواهد 2026» - وحدة التطوير والجودة، عمادة شؤون الطلاب.</a></div>
   </main>
 
