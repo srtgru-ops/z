@@ -2069,53 +2069,18 @@
       .weekly-detail-kpis{grid-template-columns:1fr 1fr}
     }
 
-  </style>
-<style>
-
-  /* زر العودة الموحد */
-  .portal-home-btn{
-    position:fixed;
-    top:18px;
-    left:18px;
-    z-index:10000;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    min-height:42px;
-    padding:0 15px;
-    border-radius:13px;
-    background:linear-gradient(135deg,#087a45,#0b8a50);
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.35);
-    box-shadow:0 10px 24px rgba(5,78,46,.20);
-    text-decoration:none !important;
-    font-family:"Tajawal","Segoe UI",Tahoma,Arial,sans-serif;
-    font-size:13px;
-    font-weight:900;
-    line-height:1;
-    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
-  }
-  .portal-home-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 14px 30px rgba(5,78,46,.28);
-    filter:brightness(1.04);
-  }
-  .portal-home-btn:focus-visible{
-    outline:3px solid rgba(201,168,76,.45);
-    outline-offset:3px;
-  }
-  .portal-home-btn .portal-home-icon{font-size:17px;line-height:1}
-  @media(max-width:650px){
-    .portal-home-btn{top:10px;left:10px;min-height:39px;padding:0 12px;font-size:12px;border-radius:11px}
-  }
-  @media print{.portal-home-btn{display:none!important}}
-
+  
+    .home-inline-btn{
+      text-decoration:none;
+      background:rgba(255,255,255,.18);
+      border-color:rgba(255,255,255,.34);
+      color:#fff;
+    }
+    .home-inline-btn:hover{background:rgba(255,255,255,.28)}
 </style>
 </head>
 <body>
-  <a class="portal-home-btn" href="index.html" aria-label="العودة للصفحة الرئيسية"><span class="portal-home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
-  <header class="topbar">
+<header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
         <div class="brand-icon">🎓</div>
@@ -2125,6 +2090,7 @@
         </div>
       </div>
       <div class="actions">
+        <a class="btn home-inline-btn" href="index.html" aria-label="العودة للصفحة الرئيسية">⌂ العودة للصفحة الرئيسية</a>
         <span class="iso-pill">ISO 9001:2015 ✓</span>
         <button class="btn" id="themeBtn" type="button">🌙 الوضع الداكن</button>
         <button class="btn" id="langBtn" type="button">English</button>
