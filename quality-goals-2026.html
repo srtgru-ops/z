@@ -60,16 +60,15 @@
       font-family:"Segoe UI",Tahoma,Arial,sans-serif;
     }
     button,input,select{font:inherit}
-    .container{width:min(1480px,95%);margin:auto;padding:22px 0 48px}
+    .container{position:relative;width:min(1480px,95%);margin:auto;padding:88px 0 48px}
     .hero{
       position:relative;overflow:hidden;
       background:linear-gradient(135deg,var(--primary-dark),var(--primary));
       color:#fff;border-radius:28px;padding:28px;
-      padding-left:28px;padding-right:28px;padding-top:34px;
       box-shadow:var(--shadow);margin-bottom:18px;
       display:flex;align-items:flex-start;gap:20px;
     }
-    .hero-content{position:relative;z-index:2;max-width:880px;padding-top:8px}
+    .hero-content{position:relative;z-index:2;max-width:880px;padding-top:0}
     .hero::after{
       content:"2026";position:absolute;left:24px;bottom:-34px;
       font-size:8rem;font-weight:900;opacity:.09;line-height:1;
@@ -211,10 +210,10 @@
       .span-8,.span-7,.span-6,.span-5,.span-4{grid-column:span 6}
     }
     @media(max-width:760px){
-      .container{width:94%;padding-top:12px}
-      .hero{flex-direction:column;align-items:flex-start;padding:20px;padding-top:72px;border-radius:20px}
+      .container{width:94%;padding-top:78px}
+      .hero{flex-direction:column;align-items:flex-start;padding:20px;border-radius:20px}
       .hero-content{padding-top:0}
-      .menu-toggle{top:14px;right:14px}
+      .menu-toggle{top:14px;right:0}
       .hero::after{font-size:5rem}
       .kpis{grid-template-columns:1fr 1fr}
       .filters{grid-template-columns:1fr}
@@ -231,9 +230,11 @@
   
 
 .menu-toggle{
-  border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;
+  border:1px solid rgba(0,123,97,.25);
+  background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;
   padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
-  align-items:center;gap:10px;position:absolute;top:18px;right:18px;z-index:2
+  align-items:center;gap:10px;position:absolute;top:18px;right:0;z-index:65;
+  box-shadow:0 10px 24px rgba(0,123,97,.22)
 }
 .menu-toggle .bars{font-size:1.15rem;line-height:1}
 .side-menu-backdrop{
@@ -313,11 +314,12 @@
   </aside>
 
   <main class="container">
+    <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
     <header class="hero">
       <div class="hero-content">
         <h1>لوحة أهداف الجودة 2026</h1>
       </div>
-      <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
+      
     </header>
 
     <section class="kpis">
@@ -698,7 +700,10 @@ document.getElementById('themeToggleMenu').onclick=()=>{ applyTheme(); closeMenu
 function openMenu(){ document.getElementById('sideMenu').classList.add('show'); document.getElementById('menuBackdrop').classList.add('show'); }
 function closeMenu(){ document.getElementById('sideMenu').classList.remove('show'); document.getElementById('menuBackdrop').classList.remove('show'); }
 document.getElementById('menuBackdrop').onclick=closeMenu;
-function goToCharts(){ window.location.href='quality-goals-2026-charts.html'; }
+function goToCharts(){
+  try { sessionStorage.setItem('qualityGoalsMainUrl', window.location.href); } catch(e) {}
+  window.location.href = new URL('quality-goals-2026-charts.html', window.location.href).href;
+}
 render();
 </script>
 </body>
