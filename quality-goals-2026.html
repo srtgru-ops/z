@@ -10,10 +10,11 @@
   }
 })();
 </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة أهداف الجودة 2026 - عمادة شؤون الطلاب</title>
-  <style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>لوحة أهداف الجودة 2026 - عمادة شؤون الطلاب</title>
+<style>
+
     :root{
       --bg:#f5f8f6;
       --surface:#ffffff;
@@ -223,20 +224,88 @@
       .hero-actions,.filters,.details-btn,.modal{display:none!important}
       body{background:#fff}.container{width:100%;padding:0}.hero,.card,.indicator,.kpi{box-shadow:none}
     }
-  </style>
+  
+
+.menu-toggle{
+  border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;
+  padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
+  align-items:center;gap:10px;position:relative;z-index:2
+}
+.menu-toggle .bars{font-size:1.15rem;line-height:1}
+.side-menu-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.38);backdrop-filter:blur(2px);display:none;z-index:70
+}
+.side-menu-backdrop.show{display:block}
+.side-menu{
+  position:fixed;top:0;right:-360px;width:min(340px,88vw);height:100vh;background:var(--surface);
+  border-left:1px solid var(--border);box-shadow:-18px 0 40px rgba(0,0,0,.16);z-index:80;
+  transition:right .25s ease;display:flex;flex-direction:column;padding:18px
+}
+.side-menu.show{right:0}
+.side-menu-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.side-menu-title{font-size:1.1rem;font-weight:900}
+.side-menu-close{border:0;background:var(--surface-2);color:var(--text);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:1.1rem}
+.menu-list{display:flex;flex-direction:column;gap:10px}
+.menu-item{
+  width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);
+  border-radius:14px;padding:12px 14px;text-align:right;cursor:pointer;font-weight:900
+}
+.menu-item:hover{border-color:var(--primary);background:var(--primary-soft)}
+.menu-item.accent{background:var(--accent);border-color:var(--accent);color:#2d2a18}
+.menu-help{margin-top:auto;color:var(--muted);font-size:.78rem;line-height:1.7;padding-top:16px}
+.data-entry-modal .modal-box{width:min(1100px,100%)}
+.data-entry-actions{display:flex;gap:10px;flex-wrap:wrap}
+.data-entry-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.entry-card{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:14px}
+.entry-card h4{margin:0 0 6px;font-size:.95rem;line-height:1.7}
+.entry-meta{font-size:.76rem;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.entry-card input{margin-top:8px}
+.entry-status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:.74rem;font-weight:900;margin-top:10px}
+.entry-status.good,.actual-line.good{background:#e3f7ef;color:#0a7a58}
+.entry-status.accept,.actual-line.accept{background:#fff3cf;color:#8a6a00}
+.entry-status.bad,.actual-line.bad{background:#fde4e4;color:#b13f3f}
+.entry-status.na,.actual-line.na{background:var(--surface-2);color:var(--muted)}
+.actual-line{display:block;border-radius:12px;padding:8px 10px;font-size:.76rem;font-weight:800;margin-bottom:12px}
+.modal-note{color:var(--muted);font-size:.82rem;line-height:1.7;margin-top:6px}
+.secondary-btn{border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:11px;padding:10px 14px;font-weight:800;cursor:pointer}
+.primary-btn{border:0;background:var(--primary);color:#fff;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}
+.danger-btn{border:0;background:var(--danger);color:#fff;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}
+.save-status{font-size:.82rem;color:var(--muted);line-height:1.7}
+.dashboard-kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:18px}
+.kpi.status-good::before{background:#12a36f}.kpi.status-accept::before{background:#d8a100}.kpi.status-bad::before{background:#d94d4d}.kpi.status-na::before{background:#93a59e}
+.no-data-banner{background:var(--surface);border:1px dashed var(--border);border-radius:16px;padding:16px;color:var(--muted);line-height:1.8;margin-bottom:18px;text-align:center}
+@media(max-width:760px){
+  .data-entry-grid{grid-template-columns:1fr}
+}
+@media print{
+  .menu-toggle,.side-menu,.side-menu-backdrop,.data-entry-modal{display:none!important}
+}
+
+</style>
 </head>
 <body>
+  <div class="side-menu-backdrop" id="menuBackdrop"></div>
+  <aside class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+      <div class="side-menu-title">القائمة</div>
+      <button class="side-menu-close" type="button" onclick="closeMenu()">×</button>
+    </div>
+    <div class="menu-list">
+      <button class="menu-item" type="button" onclick="goToCharts()">عرض الرسوم البيانية</button>
+      <button class="menu-item accent" type="button" onclick="window.print();closeMenu()">طباعة اللوحة</button>
+      <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
+      <button class="menu-item" type="button" onclick="openDataEntry()">إدخال البيانات</button>
+    </div>
+    <div class="menu-help">من خلال إدخال البيانات، يمكنك متابعة وضع كل مؤشر، وستظهر نتائجك مباشرة داخل صفحة الرسوم البيانية.</div>
+  </aside>
+
   <main class="container">
     <header class="hero">
       <div>
         <h1>لوحة أهداف الجودة 2026</h1>
         <p>لوحة مرجعية تنفيذية لأهداف الجودة في عمادة شؤون الطلاب، تشمل المؤشرات والمستهدفات وحدود القبول وطرق القياس ومصادر البيانات ومسؤوليات المتابعة.</p>
       </div>
-      <div class="hero-actions">
-        <a class="hero-btn" href="quality-goals-2026-charts.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">عرض الرسوم البيانية</a>
-        <button class="hero-btn accent" onclick="window.print()">طباعة اللوحة</button>
-        <button class="hero-btn" id="themeToggle">الوضع الداكن</button>
-      </div>
+      <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
     </header>
 
     <section class="kpis">
@@ -271,6 +340,27 @@
         <button class="close" id="closeModal">×</button>
       </div>
       <div class="modal-content"><div class="detail-grid" id="modalDetails"></div></div>
+    </div>
+  </div>
+
+  <div class="modal data-entry-modal" id="dataEntryModal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <div>
+          <h3 style="margin:0">إدخال البيانات الفعلية للمؤشرات</h3>
+          <div class="modal-note">أدخلي النتيجة الحالية لكل مؤشر كنسبة مئوية، وسيتم حفظها محليًا على هذا الجهاز ثم عرضها في صفحة الرسوم البيانية.</div>
+        </div>
+        <button class="close" type="button" onclick="closeDataEntry()">×</button>
+      </div>
+      <div class="modal-content">
+        <div class="data-entry-actions" style="margin-bottom:14px">
+          <button class="primary-btn" type="button" onclick="saveActualData()">حفظ البيانات</button>
+          <button class="danger-btn" type="button" onclick="clearActualData()">مسح البيانات</button>
+          <button class="secondary-btn" type="button" onclick="closeDataEntry()">إغلاق</button>
+          <div class="save-status" id="saveStatus"></div>
+        </div>
+        <div class="data-entry-grid" id="dataEntryGrid"></div>
+      </div>
     </div>
   </div>
 
@@ -429,24 +519,33 @@ const indicators = [
     iso:"10.2، 9.2، 9.1.3، 7.5"
   }
 ];
-
+const ACTUALS_KEY = 'quality_goals_actual_values_v1';
 const grid=document.getElementById("indicatorGrid");
 const search=document.getElementById("search");
 const categoryFilter=document.getElementById("categoryFilter");
 const measureFilter=document.getElementById("measureFilter");
 const ownerFilter=document.getElementById("ownerFilter");
 const modal=document.getElementById("modal");
-
 const categories=[...new Set(indicators.map(x=>x.category))];
 const owners=[...new Set(indicators.map(x=>x.owner))];
 categories.forEach(x=>categoryFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
 owners.forEach(x=>ownerFilter.insertAdjacentHTML("beforeend",`<option>${x}</option>`));
-
 document.getElementById("totalIndicators").textContent = indicators.length;
 document.getElementById("monthlyCount").textContent = indicators.filter(x=>x.measure==="شهري").length;
 document.getElementById("quarterReportCount").textContent = indicators.filter(x=>x.report==="ربع سنوي").length;
 document.getElementById("categoryCount").textContent = categories.length;
 
+function getActualData(){
+  try { return JSON.parse(localStorage.getItem(ACTUALS_KEY) || '{}'); } catch(e){ return {}; }
+}
+function setActualData(data){ localStorage.setItem(ACTUALS_KEY, JSON.stringify(data)); }
+function evaluateIndicator(ind, actual){
+  if(actual === undefined || actual === null || actual === '' || isNaN(actual)) return {label:'لم يتم إدخال نتيجة بعد', className:'na'};
+  const value = Number(actual);
+  if(value >= ind.targetValue) return {label:'محقق للمستهدف', className:'good'};
+  if(value >= ind.acceptanceValue) return {label:'ضمن حد القبول', className:'accept'};
+  return {label:'أقل من حد القبول', className:'bad'};
+}
 function filtered(){
   const q=search.value.trim().toLowerCase();
   return indicators.filter(x =>
@@ -456,11 +555,15 @@ function filtered(){
     (ownerFilter.value==="all" || x.owner===ownerFilter.value)
   );
 }
-
 function render(){
   const data=filtered();
+  const actuals = getActualData();
   document.getElementById("visibleCount").textContent=`${data.length} ${data.length===1?"مؤشر":"مؤشرات"}`;
-  grid.innerHTML=data.length?data.map(x=>`
+  grid.innerHTML=data.length?data.map(x=>{
+    const actual = actuals[x.id];
+    const status = evaluateIndicator(x, actual);
+    const actualText = actual === undefined || actual === null || actual === '' ? '—' : `${Number(actual)}٪`;
+    return `
     <article class="indicator">
       <div class="indicator-head">
         <div><h3>${x.name}</h3><span class="category">${x.category}</span></div>
@@ -476,12 +579,57 @@ function render(){
         <div><strong>مالك البيانات:</strong> ${x.owner}</div>
         <div><strong>خط الأساس:</strong> ${x.baseline}</div>
       </div>
+      <span class="actual-line ${status.className}">النتيجة الحالية: ${actualText} — ${status.label}</span>
       <button class="details-btn" onclick="openDetails(${x.id})">عرض جميع التفاصيل</button>
-    </article>`).join(""):`<div class="empty">لا توجد مؤشرات مطابقة للفلاتر الحالية.</div>`;
+    </article>`;
+  }).join(""):`<div class="empty">لا توجد مؤشرات مطابقة للفلاتر الحالية.</div>`;
+}
+
+function renderDataEntryGrid(){
+  const actuals = getActualData();
+  const holder = document.getElementById('dataEntryGrid');
+  holder.innerHTML = indicators.map(ind=>{
+    const status = evaluateIndicator(ind, actuals[ind.id]);
+    const value = actuals[ind.id] ?? '';
+    return `
+      <div class="entry-card">
+        <h4>${ind.id}. ${ind.name}</h4>
+        <div class="entry-meta">المستهدف: ${ind.target} | حد القبول: ${ind.acceptance}</div>
+        <label for="actual-${ind.id}">النتيجة الحالية (%)</label>
+        <input id="actual-${ind.id}" type="number" min="0" max="100" step="0.1" value="${value}" placeholder="مثال: 88">
+        <span class="entry-status ${status.className}">${status.label}</span>
+      </div>`;
+  }).join('');
+  document.getElementById('saveStatus').textContent = '';
+}
+function openDataEntry(){ closeMenu(); renderDataEntryGrid(); document.getElementById('dataEntryModal').classList.add('show'); }
+function closeDataEntry(){ document.getElementById('dataEntryModal').classList.remove('show'); }
+function saveActualData(){
+  const values = {};
+  indicators.forEach(ind=>{
+    const el = document.getElementById(`actual-${ind.id}`);
+    if(!el) return;
+    const raw = el.value.trim();
+    if(raw !== '') values[ind.id] = Number(raw);
+  });
+  setActualData(values);
+  document.getElementById('saveStatus').textContent = 'تم حفظ البيانات بنجاح.';
+  render();
+  renderDataEntryGrid();
+}
+function clearActualData(){
+  if(!confirm('هل تريدين مسح جميع البيانات المدخلة؟')) return;
+  localStorage.removeItem(ACTUALS_KEY);
+  render();
+  renderDataEntryGrid();
+  document.getElementById('saveStatus').textContent = 'تم مسح البيانات.';
 }
 
 window.openDetails=id=>{
   const x=indicators.find(i=>i.id===id);
+  const actual = getActualData()[x.id];
+  const status = evaluateIndicator(x, actual);
+  const actualText = actual === undefined || actual === null || actual === '' ? 'غير مدخل' : `${Number(actual)}٪`;
   document.getElementById("modalCategory").textContent=x.category;
   document.getElementById("modalTitle").textContent=x.name;
   const fields=[
@@ -494,6 +642,7 @@ window.openDetails=id=>{
     ["خط الأساس",x.baseline,false],
     ["المستهدف",x.target,false],
     ["حدود القبول",x.acceptance,false],
+    ["النتيجة الحالية",`${actualText} — ${status.label}`,false],
     ["الإجراء عند الانحراف",x.deviation,true],
     ["الشواهد الداعمة",x.evidence,true],
     ["ارتباط ISO 9001:2015",x.iso,true]
@@ -505,20 +654,22 @@ window.openDetails=id=>{
 
 document.getElementById("closeModal").onclick=()=>modal.classList.remove("show");
 modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("show")});
-
+document.getElementById('dataEntryModal').addEventListener('click', e=>{ if(e.target.id === 'dataEntryModal') closeDataEntry(); });
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){ modal.classList.remove("show"); closeDataEntry(); closeMenu(); }});
 [search,categoryFilter,measureFilter,ownerFilter].forEach(el=>el.addEventListener(el===search?"input":"change",render));
-document.getElementById("reset").onclick=()=>{
-  search.value="";categoryFilter.value="all";measureFilter.value="all";ownerFilter.value="all";render();
-};
-
-document.getElementById("themeToggle").onclick=()=>{
+document.getElementById("reset").onclick=()=>{ search.value="";categoryFilter.value="all";measureFilter.value="all";ownerFilter.value="all";render(); };
+function applyTheme(){
   const root=document.documentElement;
   const dark=root.dataset.theme==="dark";
   root.dataset.theme=dark?"":"dark";
-  document.getElementById("themeToggle").textContent=dark?"الوضع الداكن":"الوضع الفاتح";
-};
-
+  const text = dark?"الوضع الداكن":"الوضع الفاتح";
+  document.getElementById('themeToggleMenu').textContent = text;
+}
+document.getElementById('themeToggleMenu').onclick=()=>{ applyTheme(); closeMenu(); };
+function openMenu(){ document.getElementById('sideMenu').classList.add('show'); document.getElementById('menuBackdrop').classList.add('show'); }
+function closeMenu(){ document.getElementById('sideMenu').classList.remove('show'); document.getElementById('menuBackdrop').classList.remove('show'); }
+document.getElementById('menuBackdrop').onclick=closeMenu;
+function goToCharts(){ window.location.href='quality-goals-2026-charts.html'; }
 render();
 </script>
 </body>
