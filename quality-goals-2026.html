@@ -60,12 +60,12 @@
       font-family:"Segoe UI",Tahoma,Arial,sans-serif;
     }
     button,input,select{font:inherit}
-    .container{position:relative;width:min(1480px,95%);margin:auto;padding:88px 0 48px}
+    .container{position:relative;width:min(1480px,95%);margin:auto;padding:22px 0 48px}
     .hero{
       position:relative;overflow:hidden;
       background:linear-gradient(135deg,var(--primary-dark),var(--primary));
-      color:#fff;border-radius:28px;padding:28px;
-      box-shadow:var(--shadow);margin-bottom:18px;
+      color:#fff;border-radius:28px;padding:76px 28px 28px;
+      min-height:150px;box-shadow:var(--shadow);margin-bottom:18px;
       display:flex;align-items:flex-start;gap:20px;
     }
     .hero-content{position:relative;z-index:2;max-width:880px;padding-top:0}
@@ -211,9 +211,9 @@
     }
     @media(max-width:760px){
       .container{width:94%;padding-top:78px}
-      .hero{flex-direction:column;align-items:flex-start;padding:20px;border-radius:20px}
+      .hero{flex-direction:column;align-items:flex-start;padding:72px 20px 20px;border-radius:20px}
       .hero-content{padding-top:0}
-      .menu-toggle{top:14px;right:0}
+      .menu-toggle{top:14px;right:14px}
       .hero::after{font-size:5rem}
       .kpis{grid-template-columns:1fr 1fr}
       .filters{grid-template-columns:1fr}
@@ -230,11 +230,11 @@
   
 
 .menu-toggle{
-  border:1px solid rgba(0,123,97,.25);
-  background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;
+  border:1px solid rgba(255,255,255,.38);
+  background:rgba(255,255,255,.14);color:#fff;
   padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
-  align-items:center;gap:10px;position:absolute;top:18px;right:0;z-index:65;
-  box-shadow:0 10px 24px rgba(0,123,97,.22)
+  align-items:center;gap:10px;position:absolute;top:18px;right:18px;z-index:65;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);backdrop-filter:blur(8px)
 }
 .menu-toggle .bars{font-size:1.15rem;line-height:1}
 .side-menu-backdrop{
@@ -314,12 +314,11 @@
   </aside>
 
   <main class="container">
-    <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
     <header class="hero">
       <div class="hero-content">
         <h1>لوحة أهداف الجودة 2026</h1>
       </div>
-      
+      <button class="menu-toggle" type="button" onclick="openMenu()"><span class="bars">☰</span><span>القائمة</span></button>
     </header>
 
     <section class="kpis">
