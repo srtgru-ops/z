@@ -27,8 +27,8 @@ header{
   background:linear-gradient(135deg,var(--primary),#0c2947);
   color:#fff;padding:26px 30px 22px;position:relative;overflow:hidden
 }
-header:after{content:"";position:absolute;left:-70px;top:-90px;width:240px;height:240px;border:35px solid rgba(255,255,255,.06);border-radius:50%}
-.header-wrap{max-width:1500px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
+header:after{content:"";position:absolute;left:-70px;top:-90px;width:240px;height:240px;border:35px solid rgba(255,255,255,.06);border-radius:50%;pointer-events:none}
+.header-wrap{max-width:1500px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px;position:relative;z-index:2}
 .title h1{margin:0 0 8px;font-size:28px}
 .title p{margin:0;color:#d8e6f5;font-size:14px}
 .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:10px 15px;border-radius:12px;font-size:13px}
@@ -123,7 +123,7 @@ tr:hover td{background:#f8fbff}
     </div>
     <div class="header-actions">
       <div class="badge">الإصدار التنفيذي • 2026</div>
-      <a class="home-link" href="index.html" aria-label="العودة للصفحة الرئيسية"><span class="home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
+      <a class="home-link" href="./index.html" onclick="window.location.assign('./index.html'); return false;" aria-label="العودة للصفحة الرئيسية"><span class="home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
     </div>
   </div>
 </header>
