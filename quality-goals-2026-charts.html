@@ -343,6 +343,7 @@
     </div>
     <div class="menu-list">
       <button class="menu-item" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية <span class="alert-count" id="menuAlertCount" style="display:none">0</span></button>
+      <button class="menu-item" type="button" onclick="goToEvidence()">الشواهد</button>
       <button class="menu-item accent" type="button" onclick="window.print();closeMenu()">طباعة الرسوم</button>
       <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
       <button class="menu-item" type="button" onclick="openDataEntry()">إدخال البيانات</button>
@@ -862,6 +863,9 @@ document.getElementById('themeToggleMenu').onclick=()=>{ applyThemeToggle(); clo
 function openMenu(){ document.getElementById('sideMenu').classList.add('show'); document.getElementById('menuBackdrop').classList.add('show'); }
 function closeMenu(){ document.getElementById('sideMenu').classList.remove('show'); document.getElementById('menuBackdrop').classList.remove('show'); }
 document.getElementById('menuBackdrop').onclick=closeMenu;
+function goToEvidence(){
+  window.location.href = new URL('quality-goals-2026-evidence.html', window.location.href).href;
+}
 function goBackToMain(){
   let stored = '';
   try { stored = sessionStorage.getItem('qualityGoalsMainUrl') || ''; } catch(e) {}
