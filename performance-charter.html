@@ -95,59 +95,36 @@ tr:hover td{background:#f8fbff}
   .container{padding:12px}
   .title h1{font-size:22px}
 }
+
+.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.home-link{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:40px;padding:0 14px;border-radius:12px;
+  color:#fff;text-decoration:none;font-size:13px;font-weight:700;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.20);
+  transition:background .18s ease,transform .18s ease,border-color .18s ease;
+}
+.home-link:hover{background:rgba(255,255,255,.20);border-color:rgba(255,255,255,.34);transform:translateY(-1px)}
+.home-link:focus-visible{outline:3px solid rgba(47,128,237,.45);outline-offset:3px}
+.home-link .home-icon{font-size:16px;line-height:1}
+@media(max-width:900px){.header-actions{width:100%;justify-content:flex-start}}
+@media print{.home-link{display:none!important}}
+
 </style>
 <style>
-
-  /* زر العودة الموحد */
-  .portal-home-btn{
-    position:fixed;
-    top:18px;
-    left:18px;
-    z-index:10000;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    min-height:42px;
-    padding:0 15px;
-    border-radius:13px;
-    background:linear-gradient(135deg,#087a45,#0b8a50);
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.35);
-    box-shadow:0 10px 24px rgba(5,78,46,.20);
-    text-decoration:none !important;
-    font-family:"Tajawal","Segoe UI",Tahoma,Arial,sans-serif;
-    font-size:13px;
-    font-weight:900;
-    line-height:1;
-    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
-  }
-  .portal-home-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 14px 30px rgba(5,78,46,.28);
-    filter:brightness(1.04);
-  }
-  .portal-home-btn:focus-visible{
-    outline:3px solid rgba(201,168,76,.45);
-    outline-offset:3px;
-  }
-  .portal-home-btn .portal-home-icon{font-size:17px;line-height:1}
-  @media(max-width:650px){
-    .portal-home-btn{top:10px;left:10px;min-height:39px;padding:0 12px;font-size:12px;border-radius:11px}
-  }
-  @media print{.portal-home-btn{display:none!important}}
-
 </style>
 </head>
 <body>
-  <a class="portal-home-btn" href="index.html" aria-label="العودة للصفحة الرئيسية"><span class="portal-home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
 <header>
   <div class="header-wrap">
     <div class="title">
       <h1>لوحة ميثاق الأداء الوظيفي</h1>
       <p>عمادة شؤون الطلاب — تحليل الأهداف الموزونة، الجدارات، المستهدفات، والشواهد</p>
     </div>
-    <div class="badge">الإصدار التنفيذي • 2026</div>
+    <div class="header-actions">
+      <div class="badge">الإصدار التنفيذي • 2026</div>
+      <a class="home-link" href="index.html" aria-label="العودة للصفحة الرئيسية"><span class="home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
+    </div>
   </div>
 </header>
 
