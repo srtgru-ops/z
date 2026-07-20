@@ -66,9 +66,11 @@
       position:relative;overflow:hidden;
       background:linear-gradient(135deg,var(--primary-dark),var(--primary));
       color:#fff;border-radius:28px;padding:28px;
+      padding-left:28px;padding-right:28px;padding-top:34px;
       box-shadow:var(--shadow);margin-bottom:18px;
-      display:flex;justify-content:space-between;align-items:center;gap:20px;
+      display:flex;align-items:flex-start;gap:20px;
     }
+    .hero-content{position:relative;z-index:2;max-width:920px;padding-top:8px}
     .hero::after{
       content:"2026";position:absolute;left:24px;bottom:-34px;
       font-size:8rem;font-weight:900;opacity:.09;line-height:1;
@@ -230,7 +232,7 @@
 .menu-toggle{
   border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;
   padding:11px 16px;border-radius:14px;cursor:pointer;font-weight:900;display:inline-flex;
-  align-items:center;gap:10px;position:relative;z-index:2
+  align-items:center;gap:10px;position:absolute;top:18px;right:18px;z-index:2
 }
 .menu-toggle .bars{font-size:1.15rem;line-height:1}
 .side-menu-backdrop{
@@ -286,7 +288,49 @@
 .chart-wrap{height:360px}
 .card{min-height:430px}
 .status-note{font-size:.82rem;color:var(--muted);margin-top:6px;line-height:1.7}
-@media(max-width:760px){.chart-wrap{height:300px}.card{min-height:360px}}
+
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;min-height:250px}
+.insight-card h3{margin:0 0 8px;font-size:1rem;font-weight:900}
+.insight-card p{margin:0 0 10px;color:var(--muted);font-size:.8rem;line-height:1.7}
+.insight-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.insight-card li{background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:10px 12px;line-height:1.8;font-size:.82rem}
+.insight-card li strong{display:block;color:var(--text);margin-bottom:3px}
+.insight-card.good{border-top:4px solid #12a36f}
+.insight-card.bad{border-top:4px solid #d94d4d}
+.insight-card.improve{border-top:4px solid #d8a100}
+.empty-tip{color:var(--muted);font-size:.82rem;line-height:1.8;background:var(--surface-2);border:1px dashed var(--border);border-radius:13px;padding:12px}
+@media(max-width:1150px){.insight-grid{grid-template-columns:1fr}}
+
+@media(max-width:760px){.chart-wrap{height:300px}.card{min-height:360px}.hero{padding:20px;padding-top:72px;border-radius:20px}.hero-content{padding-top:0}.menu-toggle{top:14px;right:14px}}
+
+.priority-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+.priority-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:.74rem;font-weight:900}
+.priority-badge.high{background:#fde4e4;color:#b13f3f}
+.priority-badge.medium{background:#fff3cf;color:#8a6a00}
+.priority-badge.low{background:#e3f7ef;color:#0a7a58}
+.priority-badge.na{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.alert-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--danger);color:#fff;font-size:.72rem;font-weight:900;margin-inline-start:6px}
+
+
+.auto-alert-panel{display:none;background:var(--surface);border:1px solid var(--border);border-right:5px solid var(--danger);border-radius:16px;padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow)}
+.auto-alert-panel.show{display:block}
+.auto-alert-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.auto-alert-title{font-weight:900;font-size:1rem}
+.auto-alert-list{display:flex;flex-direction:column;gap:8px}
+.auto-alert-item{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;line-height:1.8;font-size:.82rem}
+.auto-alert-item strong{color:var(--danger)}
+.priority-card{min-height:auto}
+.priority-table{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.priority-column{background:var(--surface-2);border:1px solid var(--border);border-radius:15px;padding:14px}
+.priority-column h3{margin:0 0 10px;font-size:.95rem}
+.priority-column ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.priority-column li{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:9px 10px;font-size:.8rem;line-height:1.7}
+.priority-column.high{border-top:4px solid #d94d4d}
+.priority-column.medium{border-top:4px solid #d8a100}
+.priority-column.low{border-top:4px solid #12a36f}
+@media(max-width:900px){.priority-table{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -297,7 +341,7 @@
       <button class="side-menu-close" type="button" onclick="closeMenu()">×</button>
     </div>
     <div class="menu-list">
-      <button class="menu-item" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية</button>
+      <button class="menu-item" type="button" onclick="goBackToMain()">العودة للوحة الرئيسية <span class="alert-count" id="menuAlertCount" style="display:none">0</span></button>
       <button class="menu-item accent" type="button" onclick="window.print();closeMenu()">طباعة الرسوم</button>
       <button class="menu-item" type="button" id="themeToggleMenu">الوضع الداكن</button>
       <button class="menu-item" type="button" onclick="openDataEntry()">إدخال البيانات</button>
@@ -307,7 +351,7 @@
 
   <main class="container">
     <header class="hero">
-      <div>
+      <div class="hero-content">
         <h1>الرسوم البيانية لأهداف الجودة 2026</h1>
         <p>صفحة مخصصة لعرض الرسوم البيانية ومتابعة مكانك الحالي في كل مؤشر بناءً على البيانات التي تقومين بإدخالها.</p>
       </div>
@@ -320,10 +364,22 @@
     <section class="kpis dashboard-kpis">
       <article class="kpi" id="kpiEntered"><div class="kpi-label">المؤشرات المدخلة</div><div class="kpi-value">0</div><div class="kpi-sub">من أصل 8 مؤشرات</div></article>
       <article class="kpi" id="kpiAverage"><div class="kpi-label">متوسط النتيجة الحالية</div><div class="kpi-value">—</div><div class="kpi-sub">للمؤشرات التي تم إدخالها</div></article>
+      <article class="kpi status-good" id="kpiOverall"><div class="kpi-label">نسبة الإنجاز العامة</div><div class="kpi-value">—</div><div class="kpi-sub">متوسط الإنجاز مقارنة بالمستهدفات</div></article>
       <article class="kpi status-good" id="kpiGood"><div class="kpi-label">محقق للمستهدف</div><div class="kpi-value">0</div><div class="kpi-sub">عدد المؤشرات الملتزمة</div></article>
       <article class="kpi status-accept" id="kpiAccept"><div class="kpi-label">ضمن حد القبول</div><div class="kpi-value">0</div><div class="kpi-sub">بحاجة متابعة خفيفة</div></article>
       <article class="kpi status-bad" id="kpiBad"><div class="kpi-label">أقل من حد القبول</div><div class="kpi-value">0</div><div class="kpi-sub">بحاجة معالجة</div></article>
       <article class="kpi status-na" id="kpiMissing"><div class="kpi-label">غير مدخل</div><div class="kpi-value">8</div><div class="kpi-sub">مؤشرات بلا نتيجة فعلية</div></article>
+      <article class="kpi status-bad" id="kpiPriorityHigh"><div class="kpi-label">أولوية عالية</div><div class="kpi-value">0</div><div class="kpi-sub">تحتاج إجراءً عاجلًا</div></article>
+      <article class="kpi status-accept" id="kpiPriorityMedium"><div class="kpi-label">أولوية متوسطة</div><div class="kpi-value">0</div><div class="kpi-sub">تحتاج متابعة وتحسين</div></article>
+      <article class="kpi status-good" id="kpiPriorityLow"><div class="kpi-label">أولوية منخفضة</div><div class="kpi-value">0</div><div class="kpi-sub">مؤشرات محققة للمستهدف</div></article>
+    </section>
+
+    <section class="auto-alert-panel" id="autoAlertPanel">
+      <div class="auto-alert-head">
+        <div class="auto-alert-title">تنبيه تلقائي للمؤشرات المتأخرة</div>
+        <span class="priority-badge high" id="autoAlertBadge">0 تنبيهات</span>
+      </div>
+      <div class="auto-alert-list" id="autoAlertList"></div>
     </section>
 
     <section class="grid">
@@ -356,6 +412,34 @@
         <h2>الفجوة عن المستهدف</h2>
         <div class="sub">القيمة السالبة تعني أنك ما زلت أقل من المستهدف، والقيمة الموجبة تعني أنك تجاوزت المستهدف</div>
         <div class="chart-wrap"><canvas id="gapChart"></canvas></div>
+      </article>
+    </section>
+
+    <article class="card priority-card span-12">
+      <h2>ترتيب الأولوية للمؤشرات</h2>
+      <div class="sub">يتم ترتيب الأولوية تلقائيًا حسب النتيجة الحالية مقارنة بالمستهدف وحد القبول.</div>
+      <div class="priority-table">
+        <section class="priority-column high"><h3>أولوية عالية</h3><div id="priorityHighList"></div></section>
+        <section class="priority-column medium"><h3>أولوية متوسطة</h3><div id="priorityMediumList"></div></section>
+        <section class="priority-column low"><h3>أولوية منخفضة</h3><div id="priorityLowList"></div></section>
+      </div>
+    </article>
+
+    <section class="insight-grid">
+      <article class="insight-card good">
+        <h3>الإيجابيات</h3>
+        <p>المؤشرات التي حققت المستهدف أو تجاوزته.</p>
+        <div id="positivesList"></div>
+      </article>
+      <article class="insight-card bad">
+        <h3>السلبيات</h3>
+        <p>المؤشرات التي ما زالت أقل من حد القبول وتحتاج تدخلًا مباشرًا.</p>
+        <div id="negativesList"></div>
+      </article>
+      <article class="insight-card improve">
+        <h3>عمليات التحسين</h3>
+        <p>اقتراحات التحسين والإجراءات المطلوبة للمؤشرات التي تحتاج متابعة أو معالجة.</p>
+        <div id="improvementsList"></div>
       </article>
     </section>
 
@@ -557,6 +641,13 @@ function evaluateIndicator(ind, actual){
   if(value >= ind.acceptanceValue) return {label:'ضمن حد القبول', className:'accept'};
   return {label:'أقل من حد القبول', className:'bad'};
 }
+function getPriority(ind, actual){
+  const status = evaluateIndicator(ind, actual).className;
+  if(status === 'bad') return {label:'أولوية عالية', className:'high', rank:1};
+  if(status === 'accept') return {label:'أولوية متوسطة', className:'medium', rank:2};
+  if(status === 'good') return {label:'أولوية منخفضة', className:'low', rank:3};
+  return {label:'غير محددة', className:'na', rank:4};
+}
 function actualValueFor(ind){
   const val = getActualData()[ind.id];
   return (val === undefined || val === null || val === '') ? null : Number(val);
@@ -634,17 +725,90 @@ charts.gap=new Chart(document.getElementById("gapChart"),{
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:items=>indicators[items[0].dataIndex].name,label:c=>`${c.raw==null?'لا توجد نتيجة مدخلة':'الفجوة: '+c.raw.toFixed(1)+'٪'}`}}},scales:{x:{grid:{display:false},ticks:{color:commonText()}},y:{ticks:{color:commonText(),callback:v=>v+"٪"},grid:{color:commonGrid()}}}}
 });
 
+function renderPriorityAndAlerts(){
+  const groups = {high:[], medium:[], low:[]};
+  const alerts = [];
+  indicators.forEach(ind=>{
+    const actual = actualValueFor(ind);
+    if(actual === null) return;
+    const priority = getPriority(ind, actual);
+    const gap = Number((actual - ind.targetValue).toFixed(1));
+    const item = `<li><strong>${ind.name}</strong><br>النتيجة: ${actual}٪ | المستهدف: ${ind.targetValue}٪ | الفجوة: ${gap}٪</li>`;
+    if(groups[priority.className]) groups[priority.className].push(item);
+    if(priority.className === 'high'){
+      alerts.push(`<div class="auto-alert-item"><strong>${ind.name}</strong><br>النتيجة الحالية ${actual}٪ أقل من حد القبول ${ind.acceptanceValue}٪. الإجراء المقترح: ${ind.deviation}</div>`);
+    }
+  });
+
+  const setGroup = (id, list, emptyText)=>{
+    document.getElementById(id).innerHTML = list.length ? `<ul>${list.join('')}</ul>` : `<div class="empty-tip">${emptyText}</div>`;
+  };
+  setGroup('priorityHighList', groups.high, 'لا توجد مؤشرات ذات أولوية عالية.');
+  setGroup('priorityMediumList', groups.medium, 'لا توجد مؤشرات ذات أولوية متوسطة.');
+  setGroup('priorityLowList', groups.low, 'لا توجد مؤشرات ذات أولوية منخفضة.');
+
+  const panel = document.getElementById('autoAlertPanel');
+  const badge = document.getElementById('autoAlertBadge');
+  const menuBadge = document.getElementById('menuAlertCount');
+  badge.textContent = `${alerts.length} ${alerts.length === 1 ? 'تنبيه' : 'تنبيهات'}`;
+  menuBadge.textContent = alerts.length;
+  menuBadge.style.display = alerts.length ? 'inline-grid' : 'none';
+  document.getElementById('autoAlertList').innerHTML = alerts.length ? alerts.join('') : '<div class="empty-tip">لا توجد مؤشرات أقل من حد القبول حاليًا.</div>';
+  panel.classList.toggle('show', alerts.length > 0);
+}
+
+function renderInsights(){
+  const positives = [];
+  const negatives = [];
+  const improvements = [];
+
+  indicators.forEach(ind=>{
+    const actual = actualValueFor(ind);
+    const status = evaluateIndicator(ind, actual);
+    if(actual === null) return;
+
+    if(status.className === 'good'){
+      positives.push(`<li><strong>${ind.name}</strong>النتيجة الحالية: ${actual}٪، والمستهدف: ${ind.target}.</li>`);
+    }
+    if(status.className === 'bad'){
+      negatives.push(`<li><strong>${ind.name}</strong>النتيجة الحالية: ${actual}٪، وحد القبول: ${ind.acceptance}. الفجوة عن المستهدف: ${(actual - ind.targetValue).toFixed(1)}٪.</li>`);
+    }
+    if(status.className === 'accept' || status.className === 'bad'){
+      improvements.push(`<li><strong>${ind.name}</strong>${ind.deviation}</li>`);
+    }
+  });
+
+  document.getElementById('positivesList').innerHTML = positives.length ? `<ul>${positives.join('')}</ul>` : `<div class="empty-tip">لا توجد مؤشرات محققة للمستهدف حتى الآن، أو لم يتم إدخال بيانات.</div>`;
+  document.getElementById('negativesList').innerHTML = negatives.length ? `<ul>${negatives.join('')}</ul>` : `<div class="empty-tip">لا توجد مؤشرات أقل من حد القبول حاليًا.</div>`;
+  document.getElementById('improvementsList').innerHTML = improvements.length ? `<ul>${improvements.join('')}</ul>` : `<div class="empty-tip">لا توجد عمليات تحسين مطلوبة حاليًا، أو لم يتم إدخال بيانات بعد.</div>`;
+}
+
 function refreshDashboard(){
   const actuals = getActualData();
   const enteredValues = indicators.map(x=>actualValueFor(x)).filter(v=>v !== null);
   const counts = statusCounts();
   const average = enteredValues.length ? (enteredValues.reduce((a,b)=>a+b,0)/enteredValues.length).toFixed(1)+"٪" : '—';
+  const achievementRates = indicators.map(ind=>{
+    const actual = actualValueFor(ind);
+    return actual === null ? null : Math.min((actual / ind.targetValue) * 100, 100);
+  }).filter(v=>v !== null);
+  const overallAchievement = achievementRates.length ? (achievementRates.reduce((a,b)=>a+b,0)/achievementRates.length).toFixed(1)+"٪" : '—';
+  const priorities = {high:0, medium:0, low:0};
+  indicators.forEach(ind=>{
+    const actual = actualValueFor(ind);
+    const p = getPriority(ind, actual).className;
+    if(priorities[p] !== undefined) priorities[p]++;
+  });
   document.querySelector('#kpiEntered .kpi-value').textContent = enteredValues.length;
   document.querySelector('#kpiAverage .kpi-value').textContent = average;
+  document.querySelector('#kpiOverall .kpi-value').textContent = overallAchievement;
   document.querySelector('#kpiGood .kpi-value').textContent = counts.good;
   document.querySelector('#kpiAccept .kpi-value').textContent = counts.accept;
   document.querySelector('#kpiBad .kpi-value').textContent = counts.bad;
   document.querySelector('#kpiMissing .kpi-value').textContent = counts.missing;
+  document.querySelector('#kpiPriorityHigh .kpi-value').textContent = priorities.high;
+  document.querySelector('#kpiPriorityMedium .kpi-value').textContent = priorities.medium;
+  document.querySelector('#kpiPriorityLow .kpi-value').textContent = priorities.low;
   document.getElementById('noDataBanner').style.display = enteredValues.length ? 'none' : 'block';
   charts.target.data.datasets[2].data = indicators.map(x=>actualValueFor(x));
   charts.status.data.datasets[0].data = [counts.good, counts.accept, counts.bad, counts.missing];
@@ -653,6 +817,8 @@ function refreshDashboard(){
   });
   charts.gap.data.datasets[0].data = gapData;
   charts.gap.data.datasets[0].backgroundColor = gapData.map(v=> v===null ? '#93a59e' : (v>=0 ? '#12a36f' : '#d94d4d'));
+  renderPriorityAndAlerts();
+  renderInsights();
   applyChartTheme();
 }
 
@@ -700,6 +866,7 @@ function applyThemeToggle(){
   const dark=root.dataset.theme==="dark";
   root.dataset.theme=dark?"":"dark";
   document.getElementById('themeToggleMenu').textContent = dark?"الوضع الداكن":"الوضع الفاتح";
+  renderInsights();
   applyChartTheme();
 }
 document.getElementById('themeToggleMenu').onclick=()=>{ applyThemeToggle(); closeMenu(); };
