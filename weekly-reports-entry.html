@@ -69,7 +69,7 @@
         <div><h1>إدخال التقارير الأسبوعية</h1><p>عمادة شؤون الطلاب • من الأحد إلى الخميس</p></div>
       </div>
       <div class="header-actions">
-        <a class="pill-btn" href="./departments-dashboard.html?view=departments">رجوع لصفحة الإدارات</a>
+        <button class="pill-btn" type="button" onclick="returnToPreviousPage()">رجوع لصفحة الإدارات</button>
         <a class="pill-btn" href="./index.html">الصفحة الرئيسية</a>
         <button class="pill-btn" type="button" onclick="closeEntryPage()">إغلاق</button>
       </div>
@@ -207,7 +207,7 @@
     saveStore(store);
   }
   function getReport(periodId,deptId){return loadStore()?.[periodId]?.[deptId]||null}
-  function setReport(periodId,deptId,data){const store=loadStore();if(!store[periodId])store[periodId]={};store[periodId][deptId]=data;saveStore(store)}
+  function setReport(periodId,deptId,data){const store=loadStore();if(!store[periodId])store[periodId]={};store[periodId][deptId]=data;return saveStore(store)}
   function deleteReport(periodId,deptId){const store=loadStore();if(store[periodId]?.[deptId]){delete store[periodId][deptId];saveStore(store)}}
   function currentPeriodIndex(){const now=new Date();if(now.getFullYear()<WEEKLY_REPORT_YEAR)return 0;if(now.getFullYear()>WEEKLY_REPORT_YEAR)return PERIODS.length-1;let found=0;PERIODS.forEach((p,i)=>{if(p.start<=now)found=i});return found}
   function selectedPeriod(){return PERIODS.find(p=>p.id===selectedPeriodId)||PERIODS[currentPeriodIndex()]}
@@ -260,7 +260,8 @@
   function saveReport(status){
     const items=collectItems();if(!items.length){showMessage("أضف بندًا واحدًا على الأقل قبل الحفظ.",false);return}
     const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];
-    setReport(period.id,dept.id,{responsible:$("responsibleInput").value.trim()||dept.defaultResponsible,status,updatedAt:new Date().toISOString(),items});
+    const saved=setReport(period.id,dept.id,{responsible:$("responsibleInput").value.trim()||dept.defaultResponsible,status,updatedAt:new Date().toISOString(),items});
+    if(!saved){showMessage("تعذر حفظ البيانات لأن المتصفح منع التخزين المحلي. جرّب تحديث الصفحة أو السماح ببيانات المواقع.",false);return}
     showMessage(status==="complete"?"تم اعتماد التقرير، وسيظهر تلقائيًا في صفحة الإدارات.":"تم حفظ التقرير كمسودة، وسيظهر تلقائيًا في صفحة الإدارات.",true);renderDepartmentCards();renderSummary();$("formState").textContent=status==="complete"?"مكتمل":"مسودة";
   }
   function clearReport(){const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];if(!confirm("هل تريد مسح تقرير هذه الإدارة للأسبوع المحدد؟"))return;deleteReport(period.id,dept.id);loadForm();showMessage("تم مسح بيانات التقرير.",true)}
@@ -268,10 +269,47 @@
   function hideMessage(){$("message").className="message"}
 
   function selectCurrentWeek(){selectedPeriodId=PERIODS[currentPeriodIndex()].id;$("weekSelect").value=selectedPeriodId;localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedPeriodId);loadForm()}
-  function goBackToDepartments(){if(history.length>1){history.back()}else{window.location.href="./departments-dashboard.html?view=departments"}}
-  function closeEntryPage(){window.location.href="./departments-dashboard.html?view=departments"},100)}
+  function returnToPreviousPage(){
+    try{
+      if(history.length > 1){
+        history.back();
+        return;
+      }
+    }catch(e){}
+    window.location.href = "./departments-dashboard.html?view=departments";
+  }
+
+  function goBackToDepartments(){
+    returnToPreviousPage();
+  }
+
+  function closeEntryPage(){
+    // المتصفحات تمنع إغلاق الصفحة إذا لم تُفتح برمجيًا؛ لذلك نعود للصفحة السابقة.
+    try{
+      if(window.opener && !window.opener.closed){
+        window.close();
+        setTimeout(returnToPreviousPage, 250);
+        return;
+      }
+    }catch(e){}
+    returnToPreviousPage();
+  }
+
+  function storageIsAvailable(){
+    try{
+      const testKey = "__weekly_reports_storage_test__";
+      localStorage.setItem(testKey, "1");
+      localStorage.removeItem(testKey);
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
 
   function init(){
+    if(!storageIsAvailable()){
+      showMessage("المتصفح يمنع حفظ البيانات محليًا. افتح الصفحة من رابط GitHub Pages العادي وتأكد أن التخزين المحلي غير محظور.",false);
+    }
     migrateLegacyInvestmentEmployeesReports();
     let stored="";try{stored=localStorage.getItem(WEEKLY_SELECTED_PERIOD_KEY)||""}catch(e){}
     selectedPeriodId=PERIODS.some(p=>p.id===stored)?stored:PERIODS[currentPeriodIndex()].id;
