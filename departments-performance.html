@@ -2,15 +2,7 @@
 <!-- تحديث: نقل داشبورد الإدارة أسفل المستهدفات الرسمية وإضافة مقارنة الربع الأول والثاني -->
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
-<script>
-(function(){
-  var granted = false;
-  try { granted = sessionStorage.getItem('ut_student_affairs_access') === 'granted'; } catch (e) {}
-  if (!granted && window.name.indexOf('UT_STUDENT_AFFAIRS_ACCESS') === -1) {
-    window.location.replace('index.html');
-  }
-})();
-</script>
+<!-- النسخة المستقلة: تم تعطيل التحقق والتحويل إلى index.html مؤقتًا حتى يتم الربط لاحقًا -->
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=1440, user-scalable=yes" />
@@ -1830,6 +1822,121 @@
 
   
 
+
+    /* تقسيم صفحة الإدارات: عرض البيانات + إدخال التقارير الأسبوعية */
+    .departments-navigation{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(260px,1fr));
+      gap:14px;
+      margin:0 0 16px;
+    }
+    .department-nav-card{
+      width:100%;
+      min-height:122px;
+      border:1px solid var(--border);
+      border-radius:22px;
+      background:linear-gradient(135deg,var(--card),var(--card-2));
+      color:var(--text);
+      padding:18px;
+      display:flex;
+      align-items:center;
+      gap:15px;
+      text-align:right;
+      font-family:inherit;
+      cursor:pointer;
+      box-shadow:var(--shadow-sm);
+      transition:.2s ease;
+    }
+    .department-nav-card:hover{
+      transform:translateY(-3px);
+      border-color:var(--green);
+      box-shadow:var(--shadow);
+    }
+    .department-nav-card.weekly-entry{
+      background:linear-gradient(135deg,var(--green-soft),var(--blue-soft));
+    }
+    .department-nav-icon{
+      width:58px;
+      height:58px;
+      flex:0 0 58px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:var(--card);
+      border:1px solid var(--border);
+      font-size:29px;
+    }
+    .department-nav-card strong{
+      display:block;
+      margin-bottom:7px;
+      color:var(--text);
+      font-size:18px;
+      font-weight:1000;
+    }
+    .department-nav-card span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.75;
+    }
+    .view-only-notice{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:0 0 14px;
+      padding:12px 14px;
+      border:1px solid rgba(42,120,214,.22);
+      border-radius:16px;
+      background:var(--blue-soft);
+      color:var(--text);
+      font-size:13px;
+      font-weight:900;
+      line-height:1.7;
+    }
+    .department-view-only input,
+    .department-view-only textarea,
+    .department-view-only select{
+      pointer-events:none !important;
+      cursor:default !important;
+      opacity:1 !important;
+      color:var(--text) !important;
+      -webkit-text-fill-color:var(--text) !important;
+      background:transparent !important;
+      border-color:transparent !important;
+      box-shadow:none !important;
+      font-weight:950 !important;
+    }
+    .department-view-only textarea{
+      resize:none !important;
+      min-height:48px;
+      line-height:1.65 !important;
+    }
+    .department-view-only select{
+      appearance:none;
+      -webkit-appearance:none;
+      background-image:none !important;
+    }
+    .department-view-only input::placeholder,
+    .department-view-only textarea::placeholder{
+      color:var(--muted) !important;
+      opacity:.75 !important;
+    }
+    .department-view-only .homepage-input-table td,
+    .department-view-only .detail-month-table td,
+    .department-view-only .sports-detail-table td,
+    .department-view-only .muhtaraf-table td{
+      background:var(--card) !important;
+    }
+    .department-view-only .data-entry-note,
+    .department-view-only .weekly-action-btn,
+    .department-view-only .weekly-delete-row{
+      display:none !important;
+    }
+    @media(max-width:760px){
+      .departments-navigation{grid-template-columns:1fr}
+    }
+
     /* التقارير الأسبوعية للإدارات المساندة */
     .weekly-reports-section{
       margin-top:24px;
@@ -2069,6 +2176,114 @@
       .weekly-detail-kpis{grid-template-columns:1fr 1fr}
     }
 
+
+
+    /* نظام إدخال التقارير الأسبوعية المتغير */
+    .weekly-schedule-overview{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(140px,1fr));
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .weekly-overview-card{
+      border:1px solid var(--border);
+      border-radius:17px;
+      background:var(--card-2);
+      padding:13px;
+      text-align:center;
+    }
+    .weekly-overview-card b{
+      display:block;
+      color:var(--text);
+      font-size:24px;
+      font-weight:1000;
+      font-variant-numeric:tabular-nums;
+    }
+    .weekly-overview-card span{
+      display:block;
+      margin-top:5px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+    }
+    .weekly-schedule-controls{
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:var(--card);
+      padding:13px;
+      margin-bottom:10px;
+    }
+    .weekly-control-field{flex:1;min-width:330px}
+    .weekly-control-field label{
+      display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:900
+    }
+    .weekly-control-field select{
+      width:100%;height:42px;border:1px solid var(--border);border-radius:12px;
+      background:var(--card);color:var(--text);padding:0 12px;font:inherit;font-weight:900;outline:none
+    }
+    .weekly-control-field select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+    .weekly-control-btn,.weekly-action-btn{
+      min-height:42px;border:1px solid var(--border);border-radius:12px;padding:9px 14px;
+      background:var(--green-2);color:#fff;font:inherit;font-size:12px;font-weight:950;cursor:pointer
+    }
+    .weekly-control-btn:hover,.weekly-action-btn:hover{filter:brightness(1.06)}
+    .weekly-action-btn.secondary{background:var(--card-2);color:var(--text)}
+    .weekly-action-btn.danger{background:var(--red);border-color:var(--red)}
+    .weekly-action-btn.complete{background:var(--purple);border-color:var(--purple)}
+    .weekly-selected-period{
+      border-radius:14px;padding:10px 12px;margin-bottom:13px;
+      background:linear-gradient(135deg,var(--green-soft),var(--blue-soft));
+      color:var(--text);font-size:12px;font-weight:900;line-height:1.7
+    }
+    .weekly-card-state{
+      display:inline-flex;align-items:center;justify-content:center;min-width:82px;
+      border-radius:999px;padding:6px 9px;font-size:10px;font-weight:1000
+    }
+    .weekly-card-state.empty{background:var(--gray-soft);color:var(--muted)}
+    .weekly-card-state.draft{background:var(--amber-soft);color:#8A5A00}
+    .weekly-card-state.complete{background:var(--green-soft);color:var(--green-2)}
+    .weekly-form-meta{
+      display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0
+    }
+    .weekly-form-field{border:1px solid var(--border);border-radius:16px;background:var(--card-2);padding:12px}
+    .weekly-form-field label{display:block;color:var(--muted);font-size:11px;font-weight:900;margin-bottom:6px}
+    .weekly-form-field input{
+      width:100%;height:40px;border:1px solid var(--border);border-radius:11px;
+      background:var(--card);color:var(--text);padding:0 10px;font:inherit;font-weight:900;outline:none
+    }
+    .weekly-entry-table{
+      width:100%;min-width:980px;border-collapse:separate;border-spacing:0;
+      border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--card)
+    }
+    .weekly-entry-table th,.weekly-entry-table td{
+      border-bottom:1px solid var(--border);border-inline-start:1px solid var(--border);
+      padding:9px;vertical-align:middle;text-align:center
+    }
+    .weekly-entry-table th{background:var(--card-2);font-size:11px;font-weight:1000;color:var(--text)}
+    .weekly-entry-table tbody tr:last-child td{border-bottom:none}
+    .weekly-entry-input,.weekly-entry-select{
+      width:100%;min-height:40px;border:1px solid var(--border);border-radius:10px;
+      background:var(--card);color:var(--text);padding:7px 9px;font:inherit;font-size:12px;font-weight:850;outline:none
+    }
+    textarea.weekly-entry-input{resize:vertical;min-height:48px;line-height:1.55}
+    .weekly-delete-row{
+      width:34px;height:34px;border:0;border-radius:10px;background:var(--red-soft);color:var(--red);
+      cursor:pointer;font-size:17px;font-weight:1000
+    }
+    .weekly-form-actions{display:flex;gap:9px;flex-wrap:wrap;margin:13px 0}
+    .weekly-save-message{display:none;border-radius:12px;padding:9px 12px;background:var(--green-soft);color:var(--green-2);font-size:12px;font-weight:950}
+    .weekly-save-message.show{display:block}
+    .weekly-empty-rows{
+      padding:22px;text-align:center;color:var(--muted);font-size:13px;font-weight:900
+    }
+    @media(max-width:900px){
+      .weekly-schedule-overview{grid-template-columns:1fr 1fr}
+      .weekly-form-meta{grid-template-columns:1fr}
+    }
   
     .home-inline-btn{
       text-decoration:none;
@@ -2077,6 +2292,10 @@
       color:#fff;
     }
     .home-inline-btn:hover{background:rgba(255,255,255,.28)}
+    .departments-actions .dept-page-btn:first-child{
+      background:rgba(255,255,255,.26);
+      border-color:rgba(255,255,255,.42);
+    }
 </style>
 </head>
 <body>
@@ -2090,7 +2309,7 @@
         </div>
       </div>
       <div class="actions">
-        <a class="btn home-inline-btn" href="index.html" aria-label="العودة للصفحة الرئيسية">⌂ العودة للصفحة الرئيسية</a>
+        <button class="btn home-inline-btn" type="button" onclick="window.location.href='index.html'" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</button>
         <span class="iso-pill">ISO 9001:2015 ✓</span>
         <button class="btn" id="themeBtn" type="button">🌙 الوضع الداكن</button>
         <button class="btn" id="langBtn" type="button">English</button>
@@ -2281,28 +2500,45 @@
       <div class="departments-head">
         <div>
           <h2>صفحة الإدارات</h2>
-          <p>الصفحة الرئيسية تبقى خلاصة تنفيذية، وهنا تظهر تفاصيل الإدارات الربعية والتقارير الأسبوعية للإدارات المساندة.</p>
+          <p>تعرض هذه الصفحة بيانات الإدارات والتقارير الأسبوعية للقراءة والمراجعة فقط، دون أي حقول تعديل.</p>
         </div>
         <div class="departments-actions">
+          <button class="dept-page-btn" type="button" onclick="window.location.href='weekly-reports-entry.html'">📝 إدخال التقارير الأسبوعية</button>
+          <button class="dept-page-btn" type="button" onclick="window.location.href='index.html'">🏠 الصفحة الرئيسية</button>
           <button class="dept-page-btn" id="departmentsBackBtn" type="button">رجوع للوحة الرئيسية</button>
           <button class="dept-page-btn" id="departmentsCloseBtn" type="button">إغلاق</button>
         </div>
       </div>
       <div class="dept-list-view" id="departmentsListView">
         <div class="dept-summary-strip" id="departmentsSummaryStrip"></div>
+        <div id="departmentsDataSection"></div>
         <div class="dept-search-row">
           <input class="dept-search" id="deptSearchInput" type="search" placeholder="ابحث باسم الإدارة أو المؤشر..." />
-          <span class="tag green">التفاصيل داخل صفحة الإدارات — وضع العرض فقط</span>
+          <span class="tag blue">عرض بيانات الإدارات فقط</span>
         </div>
         <div class="departments-grid" id="departmentsGrid"></div>
-        <section class="weekly-reports-section" id="weeklyReportsSection">
+        <section class="weekly-reports-section" id="weeklyReportsSection" aria-label="عرض بيانات التقارير الأسبوعية">
           <div class="weekly-reports-head">
             <div>
-              <h3>📅 التقارير الأسبوعية</h3>
-              <p>تقارير الإدارات المساندة للفترة من 5 إلى 9 يوليو 2026، وتشمل الإنجازات وحالة كل مهمة.</p>
+              <h3>📅 بيانات التقارير الأسبوعية</h3>
+              <p>اختر الأسبوع لمراجعة التقارير المحفوظة. الإدخال والتعديل يتمان من الصفحة المستقلة عبر الزر الموجود أعلى الصفحة.</p>
             </div>
-            <span class="tag green">3 إدارات • أسبوعي</span>
+            <span class="tag green" id="weeklyHeaderTag">3 إدارات • 52 أسبوعًا</span>
           </div>
+          <div class="weekly-schedule-overview">
+            <div class="weekly-overview-card"><b id="weeklyTotalWeeks">52</b><span>إجمالي أسابيع السنة</span></div>
+            <div class="weekly-overview-card"><b id="weeklyRemainingWeeks">—</b><span>الأسابيع المتبقية</span></div>
+            <div class="weekly-overview-card"><b id="weeklyCurrentNumber">—</b><span>رقم الأسبوع المحدد</span></div>
+            <div class="weekly-overview-card"><b id="weeklyEnteredCount">0/3</b><span>تقارير تم إدخالها</span></div>
+          </div>
+          <div class="weekly-schedule-controls">
+            <div class="weekly-control-field">
+              <label for="weeklyPeriodSelect">اختر الأسبوع</label>
+              <select id="weeklyPeriodSelect"></select>
+            </div>
+            <button class="weekly-control-btn" type="button" onclick="selectCurrentWeeklyPeriod()">عرض الأسبوع الحالي</button>
+          </div>
+          <div class="weekly-selected-period" id="weeklySelectedPeriodText"></div>
           <div class="weekly-reports-grid" id="weeklyReportsGrid"></div>
         </section>
         <div class="data-entry-bottom">
@@ -2976,7 +3212,50 @@
 ];
 
 
-    const WEEKLY_REPORTS = [{"name_ar":"قسم الاستثمار وشؤون الموظفين","icon":"🏢","color":"#2A78D6","responsible":"أ. طلال العقيلي","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","people":[{"label":"الموظفون","male":1,"female":0},{"label":"المتدربون","male":1,"female":2},{"label":"تمهير","male":0,"female":0}],"items":[{"statement":"إنشاء خطابات مساءلات للموظفين عن طريق برنامج سهل","quantity":3,"status":"تم الإنجاز","notes":""},{"statement":"إنشاء خطابات مطالبات مالية عن طريق برنامج سهل","quantity":2,"status":"تحت الإجراء","notes":""},{"statement":"إنشاء خطابات تكليف للموظفين عن طريق برنامج سهل","quantity":6,"status":"تم الإنجاز","notes":""},{"statement":"إصدار تصاريح خروج الأعيان للمستثمرين","quantity":2,"status":"تم الإنجاز","notes":""},{"statement":"متابعة سداد المستحقات المالية لعدد 6 مستثمرين بمبلغ 108,750 ريال","quantity":6,"status":"تم الإنجاز","notes":""},{"statement":"التواصل مع المستثمرين عن طريق الواتساب والهاتف","quantity":"غير محدد","status":"تم الإنجاز","notes":""},{"statement":"التواصل مع موظفي وموظفات الصندوق عن طريق الواتساب والهاتف","quantity":"غير محدد","status":"تم الإنجاز","notes":""},{"statement":"رصد الإجازات ومتابعة التقرير الشهري للحضور والانصراف لموظفي الصندوق","quantity":25,"status":"تحت الإجراء","notes":""},{"statement":"متابعة الإنجاز الشهري لموظفي الصندوق","quantity":40,"status":"تحت الإجراء","notes":""}]},{"name_ar":"إدارة صندوق الطلاب","icon":"💰","color":"#1D9E75","responsible":"أ. محمد فالح البلوي","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","items":[{"statement":"إدخال الفواتير الضريبية في النظام المحاسبي الخاص بالصندوق","quantity":4,"status":"تم الإنجاز","notes":""},{"statement":"إدخال القيود اليومية في النظام المحاسبي الخاص بالصندوق","quantity":3,"status":"تم الإنجاز","notes":""},{"statement":"تسجيل بيانات الطلاب في النظام المالي","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر ارتباط لمعاملة قروض الطلاب","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر صرف لمعاملة قروض الطلاب","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر ارتباط لمعاملة توريد المطبوعات الخاصة بالأنشطة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر صرف لمعاملة توريد المطبوعات الخاصة بالأنشطة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر ارتباط لمعاملة عهدة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر صرف لمعاملة عهدة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أوامر الدفع للمعاملات الخاصة بالصندوق","quantity":9,"status":"تم الإنجاز","notes":""},{"statement":"تسجيل حسابات آيبان المستفيدين في نظام بنك الرياض (TXT)","quantity":4,"status":"تم الإنجاز","notes":""},{"statement":"فرز واحتساب حسميات السلف الخاصة بالقروض وتقسيط الأجهزة ورسوم الدورات المهنية","quantity":5,"status":"تم الإنجاز","notes":""},{"statement":"إعداد الخطابات الخاصة بحسميات الطلاب الشهرية","quantity":6,"status":"تم الإنجاز","notes":""},{"statement":"إعداد المطابقة البنكية لحساب بنك الرياض رقم 40 لشهر يونيو 2026","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"تسوية عهد الأنشطة الطلابية","quantity":2,"status":"تم الإنجاز","notes":""},{"statement":"إعداد ومراجعة إيراد إيجار مواقع الكافتيريا في الجامعة لشهر يونيو 2026","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"العمل على ضريبة شهر يوليو","quantity":1,"status":"نشط","notes":""},{"statement":"فرز المبالغ الواردة في كشف بنك الرياض رقم 41 لإيرادات المراكز واحتساب العمولات وصافي المبلغ وضريبة القيمة المضافة","quantity":"غير محدد","status":"نشط","notes":""},{"statement":"المتابعة مع مبرمج النظام المالي والإداري لضبط مخزون مراكز خدمة الطالب","quantity":"غير محدد","status":"نشط","notes":""}]},{"name_ar":"إدارة عمادة شؤون الطلاب","icon":"🗂️","color":"#534AB7","responsible":"فيصل كريشان","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","items":[{"statement":"متابعة معاملات مسار","quantity":9,"status":"نشط","notes":""},{"statement":"متابعة حضور وانصراف الموظفين على نظام حاضر","quantity":4,"status":"نشط","notes":""},{"statement":"رفع طلبات للدعم الفني","quantity":4,"status":"نشط","notes":""},{"statement":"الموافقة على طلبات إجازات الموظفين","quantity":1,"status":"نشط","notes":""},{"statement":"ترتيب وتجهيز جميع القاعات","quantity":4,"status":"نشط","notes":""}]}];
+    const WEEKLY_REPORT_YEAR = 2026;
+    const WEEKLY_STORAGE_KEY = "ut_weekly_reports_dynamic_v2";
+    const WEEKLY_SELECTED_PERIOD_KEY = "ut_weekly_selected_period_v2";
+    const WEEKLY_DEPARTMENTS = [
+      {id:"investment",name_ar:"قسم الاستثمار",icon:"📈",color:"#2A78D6",defaultResponsible:"أ. طلال العقيلي"},
+      {id:"employee-affairs",name_ar:"قسم شؤون الموظفين",icon:"👥",color:"#7C5CC4",defaultResponsible:"يُحدد عند الإدخال"},
+      {id:"rewards-management",name_ar:"قسم إدارة المكافآت",icon:"🎓",color:"#D99000",defaultResponsible:"يُحدد عند الإدخال"},
+      {id:"student-fund",name_ar:"إدارة صندوق الطلاب",icon:"💰",color:"#1D9E75",defaultResponsible:"أ. محمد فالح البلوي"},
+      {id:"deanship-admin",name_ar:"إدارة عمادة شؤون الطلاب",icon:"🗂️",color:"#534AB7",defaultResponsible:"فيصل كريشان"}
+    ];
+    const WEEKLY_REPORTS = WEEKLY_DEPARTMENTS;
+    const LEGACY_WEEKLY_REPORTS = [{"name_ar":"قسم الاستثمار","icon":"📈","color":"#2A78D6","responsible":"أ. طلال العقيلي","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","items":[{"statement":"إنشاء خطابات مطالبات مالية عن طريق برنامج سهل","quantity":2,"status":"تحت الإجراء","notes":""},{"statement":"إصدار تصاريح خروج الأعيان للمستثمرين","quantity":2,"status":"تم الإنجاز","notes":""},{"statement":"متابعة سداد المستحقات المالية لعدد 6 مستثمرين بمبلغ 108,750 ريال","quantity":6,"status":"تم الإنجاز","notes":""},{"statement":"التواصل مع المستثمرين عن طريق الواتساب والهاتف","quantity":"غير محدد","status":"تم الإنجاز","notes":""}],"id":"investment"},{"name_ar":"قسم شؤون الموظفين","icon":"👥","color":"#7C5CC4","responsible":"","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","people":[{"label":"الموظفون","male":1,"female":0},{"label":"المتدربون","male":1,"female":2},{"label":"تمهير","male":0,"female":0}],"items":[{"statement":"إنشاء خطابات مساءلات للموظفين عن طريق برنامج سهل","quantity":3,"status":"تم الإنجاز","notes":""},{"statement":"إنشاء خطابات تكليف للموظفين عن طريق برنامج سهل","quantity":6,"status":"تم الإنجاز","notes":""},{"statement":"التواصل مع موظفي وموظفات الصندوق عن طريق الواتساب والهاتف","quantity":"غير محدد","status":"تم الإنجاز","notes":""},{"statement":"رصد الإجازات ومتابعة التقرير الشهري للحضور والانصراف لموظفي الصندوق","quantity":25,"status":"تحت الإجراء","notes":""},{"statement":"متابعة الإنجاز الشهري لموظفي الصندوق","quantity":40,"status":"تحت الإجراء","notes":""}],"id":"employee-affairs"},{"name_ar":"إدارة صندوق الطلاب","icon":"💰","color":"#1D9E75","responsible":"أ. محمد فالح البلوي","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","items":[{"statement":"إدخال الفواتير الضريبية في النظام المحاسبي الخاص بالصندوق","quantity":4,"status":"تم الإنجاز","notes":""},{"statement":"إدخال القيود اليومية في النظام المحاسبي الخاص بالصندوق","quantity":3,"status":"تم الإنجاز","notes":""},{"statement":"تسجيل بيانات الطلاب في النظام المالي","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر ارتباط لمعاملة قروض الطلاب","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر صرف لمعاملة قروض الطلاب","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر ارتباط لمعاملة توريد المطبوعات الخاصة بالأنشطة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر صرف لمعاملة توريد المطبوعات الخاصة بالأنشطة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر ارتباط لمعاملة عهدة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أمر صرف لمعاملة عهدة","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"إصدار أوامر الدفع للمعاملات الخاصة بالصندوق","quantity":9,"status":"تم الإنجاز","notes":""},{"statement":"تسجيل حسابات آيبان المستفيدين في نظام بنك الرياض (TXT)","quantity":4,"status":"تم الإنجاز","notes":""},{"statement":"فرز واحتساب حسميات السلف الخاصة بالقروض وتقسيط الأجهزة ورسوم الدورات المهنية","quantity":5,"status":"تم الإنجاز","notes":""},{"statement":"إعداد الخطابات الخاصة بحسميات الطلاب الشهرية","quantity":6,"status":"تم الإنجاز","notes":""},{"statement":"إعداد المطابقة البنكية لحساب بنك الرياض رقم 40 لشهر يونيو 2026","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"تسوية عهد الأنشطة الطلابية","quantity":2,"status":"تم الإنجاز","notes":""},{"statement":"إعداد ومراجعة إيراد إيجار مواقع الكافتيريا في الجامعة لشهر يونيو 2026","quantity":1,"status":"تم الإنجاز","notes":""},{"statement":"العمل على ضريبة شهر يوليو","quantity":1,"status":"نشط","notes":""},{"statement":"فرز المبالغ الواردة في كشف بنك الرياض رقم 41 لإيرادات المراكز واحتساب العمولات وصافي المبلغ وضريبة القيمة المضافة","quantity":"غير محدد","status":"نشط","notes":""},{"statement":"المتابعة مع مبرمج النظام المالي والإداري لضبط مخزون مراكز خدمة الطالب","quantity":"غير محدد","status":"نشط","notes":""}],"id":"student-fund"},{"name_ar":"إدارة عمادة شؤون الطلاب","icon":"🗂️","color":"#534AB7","responsible":"فيصل كريشان","period":"5–9 يوليو 2026","start":"5 يوليو 2026","end":"9 يوليو 2026","items":[{"statement":"متابعة معاملات مسار","quantity":9,"status":"نشط","notes":""},{"statement":"متابعة حضور وانصراف الموظفين على نظام حاضر","quantity":4,"status":"نشط","notes":""},{"statement":"رفع طلبات للدعم الفني","quantity":4,"status":"نشط","notes":""},{"statement":"الموافقة على طلبات إجازات الموظفين","quantity":1,"status":"نشط","notes":""},{"statement":"ترتيب وتجهيز جميع القاعات","quantity":4,"status":"نشط","notes":""}],"id":"deanship-admin"}];
+
+    function weeklyPad(n){ return String(n).padStart(2,"0"); }
+    function weeklyDateKey(date){
+      return `${date.getFullYear()}-${weeklyPad(date.getMonth()+1)}-${weeklyPad(date.getDate())}`;
+    }
+    function weeklyArabicDate(date){
+      const months=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+      return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    }
+    function generateWeeklyPeriods(year){
+      const periods=[];
+      const cursor=new Date(year,0,1,12,0,0,0);
+      while(cursor.getDay()!==0) cursor.setDate(cursor.getDate()+1);
+      let number=1;
+      while(cursor.getFullYear()===year){
+        const start=new Date(cursor);
+        const end=new Date(cursor);
+        end.setDate(end.getDate()+4);
+        if(end.getFullYear()>year) end.setTime(new Date(year,11,31,12,0,0,0).getTime());
+        periods.push({
+          id:weeklyDateKey(start),number,start,end,
+          label:`الأسبوع ${number} • ${weeklyArabicDate(start)} إلى ${weeklyArabicDate(end)}`,
+          shortLabel:`${start.getDate()} ${["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"][start.getMonth()]} – ${end.getDate()} ${["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"][end.getMonth()]}`
+        });
+        cursor.setDate(cursor.getDate()+7);
+        number++;
+      }
+      return periods;
+    }
+    const WEEKLY_PERIODS = generateWeeklyPeriods(WEEKLY_REPORT_YEAR);
+    let selectedWeeklyPeriodId = "";
+
 
     const OPERATIONAL_KPIS = {
       "إدارة النقل الطلابي": [
@@ -4071,6 +4350,15 @@
     }
 
 
+    function scrollToDepartmentsData(){
+      const target = document.getElementById("departmentsDataSection") || document.getElementById("departmentsGrid");
+      if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+    function scrollToWeeklyReportsEntry(){
+      const target = document.getElementById("weeklyReportsSection");
+      if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
     function openDepartmentsPage(){
       const page = $("departmentsPage");
       if(!page) return;
@@ -4096,7 +4384,7 @@
       page.classList.remove("open");
       page.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
-      if(detail){ detail.classList.remove("open"); detail.innerHTML = ""; }
+      if(detail){ detail.classList.remove("open", "department-view-only"); detail.innerHTML = ""; }
       if(list){ list.classList.remove("hidden"); }
     }
     function normalizeArabicText(v){
@@ -4125,7 +4413,7 @@
       const detail = $("departmentDetail");
       if(!grid) return;
       if(list) list.classList.remove("hidden");
-      if(detail){ detail.classList.remove("open"); detail.innerHTML = ""; }
+      if(detail){ detail.classList.remove("open", "department-view-only"); detail.innerHTML = ""; }
       if(strip){
         const totalIndicators = DEPARTMENT_TARGETS.reduce((a,d)=>a+d.indicators.length,0);
         const totalOperational = DEPARTMENT_TARGETS.reduce((a,d)=>a+getOperationalKpis(d.name_ar).length,0);
@@ -4172,102 +4460,322 @@
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
     }
+    function loadWeeklyStore(){
+      try{
+        const parsed=JSON.parse(localStorage.getItem(WEEKLY_STORAGE_KEY) || "{}");
+        return parsed && typeof parsed === "object" ? parsed : {};
+      }catch(e){ return {}; }
+    }
+    function saveWeeklyStore(store){
+      localStorage.setItem(WEEKLY_STORAGE_KEY, JSON.stringify(store));
+    }
+
+    function splitLegacyInvestmentEmployeesReport(report){
+      const source=report && typeof report==="object" ? report : {};
+      const items=Array.isArray(source.items) ? source.items : [];
+      const investmentWords=["استثمار","مستثمر","المستثمرين","تصريح","تصاريح","الأعيان","ايجار","إيجار","سداد","مطالبات مالية"];
+      const employeeWords=["موظف","موظفين","موظفات","إجاز","حضور","انصراف","تكليف","مساءلات","تمهير","متدرب","المتدربين","الإنجاز الشهري"];
+      const investmentItems=[];
+      const employeeItems=[];
+      items.forEach(item=>{
+        const text=String(item?.statement || "");
+        const isEmployee=employeeWords.some(word=>text.includes(word));
+        const isInvestment=investmentWords.some(word=>text.includes(word));
+        if(isEmployee) employeeItems.push(item);
+        if(isInvestment || !isEmployee) investmentItems.push(item);
+      });
+      const base={...source};
+      delete base.items;
+      return {
+        investment:{...base,items:investmentItems},
+        employees:{...base,responsible:"",people:Array.isArray(source.people)?source.people:[],items:employeeItems}
+      };
+    }
+    function migrateLegacyInvestmentEmployeesReports(){
+      const store=loadWeeklyStore();
+      if(store.__investmentEmployeesSplitV3) return;
+      Object.keys(store).forEach(periodId=>{
+        if(periodId.startsWith("__") || !store[periodId] || typeof store[periodId]!=="object") return;
+        const legacy=store[periodId]["investment-employees"];
+        if(!legacy) return;
+        const split=splitLegacyInvestmentEmployeesReport(legacy);
+        if(!store[periodId]["investment"] && split.investment.items.length) store[periodId]["investment"]=split.investment;
+        if(!store[periodId]["employee-affairs"] && split.employees.items.length) store[periodId]["employee-affairs"]=split.employees;
+        delete store[periodId]["investment-employees"];
+      });
+      store.__investmentEmployeesSplitV3=true;
+      saveWeeklyStore(store);
+    }
+    function seedLegacyWeeklyReports(){
+      const store=loadWeeklyStore();
+      const seedPeriod="2026-07-05";
+      if(store.__legacySeeded) return;
+      if(!store[seedPeriod]) store[seedPeriod]={};
+      LEGACY_WEEKLY_REPORTS.forEach(report=>{
+        if(!store[seedPeriod][report.id]){
+          store[seedPeriod][report.id]={
+            responsible:report.responsible || "",
+            status:"complete",
+            updatedAt:new Date().toISOString(),
+            people:Array.isArray(report.people)?report.people:[],
+            items:Array.isArray(report.items)?report.items:[]
+          };
+        }
+      });
+      store.__legacySeeded=true;
+      saveWeeklyStore(store);
+    }
+    function getWeeklyReportData(periodId,deptId){
+      const store=loadWeeklyStore();
+      return store?.[periodId]?.[deptId] || null;
+    }
+    function setWeeklyReportData(periodId,deptId,data){
+      const store=loadWeeklyStore();
+      if(!store[periodId]) store[periodId]={};
+      store[periodId][deptId]=data;
+      saveWeeklyStore(store);
+    }
+    function deleteWeeklyReportData(periodId,deptId){
+      const store=loadWeeklyStore();
+      if(store[periodId] && store[periodId][deptId]){
+        delete store[periodId][deptId];
+        saveWeeklyStore(store);
+      }
+    }
+    function currentWeeklyPeriodIndex(){
+      const now=new Date();
+      if(now.getFullYear()<WEEKLY_REPORT_YEAR) return 0;
+      if(now.getFullYear()>WEEKLY_REPORT_YEAR) return WEEKLY_PERIODS.length-1;
+      let found=0;
+      WEEKLY_PERIODS.forEach((period,index)=>{
+        if(period.start.getTime()<=now.getTime()) found=index;
+      });
+      return found;
+    }
+    function getSelectedWeeklyPeriod(){
+      return WEEKLY_PERIODS.find(p=>p.id===selectedWeeklyPeriodId) || WEEKLY_PERIODS[currentWeeklyPeriodIndex()] || WEEKLY_PERIODS[0];
+    }
+    function initializeWeeklyReports(){
+      migrateLegacyInvestmentEmployeesReports();
+      seedLegacyWeeklyReports();
+      const select=$("weeklyPeriodSelect");
+      if(!select) return;
+      let stored="";
+      try{ stored=localStorage.getItem(WEEKLY_SELECTED_PERIOD_KEY) || ""; }catch(e){}
+      const valid=WEEKLY_PERIODS.some(p=>p.id===stored);
+      selectedWeeklyPeriodId=valid ? stored : WEEKLY_PERIODS[currentWeeklyPeriodIndex()].id;
+      select.innerHTML=WEEKLY_PERIODS.map(period=>`<option value="${period.id}">${escapeWeeklyText(period.label)}</option>`).join("");
+      select.value=selectedWeeklyPeriodId;
+      select.addEventListener("change",()=>{
+        selectedWeeklyPeriodId=select.value;
+        localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedWeeklyPeriodId);
+        renderWeeklyReportCards(normalizeArabicText($("deptSearchInput")?.value || ""));
+      });
+      updateWeeklyScheduleSummary();
+    }
+    function selectCurrentWeeklyPeriod(){
+      const period=WEEKLY_PERIODS[currentWeeklyPeriodIndex()];
+      if(!period) return;
+      selectedWeeklyPeriodId=period.id;
+      const select=$("weeklyPeriodSelect");
+      if(select) select.value=selectedWeeklyPeriodId;
+      localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedWeeklyPeriodId);
+      renderWeeklyReportCards(normalizeArabicText($("deptSearchInput")?.value || ""));
+    }
     function weeklyReportStats(report){
-      const items = Array.isArray(report?.items) ? report.items : [];
-      const completed = items.filter(item => normalizeArabicText(item.status).includes("تم الانجاز")).length;
-      const active = items.filter(item => {
-        const s = normalizeArabicText(item.status);
-        return s.includes("نشط") || s.includes("تحت الاجراء");
+      const items=Array.isArray(report?.items)?report.items:[];
+      const completed=items.filter(item=>normalizeArabicText(item.status).includes("تم الانجاز")).length;
+      const active=items.filter(item=>{
+        const status=normalizeArabicText(item.status);
+        return status.includes("نشط") || status.includes("تحت الاجراء");
       }).length;
-      const knownQuantity = items.reduce((sum,item) => {
-        const n = Number(item.quantity);
-        return sum + (Number.isFinite(n) ? n : 0);
+      const knownQuantity=items.reduce((sum,item)=>{
+        const n=Number(item.quantity);
+        return sum+(Number.isFinite(n)?n:0);
       },0);
       return {total:items.length,completed,active,knownQuantity};
     }
     function weeklyStatusClass(status){
-      const s = normalizeArabicText(status);
+      const s=normalizeArabicText(status);
       if(s.includes("تم الانجاز")) return "done";
       if(s.includes("تحت الاجراء")) return "progress";
       if(s.includes("نشط")) return "active";
       return "other";
     }
-    function renderWeeklyReportCards(query = ""){
-      const host = $("weeklyReportsGrid");
-      const section = $("weeklyReportsSection");
+    function weeklyReportState(report){
+      if(!report || !Array.isArray(report.items) || !report.items.length) return {label:"لم يتم الإدخال",className:"empty"};
+      if(report.status==="complete") return {label:"مكتمل",className:"complete"};
+      return {label:"مسودة",className:"draft"};
+    }
+    function updateWeeklyScheduleSummary(){
+      const period=getSelectedWeeklyPeriod();
+      if(!period) return;
+      const currentIndex=currentWeeklyPeriodIndex();
+      const remaining=Math.max(0,WEEKLY_PERIODS.length-currentIndex);
+      const entered=WEEKLY_DEPARTMENTS.filter(dept=>{
+        const report=getWeeklyReportData(period.id,dept.id);
+        return report && Array.isArray(report.items) && report.items.length;
+      }).length;
+      if($("weeklyTotalWeeks")) $("weeklyTotalWeeks").textContent=fmt(WEEKLY_PERIODS.length);
+      if($("weeklyRemainingWeeks")) $("weeklyRemainingWeeks").textContent=fmt(remaining);
+      if($("weeklyCurrentNumber")) $("weeklyCurrentNumber").textContent=fmt(period.number);
+      if($("weeklyEnteredCount")) $("weeklyEnteredCount").textContent=`${fmt(entered)}/${fmt(WEEKLY_DEPARTMENTS.length)}`;
+      if($("weeklyHeaderTag")) $("weeklyHeaderTag").textContent=`${fmt(WEEKLY_DEPARTMENTS.length)} إدارات • ${fmt(WEEKLY_PERIODS.length)} أسبوعًا`;
+      if($("weeklySelectedPeriodText")) $("weeklySelectedPeriodText").innerHTML=`الأسبوع المحدد: <b>${escapeWeeklyText(period.label)}</b> • الدوام من الأحد إلى الخميس`;
+    }
+    function renderWeeklyReportCards(query=""){
+      const host=$("weeklyReportsGrid");
+      const section=$("weeklyReportsSection");
       if(!host || !section) return;
-      const filtered = WEEKLY_REPORTS.map((report,index)=>({report,index})).filter(({report}) => {
+      const period=getSelectedWeeklyPeriod();
+      if(!period) return;
+      const filtered=WEEKLY_DEPARTMENTS.map((dept,index)=>({dept,index,report:getWeeklyReportData(period.id,dept.id)})).filter(({dept,report})=>{
         if(!query) return true;
-        const haystack = normalizeArabicText([
-          report.name_ar, report.responsible, report.period,
-          ...(report.items || []).map(item => `${item.statement} ${item.status} ${item.quantity}`)
+        const haystack=normalizeArabicText([
+          dept.name_ar,dept.defaultResponsible,period.label,report?.responsible || "",
+          ...(report?.items || []).map(item=>`${item.statement} ${item.status} ${item.quantity} ${item.notes}`)
         ].join(" "));
         return haystack.includes(query);
       });
-      section.style.display = filtered.length ? "" : "none";
-      host.innerHTML = filtered.map(({report,index}) => {
-        const stats = weeklyReportStats(report);
-        return `<button class="weekly-report-card" type="button" style="--weekly-color:${report.color || COLORS.green}" onclick="openWeeklyReportDetail(${index})">
+      section.style.display=filtered.length?"":"none";
+      host.innerHTML=filtered.map(({dept,index,report})=>{
+        const stats=weeklyReportStats(report);
+        const state=weeklyReportState(report);
+        return `<button class="weekly-report-card" type="button" style="--weekly-color:${dept.color || COLORS.green}" onclick="openWeeklyReportDetail(${index})">
           <div class="weekly-card-top">
-            <div class="weekly-card-icon">${report.icon || "📅"}</div>
-            <span class="weekly-period-tag">${escapeWeeklyText(report.period)}</span>
+            <div class="weekly-card-icon">${dept.icon || "📅"}</div>
+            <span class="weekly-card-state ${state.className}">${state.label}</span>
           </div>
-          <h4>${escapeWeeklyText(report.name_ar)}</h4>
-          <p>المسؤول عن التقرير: ${escapeWeeklyText(report.responsible)}</p>
+          <h4>${escapeWeeklyText(dept.name_ar)}</h4>
+          <p>المسؤول: ${escapeWeeklyText(report?.responsible || dept.defaultResponsible || "يُحدد عند الإدخال")}</p>
           <div class="weekly-card-stats">
-            <div class="weekly-card-stat"><b>${fmt(stats.total)}</b><span>إجمالي البنود</span></div>
+            <div class="weekly-card-stat"><b>${fmt(stats.total)}</b><span>البنود المسجلة</span></div>
             <div class="weekly-card-stat"><b>${fmt(stats.completed)}</b><span>تم الإنجاز</span></div>
             <div class="weekly-card-stat"><b>${fmt(stats.active)}</b><span>قيد المتابعة</span></div>
           </div>
         </button>`;
       }).join("");
+      updateWeeklyScheduleSummary();
+    }
+    function weeklyItemRowHtml(item={},rowIndex=0){
+      const statuses=["تم الإنجاز","تحت الإجراء","نشط","لم يبدأ","مؤجل","أخرى"];
+      return `<tr class="weekly-entry-row">
+        <td class="weekly-row-number">${fmt(rowIndex+1)}</td>
+        <td><textarea class="weekly-entry-input weekly-item-statement" placeholder="اكتب البند أو المعيار لهذا الأسبوع">${escapeWeeklyText(item.statement || "")}</textarea></td>
+        <td><input class="weekly-entry-input weekly-item-quantity" type="text" value="${escapeWeeklyText(item.quantity ?? "")}" placeholder="العدد أو القيمة"></td>
+        <td><select class="weekly-entry-select weekly-item-status">${statuses.map(status=>`<option value="${status}" ${status===(item.status || "لم يبدأ")?"selected":""}>${status}</option>`).join("")}</select></td>
+        <td><textarea class="weekly-entry-input weekly-item-notes" placeholder="ملاحظات اختيارية">${escapeWeeklyText(item.notes || "")}</textarea></td>
+        <td><button class="weekly-delete-row" type="button" onclick="removeWeeklyItemRow(this)" title="حذف البند">×</button></td>
+      </tr>`;
+    }
+    function renumberWeeklyRows(){
+      document.querySelectorAll("#weeklyItemsBody .weekly-entry-row").forEach((row,index)=>{
+        const cell=row.querySelector(".weekly-row-number");
+        if(cell) cell.textContent=fmt(index+1);
+      });
+    }
+    function addWeeklyItemRow(item={}){
+      const body=$("weeklyItemsBody");
+      if(!body) return;
+      const index=body.querySelectorAll(".weekly-entry-row").length;
+      body.insertAdjacentHTML("beforeend",weeklyItemRowHtml(item,index));
+      renumberWeeklyRows();
+    }
+    function removeWeeklyItemRow(button){
+      const row=button?.closest("tr");
+      if(row) row.remove();
+      renumberWeeklyRows();
+    }
+    function collectWeeklyFormData(deptIndex,status="draft"){
+      const dept=WEEKLY_DEPARTMENTS[deptIndex];
+      const items=[...document.querySelectorAll("#weeklyItemsBody .weekly-entry-row")].map(row=>({
+        statement:row.querySelector(".weekly-item-statement")?.value.trim() || "",
+        quantity:row.querySelector(".weekly-item-quantity")?.value.trim() || "",
+        status:row.querySelector(".weekly-item-status")?.value || "لم يبدأ",
+        notes:row.querySelector(".weekly-item-notes")?.value.trim() || ""
+      })).filter(item=>item.statement || item.quantity || item.notes);
+      return {
+        responsible:$("weeklyResponsibleInput")?.value.trim() || dept?.defaultResponsible || "",
+        status,
+        updatedAt:new Date().toISOString(),
+        items
+      };
+    }
+    function saveWeeklyReport(deptIndex,status="draft"){
+      const period=getSelectedWeeklyPeriod();
+      const dept=WEEKLY_DEPARTMENTS[deptIndex];
+      if(!period || !dept) return;
+      const data=collectWeeklyFormData(deptIndex,status);
+      if(!data.items.length){
+        alert("أضف بندًا واحدًا على الأقل قبل الحفظ.");
+        return;
+      }
+      setWeeklyReportData(period.id,dept.id,data);
+      renderWeeklyReportCards(normalizeArabicText($("deptSearchInput")?.value || ""));
+      openWeeklyReportDetail(deptIndex);
+      const message=$("weeklySaveMessage");
+      if(message){
+        message.textContent=status==="complete"?"تم اعتماد التقرير كمكتمل.":"تم حفظ التقرير كمسودة.";
+        message.classList.add("show");
+      }
+    }
+    function clearWeeklyReport(deptIndex){
+      const period=getSelectedWeeklyPeriod();
+      const dept=WEEKLY_DEPARTMENTS[deptIndex];
+      if(!period || !dept) return;
+      if(!confirm("هل تريد حذف بيانات هذا التقرير للأسبوع المحدد؟")) return;
+      deleteWeeklyReportData(period.id,dept.id);
+      renderWeeklyReportCards(normalizeArabicText($("deptSearchInput")?.value || ""));
+      openWeeklyReportDetail(deptIndex);
     }
     function openWeeklyReportDetail(index){
-      const report = WEEKLY_REPORTS[index];
-      if(!report) return;
-      const detail = $("departmentDetail");
-      const list = $("departmentsListView");
+      const dept=WEEKLY_DEPARTMENTS[index];
+      const period=getSelectedWeeklyPeriod();
+      if(!dept || !period) return;
+      const detail=$("departmentDetail");
+      const list=$("departmentsListView");
       if(!detail) return;
+      detail.classList.add("department-view-only");
       if(list) list.classList.add("hidden");
-      const stats = weeklyReportStats(report);
-      const completion = stats.total ? Math.round((stats.completed / stats.total) * 100) : 0;
-      const peopleHtml = Array.isArray(report.people) && report.people.length ? `
-        <h4 class="dept-section-title">👥 القوى البشرية خلال الأسبوع</h4>
-        <div class="weekly-people-grid">
-          ${report.people.map(person => `<div class="weekly-person-card"><strong>${escapeWeeklyText(person.label)}</strong><span>ذكور: ${fmt(person.male || 0)}</span><span>إناث: ${fmt(person.female || 0)}</span></div>`).join("")}
-        </div>` : "";
-      const rows = (report.items || []).map((item,rowIndex) => `<tr>
-        <td>${fmt(rowIndex + 1)}</td>
-        <td>${escapeWeeklyText(item.statement)}</td>
-        <td>${escapeWeeklyText(item.quantity)}</td>
-        <td><span class="weekly-status ${weeklyStatusClass(item.status)}">${escapeWeeklyText(item.status)}</span></td>
+      const report=getWeeklyReportData(period.id,dept.id) || {responsible:dept.defaultResponsible,status:"draft",items:[]};
+      const stats=weeklyReportStats(report);
+      const completion=stats.total?Math.round((stats.completed/stats.total)*100):0;
+      const state=weeklyReportState(report);
+      const rows=(report.items || []).map((item,rowIndex)=>`<tr>
+        <td>${fmt(rowIndex+1)}</td>
+        <td>${escapeWeeklyText(item.statement || "—")}</td>
+        <td>${escapeWeeklyText(item.quantity ?? "—")}</td>
+        <td><span class="weekly-status ${weeklyStatusClass(item.status)}">${escapeWeeklyText(item.status || "—")}</span></td>
         <td>${escapeWeeklyText(item.notes || "—")}</td>
       </tr>`).join("");
-      detail.innerHTML = `<div class="dept-detail-toolbar">
-        <button class="dept-back-light" type="button" onclick="backToDepartmentsList()">← رجوع لقائمة الإدارات</button>
+      detail.innerHTML=`<div class="dept-detail-toolbar">
+        <button class="dept-back-light" type="button" onclick="backToDepartmentsList()">← رجوع لصفحة الإدارات</button>
         <div class="departments-actions">
           <button class="dept-page-btn" type="button" onclick="printDepartmentPage()">طباعة التقرير</button>
           <button class="dept-page-btn" type="button" onclick="closeDepartmentsPage()">إغلاق</button>
         </div>
       </div>
       <div class="weekly-detail-title">
-        <span class="tag" style="background:${report.color || COLORS.green}22;color:${report.color || COLORS.green}">تقرير أسبوعي • ${escapeWeeklyText(report.period)}</span>
-        <h3>${report.icon || "📅"} ${escapeWeeklyText(report.name_ar)}</h3>
-        <p>المسؤول عن تعبئة النموذج: <b>${escapeWeeklyText(report.responsible)}</b> • بداية الفترة: ${escapeWeeklyText(report.start)} • نهاية الفترة: ${escapeWeeklyText(report.end)}</p>
+        <span class="tag" style="background:${dept.color || COLORS.green}22;color:${dept.color || COLORS.green}">الأسبوع ${fmt(period.number)} • الأحد إلى الخميس</span>
+        <h3>${dept.icon || "📅"} ${escapeWeeklyText(dept.name_ar)}</h3>
+        <p>الفترة: <b>${escapeWeeklyText(weeklyArabicDate(period.start))}</b> إلى <b>${escapeWeeklyText(weeklyArabicDate(period.end))}</b> • حالة التقرير: <span class="weekly-card-state ${state.className}">${state.label}</span></p>
       </div>
       <div class="weekly-detail-kpis">
-        <div class="weekly-detail-kpi"><b>${fmt(stats.total)}</b><span>إجمالي بنود التقرير</span></div>
+        <div class="weekly-detail-kpi"><b>${fmt(stats.total)}</b><span>إجمالي البنود</span></div>
         <div class="weekly-detail-kpi"><b>${fmt(stats.completed)}</b><span>بنود تم إنجازها</span></div>
-        <div class="weekly-detail-kpi"><b>${fmt(stats.active)}</b><span>بنود نشطة/تحت الإجراء</span></div>
-        <div class="weekly-detail-kpi"><b>${fmt(completion)}%</b><span>نسبة البنود المنجزة</span></div>
+        <div class="weekly-detail-kpi"><b>${fmt(stats.active)}</b><span>بنود قيد المتابعة</span></div>
+        <div class="weekly-detail-kpi"><b>${fmt(completion)}%</b><span>نسبة الإنجاز</span></div>
       </div>
-      ${peopleHtml}
-      <h4 class="dept-section-title">📋 تفاصيل الإنجاز الأسبوعي <span class="small-note">إجمالي الكميات الرقمية المسجلة: ${fmt(stats.knownQuantity)}</span></h4>
+      <div class="weekly-form-meta">
+        <div class="weekly-form-field"><label>المسؤول عن تعبئة التقرير</label><input type="text" value="${escapeWeeklyText(report.responsible || dept.defaultResponsible || "—")}" disabled></div>
+        <div class="weekly-form-field"><label>الفترة الأسبوعية</label><input type="text" value="${escapeWeeklyText(period.label)}" disabled></div>
+      </div>
+      <h4 class="dept-section-title">📋 بنود التقرير الأسبوعي <span class="small-note">عرض فقط</span></h4>
       <div class="table-wrap">
-        <table class="weekly-table">
-          <thead><tr><th>م</th><th>البيان</th><th>العدد/الكم</th><th>حالة الإنجاز</th><th>الملاحظات</th></tr></thead>
+        ${rows ? `<table class="weekly-table">
+          <thead><tr><th>م</th><th>البند/المعيار</th><th>العدد/القيمة</th><th>حالة الإنجاز</th><th>الملاحظات</th></tr></thead>
           <tbody>${rows}</tbody>
-        </table>
+        </table>` : `<div class="empty-state">لم يتم إدخال بيانات لهذه الإدارة في الأسبوع المحدد.</div>`}
       </div>`;
       detail.classList.add("open");
       detail.scrollIntoView({behavior:"smooth",block:"start"});
@@ -5633,6 +6141,8 @@
         }
 
         renderDepartmentCharts(deptIndex);
+        const detailRoot = document.getElementById("departmentDetail");
+        if(detailRoot?.classList.contains("department-view-only")) applyDepartmentViewOnlyMode(detailRoot);
       }
     }
 
@@ -6421,9 +6931,25 @@
         }
 
         renderDepartmentCharts(deptIndex);
+        const detailRoot = document.getElementById("departmentDetail");
+        if(detailRoot?.classList.contains("department-view-only")) applyDepartmentViewOnlyMode(detailRoot);
       }
     }
 
+
+    function applyDepartmentViewOnlyMode(root){
+      if(!root) return;
+      root.classList.add("department-view-only");
+      root.querySelectorAll("input, textarea, select").forEach(control => {
+        control.disabled = true;
+        control.readOnly = true;
+        control.tabIndex = -1;
+        control.setAttribute("aria-readonly", "true");
+        if(!String(control.value || "").trim()){
+          control.placeholder = control.tagName === "TEXTAREA" ? "لا توجد بيانات مسجلة" : "—";
+        }
+      });
+    }
 
     function openDepartmentDetail(index){
       const d = DEPARTMENT_TARGETS[index];
@@ -6519,7 +7045,7 @@
         <div class="detail-panel-head">
           <div>
             <h4>${d.icon || "🏢"} تفصيل شهري للأداء التشغيلي</h4>
-            <p>إدخال شهري شبيه بالنموذج المرسل — ويغذي قيمة الربع تلقائياً.</p>
+            <p>عرض البيانات الشهرية المسجلة التي تغذي نتيجة الربع تلقائيًا — بدون إمكانية تعديل من صفحة الإدارات.</p>
           </div>
           <span class="tag" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.18)">${d.name_ar}</span>
         </div>
@@ -6543,7 +7069,7 @@
         <div class="detail-panel-head">
           <div>
             <h4>🏅 تفصيل أداء النشاط الرياضي</h4>
-            <p>جدول خاص بالنشاط الرياضي للطلاب والطالبات — أدخل بيانات الربع الأول الآن، والربع الثاني لاحقاً.</p>
+            <p>عرض بيانات النشاط الرياضي للطلاب والطالبات حسب الربع المحدد — للقراءة فقط.</p>
           </div>
           <span class="tag" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.18)">${d.name_ar}</span>
         </div>
@@ -6563,6 +7089,7 @@
           <button class="dept-page-btn" type="button" onclick="closeDepartmentsPage()">إغلاق</button>
         </div>
       </div>
+      <div class="view-only-notice">👁️ تفاصيل الإدارة في وضع العرض فقط. إدخال البيانات متاح حصريًا من خانة التقارير الأسبوعية في صفحة الإدارات.</div>
       <div class="dept-detail-title">
         <div>
           <span class="tag" style="background:${meta.color}22;color:${meta.color}">${d.source}</span>
@@ -6587,8 +7114,8 @@
 
       <div class="main-homepage-panel">
         <div class="panel-title">
-          <h4>🧭 بيانات الظهور في الصفحة الرئيسية</h4>
-          <span>هذه القيم تعبئ بطاقة الأداء وحالة التسليم في الصفحة الرئيسية مباشرة</span>
+          <h4>🧭 بيانات الظهور في الصفحة الرئيسية — عرض فقط</h4>
+          <span>القيم الحالية المستخدمة في بطاقة الأداء وحالة التسليم</span>
         </div>
         <table class="homepage-input-table">
           <thead>
@@ -6636,7 +7163,7 @@
 
       ${performanceDetailPanel}
 
-      <h4 class="dept-section-title">📋 المستهدفات الرسمية <span class="small-note">تتعبأ تلقائياً عند وجود ربط مع المؤشرات التشغيلية</span></h4>
+      <h4 class="dept-section-title">📋 المستهدفات الرسمية <span class="small-note">عرض النتائج المحسوبة والمسجلة للربعين</span></h4>
       <div class="table-wrap">
         <table class="dept-indicators-table">
           <thead><tr><th>م</th><th>المستهدف الرسمي</th><th>مستهدف 2026</th><th>المصدر</th><th>نتيجة الربع الأول</th><th>نتيجة الربع الثاني</th><th>الحالة</th></tr></thead>
@@ -6650,14 +7177,14 @@
       </div>
 
 <div class="dept-notes-grid">
-        <div class="dept-note-box"><b>بدون تكرار</b> المؤشر التشغيلي يُدخل مرة واحدة، وأي مستهدف رسمي مرتبط به يتم احتسابه تلقائياً.</div>
-        <div class="dept-note-box"><b>الربط التلقائي</b> مثال: الالتزام بالمواعيد = (إجمالي الرحلات - الرحلات المتأخرة) ÷ إجمالي الرحلات.</div>
-        <div class="dept-note-box"><b>المؤشرات اليدوية</b> بعض المستهدفات مثل السجلات أو الاعتمادات تحتاج إثبات أو إدخال يدوي لأنها لا تُحسب رقمياً.</div>
+        <div class="dept-note-box"><b>عرض موحد</b> تظهر بيانات المؤشرات التشغيلية والمستهدفات الرسمية في مكان واحد للقراءة والمراجعة.</div>
+        <div class="dept-note-box"><b>الربط التلقائي</b> النتائج الرسمية المعروضة تُحتسب من البيانات التشغيلية المرتبطة عند توفرها.</div>
+        <div class="dept-note-box"><b>وضع القراءة فقط</b> إدخال البيانات غير متاح من تفاصيل الإدارة، بينما إدخال التقارير الأسبوعية يتم من الصفحة المستقلة.</div>
       </div>
 
       <div class="detail-quarter-box active" data-quarter="Q1">
         <div class="recs-box">
-          <h5>توصيات اجتماع مراجعة الإدارة — الربع الأول</h5>
+          <h5>توصيات اجتماع مراجعة الإدارة — الربع الأول (عرض فقط)</h5>
           <p class="recs-quarter-note">هذه التوصيات مخصصة لنتائج وملاحظات الربع الأول فقط.</p>
           <div class="recs-list">
             <div class="rec-row"><span class="num">1</span><textarea class="rec-input" rows="2" ${dataEntryUnlocked ? "" : "disabled"} data-rec-input="${index}_Q1_1" oninput="handleDepartmentRecommendationInput(${index}, 'Q1', 1, this.value)" placeholder="لا توجد توصية أولى للربع الأول"></textarea></div>
@@ -6669,7 +7196,7 @@
       </div>
       <div class="detail-quarter-box" data-quarter="Q2">
         <div class="recs-box">
-          <h5>توصيات اجتماع مراجعة الإدارة — الربع الثاني</h5>
+          <h5>توصيات اجتماع مراجعة الإدارة — الربع الثاني (عرض فقط)</h5>
           <p class="recs-quarter-note">هذه التوصيات مخصصة لنتائج وملاحظات الربع الثاني فقط، وهي منفصلة عن توصيات الربع الأول.</p>
           <div class="recs-list">
             <div class="rec-row"><span class="num">1</span><textarea class="rec-input" rows="2" ${dataEntryUnlocked ? "" : "disabled"} data-rec-input="${index}_Q2_1" oninput="handleDepartmentRecommendationInput(${index}, 'Q2', 1, this.value)" placeholder="لا توجد توصية أولى للربع الثاني"></textarea></div>
@@ -6679,9 +7206,10 @@
           </div>
         </div>
       </div>`;
-      detail.classList.add("open");
+      detail.classList.add("open", "department-view-only");
       refreshDataEntryButton();
       restoreSavedDepartmentInputs(index);
+      applyDepartmentViewOnlyMode(detail);
       detail.scrollIntoView({behavior:"smooth", block:"start"});
       updateOfficialAutoTargets(index);
       updateDepartmentLiveStrip(index, "Q1");
@@ -6895,7 +7423,7 @@
     function backToDepartmentsList(){
       const detail = $("departmentDetail");
       const list = $("departmentsListView");
-      if(detail){ detail.classList.remove("open"); detail.innerHTML = ""; }
+      if(detail){ detail.classList.remove("open", "department-view-only"); detail.innerHTML = ""; }
       if(list){ list.classList.remove("hidden"); list.scrollIntoView({behavior:"smooth", block:"start"}); }
     }
     function scrollDepartmentInDashboardByName(name){
@@ -7025,8 +7553,28 @@
     document.querySelectorAll(".quarter-btn").forEach(btn => btn.addEventListener("click", () => switchQuarter(btn.dataset.quarter)));
     if($("deptSearchInput")) $("deptSearchInput").addEventListener("input", renderDepartmentsPage);
 
+    function refreshWeeklyReportsDisplay(){
+      if(!selectedWeeklyPeriodId) return;
+      renderWeeklyReportCards(normalizeArabicText($("deptSearchInput")?.value || ""));
+    }
+    window.addEventListener("storage", (event) => {
+      if(event.key===WEEKLY_STORAGE_KEY || event.key===WEEKLY_SELECTED_PERIOD_KEY) refreshWeeklyReportsDisplay();
+    });
+    window.addEventListener("focus", refreshWeeklyReportsDisplay);
+    window.addEventListener("pageshow", refreshWeeklyReportsDisplay);
+    document.addEventListener("visibilitychange", () => {
+      if(!document.hidden) refreshWeeklyReportsDisplay();
+    });
+
+    initializeWeeklyReports();
     refreshDataEntryButton();
     renderAll();
+
+    /* فتح صفحة الإدارات مباشرة عند الدخول من الصفحة الرئيسية */
+    try {
+      const requestedView = new URLSearchParams(window.location.search).get("view");
+      if(requestedView === "departments") setTimeout(openDepartmentsPage, 0);
+    } catch (e) {}
   </script>
 </body>
 </html>
