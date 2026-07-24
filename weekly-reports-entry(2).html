@@ -69,7 +69,7 @@
         <div><h1>إدخال التقارير الأسبوعية</h1><p>عمادة شؤون الطلاب • من الأحد إلى الخميس</p></div>
       </div>
       <div class="header-actions">
-        <a class="pill-btn" href="./departments-dashboard-display.html?view=departments">رجوع لصفحة الإدارات</a>
+        <a class="pill-btn" href="./departments-dashboard.html?view=departments">رجوع لصفحة الإدارات</a>
         <a class="pill-btn" href="./index.html">الصفحة الرئيسية</a>
         <button class="pill-btn" type="button" onclick="closeEntryPage()">إغلاق</button>
       </div>
@@ -268,7 +268,7 @@
   function hideMessage(){$("message").className="message"}
 
   function selectCurrentWeek(){selectedPeriodId=PERIODS[currentPeriodIndex()].id;$("weekSelect").value=selectedPeriodId;localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedPeriodId);loadForm()}
-  function goBackToDepartments(){if(history.length>1){history.back()}else{window.location.href="departments-dashboard-display.html?view=departments"}}
+  function goBackToDepartments(){if(history.length>1){history.back()}else{window.location.href="./departments-dashboard.html?view=departments"}}
   function closeEntryPage(){window.close();setTimeout(()=>{if(!window.closed)goBackToDepartments()},100)}
 
   function init(){
