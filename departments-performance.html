@@ -389,6 +389,7 @@
       cursor:pointer;
       font-family:inherit;
     }
+    .dept-page-btn{text-decoration:none}
     .dept-page-btn:hover{background:rgba(255,255,255,.24)}
     .departments-grid{
       display:grid;
@@ -2309,7 +2310,7 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn home-inline-btn" type="button" onclick="window.location.href='index.html'" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</button>
+        <a class="btn home-inline-btn" href="./index.html" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</a>
         <span class="iso-pill">ISO 9001:2015 ✓</span>
         <button class="btn" id="themeBtn" type="button">🌙 الوضع الداكن</button>
         <button class="btn" id="langBtn" type="button">English</button>
@@ -2503,7 +2504,7 @@
           <p>تعرض هذه الصفحة بيانات الإدارات والتقارير الأسبوعية للقراءة والمراجعة فقط، دون أي حقول تعديل.</p>
         </div>
         <div class="departments-actions">
-          <button class="dept-page-btn" type="button" onclick="window.location.href='weekly-reports-entry.html'">📝 إدخال التقارير الأسبوعية</button>
+          <a class="dept-page-btn" href="./weekly-reports-entry.html" role="button">📝 إدخال التقارير الأسبوعية</a>
           <button class="dept-page-btn" type="button" onclick="window.location.href='index.html'">🏠 الصفحة الرئيسية</button>
           <button class="dept-page-btn" id="departmentsBackBtn" type="button">رجوع للوحة الرئيسية</button>
           <button class="dept-page-btn" id="departmentsCloseBtn" type="button">إغلاق</button>
