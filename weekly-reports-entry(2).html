@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>إدخال التقارير الأسبوعية</title>
+  <style>
+    :root{
+      --green:#1D9E75;--green2:#0F6E56;--blue:#2A78D6;--purple:#534AB7;--red:#E24B4A;
+      --amber:#EDA100;--navy:#174D5A;--bg:#EEF4F7;--card:#fff;--card2:#F7FAFC;
+      --border:#DDE7EC;--text:#172033;--muted:#667085;--shadow:0 18px 45px rgba(15,35,55,.10);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#EAF3F5,var(--bg));color:var(--text);min-height:100vh}
+    button,input,select,textarea{font-family:inherit}
+    .header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,#174D5A,#226778);padding:18px clamp(14px,3vw,34px);box-shadow:0 12px 30px rgba(9,40,50,.22)}
+    .header-inner{max-width:1450px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+    .title-wrap{display:flex;align-items:center;gap:14px;color:#fff}
+    .title-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);font-size:29px}
+    h1{margin:0 0 5px;font-size:clamp(21px,3vw,30px)}
+    .title-wrap p{margin:0;color:rgba(255,255,255,.78);font-size:13px;font-weight:800}
+    .header-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .pill-btn{min-height:48px;border-radius:999px;padding:0 24px;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.30);color:#fff;font-size:16px;font-weight:1000;cursor:pointer;transition:.18s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .pill-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-1px)}
+    .container{max-width:1450px;margin:auto;padding:24px clamp(14px,3vw,34px) 44px}
+    .intro{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+    .intro h2{margin:0 0 8px;font-size:24px}.intro p{margin:0;color:var(--muted);font-size:13px;font-weight:850;line-height:1.8}
+    .success-note{margin-top:12px;padding:11px 13px;border-radius:14px;background:#E1F5EE;color:var(--green2);font-size:12px;font-weight:950;line-height:1.7}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+    .summary-card{background:var(--card);border:1px solid var(--border);border-radius:19px;padding:15px;text-align:center;box-shadow:0 8px 20px rgba(15,35,55,.05)}
+    .summary-card b{display:block;font-size:25px}.summary-card span{display:block;margin-top:6px;color:var(--muted);font-size:11px;font-weight:900}
+    .controls{display:grid;grid-template-columns:minmax(280px,1.4fr) minmax(250px,1fr) auto;gap:12px;align-items:end;background:var(--card);border:1px solid var(--border);border-radius:21px;padding:15px;box-shadow:0 8px 20px rgba(15,35,55,.05);margin-bottom:16px}
+    .field label{display:block;margin-bottom:7px;color:var(--muted);font-size:12px;font-weight:950}
+    .field select,.field input{width:100%;height:44px;border:1px solid var(--border);border-radius:13px;background:var(--card);color:var(--text);padding:0 12px;font-size:13px;font-weight:900;outline:none}
+    .field select:focus,.field input:focus,.entry-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+    .small-btn{min-height:44px;border:0;border-radius:13px;padding:10px 15px;background:var(--green2);color:#fff;font-size:12px;font-weight:1000;cursor:pointer}
+    .departments{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+    .dept-card{border:1px solid var(--border);border-radius:20px;background:var(--card);padding:16px;text-align:right;color:var(--text);cursor:pointer;box-shadow:0 8px 20px rgba(15,35,55,.05);transition:.18s;position:relative;overflow:hidden}
+    .dept-card:before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--dept-color)}
+    .dept-card:hover,.dept-card.active{transform:translateY(-2px);border-color:var(--dept-color);box-shadow:var(--shadow)}
+    .dept-card.active{background:linear-gradient(135deg,#fff,color-mix(in srgb,var(--dept-color) 9%,#fff))}
+    .dept-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.dept-icon{font-size:25px}
+    .state{display:inline-flex;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:1000}.state.empty{background:#EDF1F4;color:var(--muted)}.state.draft{background:#FAEEDA;color:#8A5A00}.state.complete{background:#E1F5EE;color:var(--green2)}
+    .dept-card h3{margin:12px 0 7px;font-size:16px}.dept-card p{margin:0;color:var(--muted);font-size:11px;font-weight:850}
+    .form-panel{background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+    .form-head{padding:17px 19px;background:linear-gradient(135deg,#174D5A,#1D9E75);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .form-head h2{margin:0 0 4px;font-size:21px}.form-head p{margin:0;color:rgba(255,255,255,.82);font-size:12px;font-weight:850}
+    .form-state{border-radius:999px;padding:7px 11px;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.24);font-size:11px;font-weight:1000}
+    .form-body{padding:16px}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:17px}
+    table{width:100%;min-width:980px;border-collapse:collapse;background:var(--card)}
+    th,td{padding:10px;border-bottom:1px solid var(--border);border-inline-start:1px solid var(--border);text-align:center;vertical-align:middle}th{background:var(--card2);font-size:11px;font-weight:1000}td:first-child{width:48px;font-weight:1000;color:var(--muted)}
+    .entry-input{width:100%;min-height:42px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text);padding:8px 9px;font-size:12px;font-weight:850;outline:none}
+    textarea.entry-input{resize:vertical;line-height:1.55;min-height:50px}
+    .delete-btn{width:34px;height:34px;border:0;border-radius:10px;background:#FCEBEB;color:var(--red);font-size:17px;font-weight:1000;cursor:pointer}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.action-btn{min-height:42px;border:1px solid var(--border);border-radius:12px;padding:9px 15px;background:var(--green2);color:#fff;font-size:12px;font-weight:1000;cursor:pointer}.action-btn.secondary{background:var(--card2);color:var(--text)}.action-btn.complete{background:var(--purple)}.action-btn.danger{background:var(--red);border-color:var(--red)}
+    .message{display:none;margin-top:12px;border-radius:13px;padding:10px 12px;font-size:12px;font-weight:1000}.message.show{display:block}.message.success{background:#E1F5EE;color:var(--green2)}.message.error{background:#FCEBEB;color:#A52A2A}
+    @media(max-width:900px){.summary{grid-template-columns:1fr 1fr}.controls{grid-template-columns:1fr}.departments{grid-template-columns:1fr}.meta{grid-template-columns:1fr}}
+    @media(max-width:520px){.summary{grid-template-columns:1fr}.pill-btn{width:100%;font-size:14px}.header-actions{width:100%}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="title-wrap">
+        <div class="title-icon">📝</div>
+        <div><h1>إدخال التقارير الأسبوعية</h1><p>عمادة شؤون الطلاب • من الأحد إلى الخميس</p></div>
+      </div>
+      <div class="header-actions">
+        <a class="pill-btn" href="./departments-dashboard-display.html?view=departments">رجوع لصفحة الإدارات</a>
+        <a class="pill-btn" href="./index.html">الصفحة الرئيسية</a>
+        <button class="pill-btn" type="button" onclick="closeEntryPage()">إغلاق</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <h2>اختر الأسبوع والإدارة ثم أدخل بيانات التقرير</h2>
+      <p>يمكنك تغيير البنود والمعايير من أسبوع إلى آخر، وحفظ التقرير كمسودة أو اعتماده كمكتمل.</p>
+      <div class="success-note">بعد الحفظ ستظهر البيانات تلقائيًا في صفحة الإدارات، بشرط أن يكون الملفان في المجلد نفسه وعلى الموقع نفسه.</div>
+    </section>
+
+    <section class="summary">
+      <div class="summary-card"><b id="totalWeeks">52</b><span>إجمالي أسابيع السنة</span></div>
+      <div class="summary-card"><b id="currentWeekNumber">—</b><span>رقم الأسبوع المحدد</span></div>
+      <div class="summary-card"><b id="enteredCount">0/3</b><span>تقارير مدخلة</span></div>
+      <div class="summary-card"><b id="completedCount">0/3</b><span>تقارير مكتملة</span></div>
+    </section>
+
+    <section class="controls">
+      <div class="field"><label for="weekSelect">الأسبوع</label><select id="weekSelect"></select></div>
+      <div class="field"><label for="departmentSelect">الإدارة</label><select id="departmentSelect"></select></div>
+      <button class="small-btn" type="button" onclick="selectCurrentWeek()">الأسبوع الحالي</button>
+    </section>
+
+    <section class="departments" id="departmentCards"></section>
+
+    <section class="form-panel">
+      <div class="form-head">
+        <div><h2 id="formTitle">التقرير الأسبوعي</h2><p id="formPeriod">—</p></div>
+        <span class="form-state" id="formState">لم يتم الإدخال</span>
+      </div>
+      <div class="form-body">
+        <div class="meta">
+          <div class="field"><label for="responsibleInput">المسؤول عن تعبئة التقرير</label><input id="responsibleInput" type="text" placeholder="اسم المسؤول"></div>
+          <div class="field"><label>الفترة الأسبوعية</label><input id="periodInput" type="text" disabled></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>م</th><th>البند/المعيار</th><th>العدد/القيمة</th><th>حالة الإنجاز</th><th>الملاحظات</th><th>حذف</th></tr></thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button class="action-btn secondary" type="button" onclick="addRow()">＋ إضافة بند جديد</button>
+          <button class="action-btn" type="button" onclick="saveReport('draft')">حفظ كمسودة</button>
+          <button class="action-btn complete" type="button" onclick="saveReport('complete')">اعتماد التقرير كمكتمل</button>
+          <button class="action-btn danger" type="button" onclick="clearReport()">مسح تقرير الأسبوع</button>
+        </div>
+        <div class="message" id="message"></div>
+      </div>
+    </section>
+  </main>
+
+<script>
+  const WEEKLY_REPORT_YEAR=2026;
+  const WEEKLY_STORAGE_KEY="ut_weekly_reports_dynamic_v2";
+  const WEEKLY_SELECTED_PERIOD_KEY="ut_weekly_selected_period_v2";
+  const WEEKLY_DEPARTMENTS=[
+    {id:"investment",name_ar:"قسم الاستثمار",icon:"📈",color:"#2A78D6",defaultResponsible:"أ. طلال العقيلي"},
+    {id:"employee-affairs",name_ar:"قسم شؤون الموظفين",icon:"👥",color:"#7C5CC4",defaultResponsible:"يُحدد عند الإدخال"},
+    {id:"rewards-management",name_ar:"قسم إدارة المكافآت",icon:"🎓",color:"#D99000",defaultResponsible:"يُحدد عند الإدخال"},
+    {id:"student-fund",name_ar:"إدارة صندوق الطلاب",icon:"💰",color:"#1D9E75",defaultResponsible:"أ. محمد فالح البلوي"},
+    {id:"deanship-admin",name_ar:"إدارة عمادة شؤون الطلاب",icon:"🗂️",color:"#534AB7",defaultResponsible:"فيصل كريشان"}
+  ];
+  const STATUSES=["تم الإنجاز","تحت الإجراء","نشط","لم يبدأ","مؤجل","أخرى"];
+  let selectedPeriodId="";
+  let selectedDepartmentIndex=0;
+
+  const $=id=>document.getElementById(id);
+  const pad=n=>String(n).padStart(2,"0");
+  const dateKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const months=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  const arabicDate=d=>`${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  const esc=value=>String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+
+  function generatePeriods(year){
+    const periods=[];const cursor=new Date(year,0,1,12);
+    while(cursor.getDay()!==0) cursor.setDate(cursor.getDate()+1);
+    let number=1;
+    while(cursor.getFullYear()===year){
+      const start=new Date(cursor),end=new Date(cursor);end.setDate(end.getDate()+4);
+      if(end.getFullYear()>year) end.setTime(new Date(year,11,31,12).getTime());
+      periods.push({id:dateKey(start),number,start,end,label:`الأسبوع ${number} • ${arabicDate(start)} إلى ${arabicDate(end)}`});
+      cursor.setDate(cursor.getDate()+7);number++;
+    }
+    return periods;
+  }
+  const PERIODS=generatePeriods(WEEKLY_REPORT_YEAR);
+
+  let memoryStore={};
+  function loadStore(){
+    try{
+      const raw=localStorage.getItem(WEEKLY_STORAGE_KEY);
+      const v=JSON.parse(raw||"{}");
+      memoryStore=v&&typeof v==="object"?v:{};
+      return memoryStore;
+    }catch(e){return memoryStore&&typeof memoryStore==="object"?memoryStore:{}}
+  }
+  function saveStore(store){
+    memoryStore=store&&typeof store==="object"?store:{};
+    try{localStorage.setItem(WEEKLY_STORAGE_KEY,JSON.stringify(memoryStore));return true}catch(e){return false}
+  }
+
+  function splitLegacyInvestmentEmployeesReport(report){
+    const source=report&&typeof report==="object"?report:{};
+    const items=Array.isArray(source.items)?source.items:[];
+    const investmentWords=["استثمار","مستثمر","المستثمرين","تصريح","تصاريح","الأعيان","ايجار","إيجار","سداد","مطالبات مالية"];
+    const employeeWords=["موظف","موظفين","موظفات","إجاز","حضور","انصراف","تكليف","مساءلات","تمهير","متدرب","المتدربين","الإنجاز الشهري"];
+    const investmentItems=[],employeeItems=[];
+    items.forEach(item=>{
+      const text=String(item?.statement||"");
+      const isEmployee=employeeWords.some(word=>text.includes(word));
+      const isInvestment=investmentWords.some(word=>text.includes(word));
+      if(isEmployee)employeeItems.push(item);
+      if(isInvestment||!isEmployee)investmentItems.push(item);
+    });
+    const base={...source};delete base.items;
+    return {investment:{...base,items:investmentItems},employees:{...base,responsible:"",people:Array.isArray(source.people)?source.people:[],items:employeeItems}};
+  }
+  function migrateLegacyInvestmentEmployeesReports(){
+    const store=loadStore();
+    if(store.__investmentEmployeesSplitV3)return;
+    Object.keys(store).forEach(periodId=>{
+      if(periodId.startsWith("__")||!store[periodId]||typeof store[periodId]!=="object")return;
+      const legacy=store[periodId]["investment-employees"];
+      if(!legacy)return;
+      const split=splitLegacyInvestmentEmployeesReport(legacy);
+      if(!store[periodId]["investment"]&&split.investment.items.length)store[periodId]["investment"]=split.investment;
+      if(!store[periodId]["employee-affairs"]&&split.employees.items.length)store[periodId]["employee-affairs"]=split.employees;
+      delete store[periodId]["investment-employees"];
+    });
+    store.__investmentEmployeesSplitV3=true;
+    saveStore(store);
+  }
+  function getReport(periodId,deptId){return loadStore()?.[periodId]?.[deptId]||null}
+  function setReport(periodId,deptId,data){const store=loadStore();if(!store[periodId])store[periodId]={};store[periodId][deptId]=data;saveStore(store)}
+  function deleteReport(periodId,deptId){const store=loadStore();if(store[periodId]?.[deptId]){delete store[periodId][deptId];saveStore(store)}}
+  function currentPeriodIndex(){const now=new Date();if(now.getFullYear()<WEEKLY_REPORT_YEAR)return 0;if(now.getFullYear()>WEEKLY_REPORT_YEAR)return PERIODS.length-1;let found=0;PERIODS.forEach((p,i)=>{if(p.start<=now)found=i});return found}
+  function selectedPeriod(){return PERIODS.find(p=>p.id===selectedPeriodId)||PERIODS[currentPeriodIndex()]}
+  function reportState(report){if(!report?.items?.length)return {label:"لم يتم الإدخال",className:"empty"};if(report.status==="complete")return {label:"مكتمل",className:"complete"};return {label:"مسودة",className:"draft"}}
+
+  function rowHtml(item={},index=0){
+    return `<tr class="entry-row">
+      <td class="row-number">${index+1}</td>
+      <td><textarea class="entry-input statement" placeholder="اكتب البند أو المعيار">${esc(item.statement||"")}</textarea></td>
+      <td><input class="entry-input quantity" type="text" value="${esc(item.quantity??"")}" placeholder="العدد أو القيمة"></td>
+      <td><select class="entry-input status">${STATUSES.map(s=>`<option value="${s}" ${s===(item.status||"لم يبدأ")?"selected":""}>${s}</option>`).join("")}</select></td>
+      <td><textarea class="entry-input notes" placeholder="ملاحظات اختيارية">${esc(item.notes||"")}</textarea></td>
+      <td><button class="delete-btn" type="button" onclick="removeRow(this)">×</button></td>
+    </tr>`;
+  }
+  function renumber(){document.querySelectorAll(".entry-row").forEach((row,i)=>row.querySelector(".row-number").textContent=i+1)}
+  function addRow(item={}){$("itemsBody").insertAdjacentHTML("beforeend",rowHtml(item,document.querySelectorAll(".entry-row").length));renumber()}
+  function removeRow(btn){btn.closest("tr")?.remove();renumber();if(!document.querySelector(".entry-row"))addRow()}
+
+  function renderDepartmentCards(){
+    const period=selectedPeriod();
+    $("departmentCards").innerHTML=WEEKLY_DEPARTMENTS.map((dept,index)=>{
+      const state=reportState(getReport(period.id,dept.id));
+      return `<button class="dept-card ${index===selectedDepartmentIndex?"active":""}" style="--dept-color:${dept.color}" type="button" onclick="chooseDepartment(${index})">
+        <div class="dept-top"><span class="dept-icon">${dept.icon}</span><span class="state ${state.className}">${state.label}</span></div>
+        <h3>${dept.name_ar}</h3><p>${dept.defaultResponsible}</p>
+      </button>`;
+    }).join("");
+  }
+
+  function renderSummary(){
+    const period=selectedPeriod();
+    const entered=WEEKLY_DEPARTMENTS.filter(d=>getReport(period.id,d.id)?.items?.length).length;
+    const completed=WEEKLY_DEPARTMENTS.filter(d=>getReport(period.id,d.id)?.status==="complete").length;
+    $("totalWeeks").textContent=PERIODS.length;$("currentWeekNumber").textContent=period.number;$("enteredCount").textContent=`${entered}/${WEEKLY_DEPARTMENTS.length}`;$("completedCount").textContent=`${completed}/${WEEKLY_DEPARTMENTS.length}`;
+  }
+
+  function loadForm(){
+    const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];
+    const report=getReport(period.id,dept.id)||{responsible:dept.defaultResponsible,status:"draft",items:[]};
+    const state=reportState(report);
+    $("formTitle").textContent=`${dept.icon} ${dept.name_ar}`;$("formPeriod").textContent=period.label;$("formState").textContent=state.label;
+    $("responsibleInput").value=report.responsible||dept.defaultResponsible||"";$("periodInput").value=period.label;
+    $("itemsBody").innerHTML=(report.items||[]).map(rowHtml).join("");if(!report.items?.length)addRow();
+    hideMessage();renderDepartmentCards();renderSummary();
+  }
+
+  function chooseDepartment(index){selectedDepartmentIndex=index;$("departmentSelect").value=String(index);loadForm()}
+  function collectItems(){return [...document.querySelectorAll(".entry-row")].map(row=>({statement:row.querySelector(".statement").value.trim(),quantity:row.querySelector(".quantity").value.trim(),status:row.querySelector(".status").value,notes:row.querySelector(".notes").value.trim()})).filter(x=>x.statement||x.quantity||x.notes)}
+  function saveReport(status){
+    const items=collectItems();if(!items.length){showMessage("أضف بندًا واحدًا على الأقل قبل الحفظ.",false);return}
+    const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];
+    setReport(period.id,dept.id,{responsible:$("responsibleInput").value.trim()||dept.defaultResponsible,status,updatedAt:new Date().toISOString(),items});
+    showMessage(status==="complete"?"تم اعتماد التقرير، وسيظهر تلقائيًا في صفحة الإدارات.":"تم حفظ التقرير كمسودة، وسيظهر تلقائيًا في صفحة الإدارات.",true);renderDepartmentCards();renderSummary();$("formState").textContent=status==="complete"?"مكتمل":"مسودة";
+  }
+  function clearReport(){const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];if(!confirm("هل تريد مسح تقرير هذه الإدارة للأسبوع المحدد؟"))return;deleteReport(period.id,dept.id);loadForm();showMessage("تم مسح بيانات التقرير.",true)}
+  function showMessage(text,success){const m=$("message");m.textContent=text;m.className=`message show ${success?"success":"error"}`}
+  function hideMessage(){$("message").className="message"}
+
+  function selectCurrentWeek(){selectedPeriodId=PERIODS[currentPeriodIndex()].id;$("weekSelect").value=selectedPeriodId;localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedPeriodId);loadForm()}
+  function goBackToDepartments(){if(history.length>1){history.back()}else{window.location.href="departments-dashboard-display.html?view=departments"}}
+  function closeEntryPage(){window.close();setTimeout(()=>{if(!window.closed)goBackToDepartments()},100)}
+
+  function init(){
+    migrateLegacyInvestmentEmployeesReports();
+    let stored="";try{stored=localStorage.getItem(WEEKLY_SELECTED_PERIOD_KEY)||""}catch(e){}
+    selectedPeriodId=PERIODS.some(p=>p.id===stored)?stored:PERIODS[currentPeriodIndex()].id;
+    $("weekSelect").innerHTML=PERIODS.map(p=>`<option value="${p.id}">${esc(p.label)}</option>`).join("");$("weekSelect").value=selectedPeriodId;
+    $("departmentSelect").innerHTML=WEEKLY_DEPARTMENTS.map((d,i)=>`<option value="${i}">${d.name_ar}</option>`).join("");
+    $("weekSelect").addEventListener("change",()=>{selectedPeriodId=$("weekSelect").value;localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedPeriodId);loadForm()});
+    $("departmentSelect").addEventListener("change",()=>chooseDepartment(Number($("departmentSelect").value)||0));
+    window.addEventListener("storage",e=>{if(e.key===WEEKLY_STORAGE_KEY)loadForm()});
+    loadForm();
+  }
+  init();
+</script>
+</body>
+</html>
