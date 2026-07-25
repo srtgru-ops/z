@@ -4461,14 +4461,71 @@
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
     }
-    function loadWeeklyStore(){
+    /* قراءة التقارير مباشرة من Firebase لتظهر بسرعة في جميع المتصفحات */
+    const FIREBASE_DATABASE_URL="https://ut-weekly-reports-default-rtdb.europe-west1.firebasedatabase.app";
+    const FIREBASE_WEEKLY_PATH="weeklyReports";
+    let weeklyStoreCache={};
+    let weeklyLastCloudPayload="";
+    let weeklySyncTimer=null;
+
+    function readWeeklyLocalBackup(){
       try{
         const parsed=JSON.parse(localStorage.getItem(WEEKLY_STORAGE_KEY) || "{}");
         return parsed && typeof parsed === "object" ? parsed : {};
       }catch(e){ return {}; }
     }
+
+    function loadWeeklyStore(){
+      if(!weeklyStoreCache || typeof weeklyStoreCache!=="object"){
+        weeklyStoreCache=readWeeklyLocalBackup();
+      }
+      return weeklyStoreCache;
+    }
+
     function saveWeeklyStore(store){
-      localStorage.setItem(WEEKLY_STORAGE_KEY, JSON.stringify(store));
+      weeklyStoreCache=store && typeof store==="object" ? store : {};
+      try{
+        localStorage.setItem(WEEKLY_STORAGE_KEY,JSON.stringify(weeklyStoreCache));
+      }catch(e){}
+    }
+
+    async function fetchWeeklyReportsFromFirebase(forceRender=false){
+      try{
+        const response=await fetch(`${FIREBASE_DATABASE_URL}/${FIREBASE_WEEKLY_PATH}.json`,{
+          method:"GET",
+          cache:"no-store"
+        });
+        if(!response.ok) throw new Error(`Firebase read failed: ${response.status}`);
+
+        const remote=await response.json();
+        const normalized=remote && typeof remote==="object" ? remote : {};
+        const payload=JSON.stringify(normalized);
+
+        if(forceRender || payload!==weeklyLastCloudPayload){
+          weeklyLastCloudPayload=payload;
+          weeklyStoreCache=normalized;
+          try{
+            localStorage.setItem(WEEKLY_STORAGE_KEY,payload);
+          }catch(e){}
+          refreshWeeklyReportsDisplay();
+        }
+        return true;
+      }catch(error){
+        console.error("تعذر تحديث التقارير من Firebase:",error);
+        if(!Object.keys(weeklyStoreCache||{}).length){
+          weeklyStoreCache=readWeeklyLocalBackup();
+        }
+        return false;
+      }
+    }
+
+    function startWeeklyFirebaseSync(){
+      clearInterval(weeklySyncTimer);
+      weeklySyncTimer=setInterval(()=>{
+        if(document.visibilityState==="visible"){
+          fetchWeeklyReportsFromFirebase(false);
+        }
+      },2000);
     }
 
     function splitLegacyInvestmentEmployeesReport(report){
@@ -4556,9 +4613,13 @@
     function getSelectedWeeklyPeriod(){
       return WEEKLY_PERIODS.find(p=>p.id===selectedWeeklyPeriodId) || WEEKLY_PERIODS[currentWeeklyPeriodIndex()] || WEEKLY_PERIODS[0];
     }
-    function initializeWeeklyReports(){
+    async function initializeWeeklyReports(){
+      weeklyStoreCache=readWeeklyLocalBackup();
+      await fetchWeeklyReportsFromFirebase(false);
+
       migrateLegacyInvestmentEmployeesReports();
       seedLegacyWeeklyReports();
+
       const select=$("weeklyPeriodSelect");
       if(!select) return;
       let stored="";
@@ -4572,7 +4633,18 @@
         localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedWeeklyPeriodId);
         renderWeeklyReportCards(normalizeArabicText($("deptSearchInput")?.value || ""));
       });
+
+      document.addEventListener("visibilitychange",()=>{
+        if(document.visibilityState==="visible"){
+          fetchWeeklyReportsFromFirebase(true);
+        }
+      });
+      window.addEventListener("focus",()=>fetchWeeklyReportsFromFirebase(true));
+      window.addEventListener("online",()=>fetchWeeklyReportsFromFirebase(true));
+
+      startWeeklyFirebaseSync();
       updateWeeklyScheduleSummary();
+      refreshWeeklyReportsDisplay();
     }
     function selectCurrentWeeklyPeriod(){
       const period=WEEKLY_PERIODS[currentWeeklyPeriodIndex()];
