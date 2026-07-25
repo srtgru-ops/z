@@ -10,7 +10,6 @@
   }
 })();
 </script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>دليل نظام إدارة الجودة — عمادة شؤون الطلاب | جامعة تبوك</title>
@@ -89,7 +88,16 @@ body{font-family:'Tajawal',sans-serif;background:var(--off);color:var(--text);di
 /* PERSON CARD */
 .person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;margin-bottom:2rem}
 .person-card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.person-head{cursor:pointer;position:relative}
+.person-head:hover{filter:brightness(1.08)}
+.card-chevron{position:absolute;left:1.25rem;top:50%;transform:translateY(-50%);color:var(--gold-light);font-size:1rem;transition:transform .25s ease;pointer-events:none}
+.person-card.expanded .card-chevron{transform:translateY(-50%) rotate(180deg)}
+.person-body{display:none;animation:cardOpen .25s ease}
+.person-card.expanded .person-body{display:block}
+@keyframes cardOpen{from{opacity:0}to{opacity:1}}
 .person-head{background:linear-gradient(135deg,var(--navy),#14663f);padding:1.25rem 1.5rem;position:relative}
+.proc-link-btn{display:inline-flex;align-items:center;gap:.4rem;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);color:var(--gold-light);font-size:.72rem;font-weight:600;padding:.35rem .8rem;border-radius:20px;cursor:pointer;font-family:inherit;margin-top:.65rem;transition:all .2s}
+.proc-link-btn:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
 .person-head::after{content:'';position:absolute;bottom:0;right:0;width:60px;height:60px;background:rgba(201,168,76,.08);border-radius:50% 0 0 0}
 .person-code{font-size:.65rem;color:var(--gold);font-weight:700;letter-spacing:.08em;margin-bottom:.3rem}
 .person-name{font-size:1rem;font-weight:700;color:#fff}
@@ -220,52 +228,12 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
 
 .fade-in{animation:fadeIn .4s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-</style>
-<style>
 
-  /* زر العودة الموحد */
-  .portal-home-btn{
-    position:fixed;
-    top:18px;
-    left:18px;
-    z-index:10000;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    min-height:42px;
-    padding:0 15px;
-    border-radius:13px;
-    background:linear-gradient(135deg,#087a45,#0b8a50);
-    color:#fff !important;
-    border:1px solid rgba(255,255,255,.35);
-    box-shadow:0 10px 24px rgba(5,78,46,.20);
-    text-decoration:none !important;
-    font-family:"Tajawal","Segoe UI",Tahoma,Arial,sans-serif;
-    font-size:13px;
-    font-weight:900;
-    line-height:1;
-    transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
-  }
-  .portal-home-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 14px 30px rgba(5,78,46,.28);
-    filter:brightness(1.04);
-  }
-  .portal-home-btn:focus-visible{
-    outline:3px solid rgba(201,168,76,.45);
-    outline-offset:3px;
-  }
-  .portal-home-btn .portal-home-icon{font-size:17px;line-height:1}
-  @media(max-width:650px){
-    .portal-home-btn{top:10px;left:10px;min-height:39px;padding:0 12px;font-size:12px;border-radius:11px}
-  }
-  @media print{.portal-home-btn{display:none!important}}
-
+.portal-home-link{color:#fff;background:rgba(201,168,76,.12);border-right-color:var(--gold);font-weight:700;margin-bottom:.35rem}
+.portal-home-link:hover{background:rgba(201,168,76,.22);color:var(--gold-light)}
 </style>
 </head>
 <body>
-  <a class="portal-home-btn" href="index.html" aria-label="العودة للصفحة الرئيسية"><span class="portal-home-icon">⌂</span><span>العودة للصفحة الرئيسية</span></a>
 
 <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
 
@@ -278,6 +246,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
   </div>
   <div class="sidebar-nav">
     <div class="nav-group-label">الرئيسية</div>
+    <a class="nav-item portal-home-link" href="index.html"><span class="icon">↩️</span> العودة لبوابة الأداء والجودة</a>
     <a class="nav-item active" onclick="showPage('home')" href="#"><span class="icon">🏠</span> الصفحة الرئيسية</a>
     <a class="nav-item" onclick="showPage('scope')" href="#"><span class="icon">📋</span> نطاق التطبيق</a>
     <a class="nav-item" onclick="showPage('policy')" href="#"><span class="icon">📜</span> سياسة الجودة</a>
@@ -299,8 +268,17 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
     <a class="nav-item" onclick="showPage('objectives')" href="#"><span class="icon">🎯</span> أهداف الجودة</a>
     <a class="nav-item" onclick="showPage('processes')" href="#"><span class="icon">⚙️</span> إجراءات عمادة شؤون الطلاب</a>
     <a class="nav-item" onclick="showPage('docs')" href="#"><span class="icon">🔄</span> التخطيط للتغيرات</a>
+    <a class="nav-item" onclick="showPage('kpi')" href="#"><span class="icon">📈</span> قياس العمليات وتحليل الأداء</a>
+    <a class="nav-item" onclick="showPage('mgmtreview')" href="#"><span class="icon">🗓️</span> مراجعة الإدارة</a>
+    <a class="nav-item" onclick="showPage('corrective')" href="#"><span class="icon">🛠️</span> الإجراءات التصحيحية</a>
+    <a class="nav-item" onclick="showPage('improvement')" href="#"><span class="icon">🌱</span> التحسين المستمر</a>
+    <a class="nav-item" onclick="showPage('internalaudit')" href="#"><span class="icon">🕵️</span> المراجعة الداخلية</a>
 
     <div class="nav-group-label">العمليات الداعمة</div>
+    <a class="nav-item" onclick="showPage('docsinfo')" href="#"><span class="icon">🗂️</span> توثيق المعلومات</a>
+    <a class="nav-item" onclick="showPage('privacy')" href="#"><span class="icon">🔒</span> البيانات الشخصية والخصوصية</a>
+    <a class="nav-item" onclick="showPage('satisfaction')" href="#"><span class="icon">😊</span> قياس رضا المستفيدين</a>
+    <a class="nav-item" onclick="showPage('knowledge')" href="#"><span class="icon">🧠</span> المعرفة المؤسسية والتواصل</a>
     <a class="nav-item" onclick="showPage('suppliers')" href="#"><span class="icon">🛒</span> الموردون والمستثمرون</a>
     <a class="nav-item" onclick="showPage('regulations')" href="#"><span class="icon">📑</span> اللوائح والوثائق</a>
   </div>
@@ -630,7 +608,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
     <div class="page-hero"><div class="page-hero-eye">المهام والصلاحيات</div><h1>عمادة شؤون <em>الطلاب</em></h1></div>
 
     <div class="person-grid">
-      <div class="person-card"><div class="person-head"><div class="person-code">١</div><div class="person-name">عميد عمادة شؤون الطلاب</div><div class="person-dept">أعلى سلطة إدارية في العمادة</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">١</div><div class="person-name">عميد عمادة شؤون الطلاب</div><div class="person-dept">أعلى سلطة إدارية في العمادة</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول عن تنفيذ الأنظمة واللوائح التعليمية بالعمادة، وتنفيذ قرارات مجالس العمادة والجامعة</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر وزير التعليم القرار بتعيين عميد عمادة شؤون الطلاب بناء على ترشيح رئيس الجامعة، على أن يكون أحد أعضاء هيئة التدريس بإحدى كليات الجامعة من ذوي التميز والكفاءة العلمية والإدارية، ويكون عضواً في مجلس الجامعة، ويكون التعيين لمدة سنتين قابلة للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط عميد عمادة شؤون الطلاب إدارياً بوكيل الجامعة للشؤون الأكاديمية وفنياً برئيس الجامعة</div></div>
@@ -638,7 +616,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <div class="person-section"><div class="person-label">المهام والمسؤوليات</div><ul class="person-list"><li>الإشراف الإداري والمالي والفني على عمادة شؤون الطلاب ومنسوبيها</li><li>رئاسة مجلس الصندوق الطلابي</li><li>نائب مجلس الصندوق الخيري لدعم برامج طلاب المنح</li><li>رئاسة لجنة تأديب الطلاب بالجامعة</li><li>تمثيل العمادة والجامعة في المناسبات والمحافل والزيارات الداخلية والخارجية التي من اختصاصه أو تكليف من ينوب عنه</li><li>عقد الاجتماعات بالطلاب للنظر في احتياجاتهم والمشاكل التي تواجههم والاستماع إلى مقترحاتهم</li><li>اقتراح اللجان الدائمة والمؤقتة في العمادة وفق متطلبات العمل، والرفع بها حسب الصلاحية للمصادقة على الاعتماد</li><li>إصدار جميع القرارات الإدارية الداخلية الخاصة بعمادة شؤون الطلاب</li><li>إقرار خطة وكالات وإدارات العمادة السنوية، والرفع بها لاعتمادها لدى الجهات المختصة</li><li>اقتراح من يتولون قيادة وكالات العمادة والإدارات المرتبطة بها، والرفع بها إلى الجهات المختصة لاعتمادها</li><li>اعتماد ترشيح وكلاء العمادة للمشاركة في المناسبات الداخلية والخارجية بحسب اختصاص الوكالة</li><li>إقرار الهيكل التنظيمي، والتوصيف الإداري لعمادة شؤون الطلاب، والرفع بها لاعتمادها من الجهات المختصة</li><li>اعتماد التقييمات الخاصة بالأداء الوظيفي لجميع موظفي العمادة، والتوجيه للرفع بها للجهات المختصة</li><li>اعتماد التقرير السنوي للعمادة وإنجازاتها، والرفع بها لرئيس الجامعة ووكيل الشؤون الأكاديمية، مع بيان التحديات التي واجهت العمادة خلال العام الدراسي</li><li>إصدار قرارات صرف المكافآت الشهرية ومكافآت التفوق ومكافآت بدل الإعاقة ومكافآت ومصروفات النشاط الطلابي</li><li>إصدار قرارات الإعانات المالية</li><li>الموافقة على أوامر إركاب الطلاب وإصدار طلب التأشيرات</li><li>اعتماد تقاويم الأداء الوظيفي لموظفين وموظفات العمادة</li><li>الاتصال المباشر بالوزارات والمصالح الحكومية وغيرها مما يقع تحت اختصاصه مع مراعاة المستوى الوظيفي</li></ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٢</div><div class="person-name">سكرتير مكتب عميد شؤون الطلاب</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٢</div><div class="person-name">سكرتير مكتب عميد شؤون الطلاب</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-dean-office')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول الإداري عن متابعة وجدولة أعمال عميد عمادة شؤون الطلاب، وتنظيم واستقبال زوار المكتب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف سكرتير عميد عمادة شؤون الطلاب، على أن يكون أحد الموظفين الإداريين بالجامعة، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط إدارياً وفنياً بعميد شؤون الطلاب</div></div>
@@ -646,7 +624,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <div class="person-section"><div class="person-label">الصلاحيات</div><p style="font-size:.8rem;color:var(--text)">بحسب الصلاحيات التي يفوضه بها عميد عمادة شؤون الطلاب</p></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٣</div><div class="person-name">مدير مكتب عميد شؤون الطلاب</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٣</div><div class="person-name">مدير مكتب عميد شؤون الطلاب</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-dean-office')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول الإداري عن تنفيذ الخطط والتعليمات وإحالة المعاملات الواردة إلى مكتب عميد عمادة شؤون الطلاب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير المكتب، على أن يكون أحد الموظفين الإداريين بالجامعة، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير مكتب عميد عمادة شؤون الطلاب إدارياً بمدير إدارة عمادة شؤون الطلاب، وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -654,7 +632,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <div class="person-section"><div class="person-label">الصلاحيات</div><ul class="person-list"><li>استقبال المعاملات السرية المحالة إلى مكتب عميد عمادة شؤون الطلاب</li><li>تنفيذ الإجراءات الإدارية المتعلقة بالمعاملات المحالة إلى مكتب عميد عمادة شؤون الطلاب</li></ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٤</div><div class="person-name">مدير إدارة عمادة شؤون الطلاب</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٤</div><div class="person-name">مدير إدارة عمادة شؤون الطلاب</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-deanadmin')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول الإداري عن تنفيذ الأعمال الإدارية الخاصة بموظفين وموظفات عمادة شؤون الطلاب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر وكيل الجامعة قراراً بتكليف مدير إدارة عميد عمادة شؤون الطلاب بناءً على ترشيح عميد عمادة شؤون الطلاب، وهو أحد الموظفين الإداريين بالجامعة، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير إدارة عمادة شؤون الطلاب إدارياً وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -667,7 +645,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٥</div><div class="person-name">مدير إدارة المكافآت</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٥</div><div class="person-name">مدير إدارة المكافآت</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-rewards')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول الإداري عن تنفيذ الأعمال الإدارية والمالية الخاصة بإدارة المكافآت الطلابية</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر وكيل الجامعة قراراً بتكليف مدير إدارة المكافآت الطلابية بناءً على ترشيح عميد عمادة شؤون الطلاب، وهو أحد موظفي الجامعة الإداريين، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير إدارة المكافآت الطلابية إدارياً وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -680,7 +658,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٦</div><div class="person-name">المدير التنفيذي لإدارة الصندوق الطلابي</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٦</div><div class="person-name">المدير التنفيذي لإدارة الصندوق الطلابي</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-fund')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول الإداري عن تنفيذ جميع الأنظمة واللوائح التعليمية الجامعية الخاصة بالصندوق الطلابي وتنفيذ قرارات مجلس الصندوق والجامعة</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر رئيس الجامعة قراراً بتكليف المدير التنفيذي للصندوق الطلابي بناءً على ترشيح عميد عمادة شؤون الطلاب، وهو أحد موظفي الجامعة الإداريين، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط المدير التنفيذي لإدارة الصندوق الطلابي إدارياً بعميد عمادة شؤون الطلاب، وفنياً برئيس الجامعة</div></div>
@@ -696,7 +674,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٧</div><div class="person-name">المدير التنفيذي لمركز التدريب والتأهيل</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٧</div><div class="person-name">المدير التنفيذي لمركز التدريب والتأهيل</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-training')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول الإداري عن تنفيذ الأعمال الإدارية والمالية الخاصة بالمركز</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر رئيس الجامعة قراراً بتكليف المدير التنفيذي لمركز التدريب والتأهيل بناء على ترشيح عمادة شؤون الطلاب، وهو أحد أعضاء هيئة التدريس بإحدى كليات الجامعة، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط المدير التنفيذي لمركز التدريب والتأهيل إدارياً بعميد عمادة شؤون الطلاب، وفنياً بمجلس الإدارة</div></div>
@@ -719,7 +697,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
     <div class="page-hero"><div class="page-hero-eye">وكالة الأنشطة الطلابية</div><h1>الأنشطة الطلابية <em>والخدمات</em></h1></div>
 
     <div class="person-grid">
-      <div class="person-card"><div class="person-head"><div class="person-code">١</div><div class="person-name">وكيل عمادة شؤون الطلاب للأنشطة الطلابية</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">١</div><div class="person-name">وكيل عمادة شؤون الطلاب للأنشطة الطلابية</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">المسؤول عن تنفيذ الأنظمة واللوائح التعليمية الجامعية بالوكالة، وتنفيذ قرارات مجالس العمادة والجامعة، والإشراف على الأنشطة الطلابية المقدمة من عمادة شؤون الطلاب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر رئيس الجامعة القرار بتعيين وكيل الأنشطة الطلابية بناءً على ترشيح عميد شؤون الطلاب، ويكون التعيين لمدة سنتين قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط وكيل عمادة شؤون الطلاب للأنشطة الطلابية إدارياً وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -728,7 +706,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <div class="person-section"><div class="person-label">الصلاحيات</div><ul class="person-list"><li>نائب عميد عمادة شؤون الطلاب</li><li>اعتماد الخطة التشغيلية للوكالة</li><li>اعتماد تقييم الأداء الوظيفي لموظفي الوكالة</li><li>الموافقة على إجازات موظفي الوكالة، والتنسيق مع إدارة عمادة شؤون الطلاب، أو إدارة الصندوق الطلابي بحسب التبعية، وتعيين البديل عنهم</li><li>اقتراح أسماء مجلس الصندوق الخيري لدعم برامج طلاب المنح، والرفع بها إلى عميد عمادة شؤون الطلاب لطلب الاعتماد</li><li>اقتراح أسماء اللجنة الدائمة للسكن الطلابي، والرفع بها إلى عميد عمادة شؤون الطلاب لطلب الاعتماد</li><li>اعتماد التقرير السنوي للوكالة</li><li>اقتراح اللجان الدائمة والمؤقتة، والرفع بها لعميد عمادة شؤون الطلاب</li><li>اقتراح الحوافز الإدارية والمالية للموظفين الرسميين وغير الرسميين</li></ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٢</div><div class="person-name">مدير إدارة النشاط الطلابي</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٢</div><div class="person-name">مدير إدارة النشاط الطلابي</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">المسؤول عن تنفيذ الأعمال الإدارية والمالية الخاصة بالإدارة</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير إدارة الأنشطة الطلابية بناءً على ترشيح وكيل الأنشطة الطلابية ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير إدارة الأنشطة الطلابية إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للأنشطة الطلابية</div></div>
@@ -740,7 +718,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٣</div><div class="person-name">مدير إدارة وحدة المنح الطلابية</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٣</div><div class="person-name">مدير إدارة وحدة المنح الطلابية</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-scholarships')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">المسؤول عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بإدارة الطالب الدولي</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير إدارة وحدة المنح الطلابية بناءً على ترشيح وكيل الأنشطة الطلابية، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير إدارة المنح الطلابية إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للأنشطة الطلابية</div></div>
@@ -752,7 +730,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٤</div><div class="person-name">مدير إدارة وحدة ذوي الإعاقة</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٤</div><div class="person-name">مدير إدارة وحدة ذوي الإعاقة</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-disability')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الوحدة المسؤولة عن تنفيذ الأنظمة واللوائح التعليمية الجامعية ذات العلاقة الخاصة بوحدة ذوي الإعاقة</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر رئيس الجامعة قراراً بتكليف مشرف وحدة ذوي الإعاقة بناءً على ترشيح عميد عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مشرف وحدة ذوي الإعاقة إدارياً بوكيل عمادة شؤون الطلاب للأنشطة الطلابية، وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -764,7 +742,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٥</div><div class="person-name">مدير قسم السكن الطلابي</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٥</div><div class="person-name">مدير قسم السكن الطلابي</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-housing')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الوحدة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بإدارة السكن الطلابي</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير قسم السكن الطلابي بناءً على ترشيح وكيل الأنشطة الطلابية، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير قسم السكن الطلابي إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للأنشطة الطلابية</div></div>
@@ -776,7 +754,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٦</div><div class="person-name">مدير إدارة النقل الطلابي</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٦</div><div class="person-name">مدير إدارة النقل الطلابي</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-transport')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الإدارة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بقسم النقل الطلابي</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير إدارة النقل الطلابي بناءً على ترشيح وكيل الأنشطة الطلابية، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير إدارة النقل الطلابي إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للأنشطة الطلابية</div></div>
@@ -788,7 +766,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٧</div><div class="person-name">مدير قسم التغذية والإعاشة</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٧</div><div class="person-name">مدير قسم التغذية والإعاشة</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-catering')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الإدارة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بقسم التغذية والإعاشة</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير قسم التغذية والإعاشة بناءً على ترشيح وكيل الأنشطة الطلابية، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير قسم التغذية والإعاشة إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للأنشطة الطلابية</div></div>
@@ -809,7 +787,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
     <div class="page-hero"><div class="page-hero-eye">وكالة الخريجين والتدريب</div><h1>الخريجون والتدريب <em>والتوظيف</em></h1></div>
 
     <div class="person-grid">
-      <div class="person-card"><div class="person-head"><div class="person-code">١</div><div class="person-name">وكيل عمادة شؤون الطلاب للخريجين</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">١</div><div class="person-name">وكيل عمادة شؤون الطلاب للخريجين</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">المسؤول عن تنفيذ الأنظمة واللوائح التعليمية الجامعية بالوكالة، وتنفيذ قرارات مجالس العمادة والجامعة، والإشراف على الخدمات المقدمة للخريجين من عمادة شؤون الطلاب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر رئيس الجامعة القرار بتعيين وكيل الخريجين بناءً على ترشيح عميد عمادة شؤون الطلاب، ويكون التعيين لمدة سنتين قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط وكيل الخريجين إدارياً وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -818,7 +796,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <div class="person-section"><div class="person-label">الصلاحيات</div><ul class="person-list"><li>اعتماد الخطة التشغيلية للوكالة</li><li>اعتماد تقييم الأداء الوظيفي لموظفي الوكالة</li><li>الموافقة على إجازات موظفي الوكالة والتنسيق مع إدارة عمادة شؤون الطلاب، أو إدارة الصندوق الطلابي بحسب التبعية، وتعيين البديل عنهم</li><li>اعتماد التقرير السنوي للوكالة</li><li>اقتراح اللجان الدائمة والمؤقتة والرفع بها لعميد عمادة شؤون الطلاب</li><li>اقتراح الحوافز الإدارية والمالية للموظفين الرسميين وغير الرسميين</li><li>مخاطبة الجهات الخارجية (الشركات بالقطاع الخاص)</li></ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٢</div><div class="person-name">مدير مكتب التوظيف</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٢</div><div class="person-name">مدير مكتب التوظيف</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-employment')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">المسؤول عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بمكتب التوظيف</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير مكتب التوظيف بناءً على ترشيح وكيل الخريجين، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير مكتب التوظيف إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للخريجين</div></div>
@@ -830,7 +808,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٣</div><div class="person-name">مسؤول قسم تطوير المهارات</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٣</div><div class="person-name">مسؤول قسم تطوير المهارات</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو القسم المسؤول عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بقسم تطوير مهارات الخريجين</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير قسم تطوير مهارات الخريجين بناءً على ترشيح وكيل الخريجين، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير مكتب التوظيف إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيل عمادة شؤون الطلاب للخريجين</div></div>
@@ -851,7 +829,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
     <div class="page-hero"><div class="page-hero-eye">وكالة شطر الطالبات</div><h1>وكالة شطر الطالبات <em>والإدارات التابعة</em></h1></div>
 
     <div class="person-grid">
-      <div class="person-card"><div class="person-head"><div class="person-code">١</div><div class="person-name">وكيلة عمادة شؤون الطلاب شطر الطالبات</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">١</div><div class="person-name">وكيلة عمادة شؤون الطلاب شطر الطالبات</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">المسؤولة عن تنفيذ الأنظمة واللوائح التعليمية الجامعية بالوكالة، وتنفيذ قرارات مجالس العمادة والجامعة، والإشراف على الخدمات المقدمة لشطر الطالبات كافة والإدارات التي تقع تحت إشرافها</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر رئيس الجامعة القرار بتعيين وكيلة شطر الطالبات بناءً على ترشيح عميد عمادة شؤون الطلاب، ويكون التعيين لمدة سنتين قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">ترتبط وكيلة شطر الطالبات إدارياً وفنياً بعميد عمادة شؤون الطلاب</div></div>
@@ -860,7 +838,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <div class="person-section"><div class="person-label">الصلاحيات</div><ul class="person-list"><li>اقتراح الحوافز الإدارية والمالية للموظفين الرسميين وغير الرسميين</li><li>اعتماد الخطة التشغيلية للوكالة</li><li>اعتماد تقييم الأداء الوظيفي لموظفي الوكالة</li><li>الموافقة على إجازات موظفي الوكالة والتنسيق مع إدارة عمادة شؤون الطلاب، أو إدارة الصندوق الطلابي بحسب التبعية، وتعيين البديل عنهم</li><li>اعتماد التقرير السنوي للوكالة</li><li>اقتراح اللجان الدائمة والمؤقتة، والرفع بها لعميد عمادة شؤون الطلاب</li><li>اقتراح الحوافز الإدارية والمالية للموظفين الرسميين وغير الرسميين</li><li>مخاطبة الجهات الخارجية (الشركات بالقطاع الخاص)</li></ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٢</div><div class="person-name">مدير الجودة</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٢</div><div class="person-name">مدير الجودة</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هو المسؤول عن إدارة نظام الجودة بعمادة شؤون الطلاب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير الجودة بناءً على ترشيح وكيلة عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير الجودة إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيلة عمادة شؤون الطلاب لشطر الطالبات</div></div>
@@ -872,7 +850,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٣</div><div class="person-name">مدير إدارة العمل التطوعي</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٣</div><div class="person-name">مدير إدارة العمل التطوعي</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-volunteer')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الإدارة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بإدارة العمل التطوعي</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير إدارة العمل التطوعي بناءً على ترشيح وكيلة عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير إدارة العمل التطوعي إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيلة عمادة شؤون الطلاب لشطر الطالبات</div></div>
@@ -883,7 +861,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
         <li><strong>مساعد إداري</strong> — إعداد قاعدة بيانات بكافة أسماء منسقي التطوع في الكليات الجامعية، التنسيق مع الأنشطة الطلابية لطرح الفرص التطوعية، تسجيل الساعات الخاصة بالنشاط الطلابي في المنصة، تأسيس قاعدة بيانات خاصة بالإدارة وبالمتطوعين في جامعة تبوك، إعداد التقارير الربع سنوية عن سير العمليات التطوعية في الجامعة</li>
       </ul></div>
       </div></div>
-      <div class="person-card"><div class="person-head"><div class="person-code">٤</div><div class="person-name">وحدة التوجيه وحقوق الطالب</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٤</div><div class="person-name">وحدة التوجيه وحقوق الطالب</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-guidance')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الوحدة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بوحدة الحقوق وتوجيه الطالب</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير وحدة التوجيه وحقوق الطالب بناءً على ترشيح وكيلة عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير وحدة الحقوق وتوجيه الطالب إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيلة عمادة شؤون الطلاب لشطر الطالبات</div></div>
@@ -896,7 +874,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٥</div><div class="person-name">وحدة الموهبة والإبداع</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٥</div><div class="person-name">وحدة الموهبة والإبداع</div><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الوحدة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بوحدة الموهبة والإبداع</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مدير وحدة الموهبة والإبداع بناءً على ترشيح وكيلة عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مدير وحدة الموهبة والإبداع إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيلة عمادة شؤون الطلاب لشطر الطالبات</div></div>
@@ -908,7 +886,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٦</div><div class="person-name">إدارة النشاط الرياضي</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٦</div><div class="person-name">إدارة النشاط الرياضي</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-sports')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الإدارة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بإدارة النشاط الرياضي</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مسؤول إدارة النشاط الرياضي بناءً على ترشيح وكيلة عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مسؤول إدارة النشاط الرياضي إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيلة عمادة شؤون الطلاب لشطر الطالبات</div></div>
@@ -922,7 +900,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </ul></div>
       </div></div>
 
-      <div class="person-card"><div class="person-head"><div class="person-code">٧</div><div class="person-name">وحدة عشائر الجوالة</div></div><div class="person-body">
+      <div class="person-card"><div class="person-head" onclick="toggleCard(this)"><div class="person-code">٧</div><div class="person-name">وحدة عشائر الجوالة</div><button class="proc-link-btn" onclick="event.stopPropagation();return goToProcedures('proc-scouts')">📋 الإجراءات التابعة</button><span class="card-chevron">▾</span></div><div class="person-body">
       <div class="person-section"><div class="person-label">الوصف الوظيفي</div><p style="font-size:.8rem;color:var(--text)">هي الوحدة المسؤولة عن تنفيذ جميع الأعمال الإدارية والمالية الخاصة بإدارة عشائر الجوالة</p></div>
       <div class="person-section"><div class="person-label">التعيين</div><p style="font-size:.8rem;color:var(--text)">يصدر عميد عمادة شؤون الطلاب القرار بتكليف مسؤول وحدة عشائر الجوالة بناءً على ترشيح وكيلة عمادة شؤون الطلاب، ويكون التكليف لمدة سنة قابل للتجديد</p></div>
       <div class="person-section"><div class="person-label">الارتباط الوظيفي</div><div class="reports-to">يرتبط مسؤول وحدة عشائر الجوالة إدارياً بمدير إدارة عمادة شؤون الطلاب أو المدير التنفيذي للصندوق الطلابي (بحسب التبعية)، وفنياً بوكيلة عمادة شؤون الطلاب لشطر الطالبات</div></div>
@@ -984,7 +962,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">📋 إجراءات مكتب عميد شؤون الطلاب</div>
+    <div class="sec" id="proc-dean-office"><div class="sec-title">📋 إجراءات مكتب عميد شؤون الطلاب</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -993,7 +971,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">💰 إجراءات إدارة المكافآت</div>
+    <div class="sec" id="proc-rewards"><div class="sec-title">💰 إجراءات إدارة المكافآت</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1007,7 +985,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🏦 إجراءات إدارة الصندوق الطلابي</div>
+    <div class="sec" id="proc-fund"><div class="sec-title">🏦 إجراءات إدارة الصندوق الطلابي</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1033,7 +1011,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🎓 إجراءات مركز التدريب والتأهيل (محترف)</div>
+    <div class="sec" id="proc-training"><div class="sec-title">🎓 إجراءات مركز التدريب والتأهيل (محترف)</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1054,7 +1032,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🌍 إجراءات إدارة المنح الطلابية</div>
+    <div class="sec" id="proc-scholarships"><div class="sec-title">🌍 إجراءات إدارة المنح الطلابية</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1077,7 +1055,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">♿ إجراءات إدارة وحدة ذوي الإعاقة</div>
+    <div class="sec" id="proc-disability"><div class="sec-title">♿ إجراءات إدارة وحدة ذوي الإعاقة</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1090,7 +1068,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🏠 إجراءات إدارة السكن الطلابي</div>
+    <div class="sec" id="proc-housing"><div class="sec-title">🏠 إجراءات إدارة السكن الطلابي</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1101,7 +1079,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🚌 إجراءات إدارة النقل الطلابي</div>
+    <div class="sec" id="proc-transport"><div class="sec-title">🚌 إجراءات إدارة النقل الطلابي</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1115,7 +1093,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🍽️ إجراءات قسم التغذية والإعاشة</div>
+    <div class="sec" id="proc-catering"><div class="sec-title">🍽️ إجراءات قسم التغذية والإعاشة</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1124,7 +1102,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">💼 إجراءات مكتب التوظيف</div>
+    <div class="sec" id="proc-employment"><div class="sec-title">💼 إجراءات مكتب التوظيف</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1133,7 +1111,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">❤️ إجراءات إدارة العمل التطوعي</div>
+    <div class="sec" id="proc-volunteer"><div class="sec-title">❤️ إجراءات إدارة العمل التطوعي</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1144,7 +1122,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🤝 إجراءات وحدة التوجيه وحقوق الطالب</div>
+    <div class="sec" id="proc-guidance"><div class="sec-title">🤝 إجراءات وحدة التوجيه وحقوق الطالب</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1154,7 +1132,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🏆 إجراءات إدارة الأنشطة الرياضية</div>
+    <div class="sec" id="proc-sports"><div class="sec-title">🏆 إجراءات إدارة الأنشطة الرياضية</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1166,7 +1144,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">🏛️ إجراءات إدارة عمادة شؤون الطلاب</div>
+    <div class="sec" id="proc-deanadmin"><div class="sec-title">🏛️ إجراءات إدارة عمادة شؤون الطلاب</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1185,7 +1163,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       </table></div>
     </div>
 
-    <div class="sec"><div class="sec-title">⚜️ إجراءات إدارة وحدة عشائر الجوالة</div>
+    <div class="sec" id="proc-scouts"><div class="sec-title">⚜️ إجراءات إدارة وحدة عشائر الجوالة</div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>الإجراء</th><th>الرمز</th><th>النماذج</th><th>رمز النموذج</th><th>الإعداد</th></tr></thead>
         <tbody>
@@ -1294,6 +1272,839 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
     </div>
     </div>
   </div>
+  <!-- ══════════ KNOWLEDGE & COMMUNICATION ══════════ -->
+  <div class="page fade-in" id="page-knowledge">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 7-1-6 و7-4 من ISO 9001:2015</div><h1>المعرفة المؤسسية <em>والتواصل</em></h1></div>
+
+    <!-- INSTITUTIONAL KNOWLEDGE -->
+    <div class="sec">
+      <div class="sec-title">المعرفة المؤسسية</div>
+      <h2>توفير وحفظ المعرفة المؤسسية</h2>
+      <p class="sec-desc">تلتزم عمادة شؤون الطلاب بتوفير وحفظ وتحديث المعرفة المؤسسية اللازمة لتشغيل عملياتها وتقديم خدماتها للطلبة والمستفيدين بكفاءة، وذلك بما يتوافق مع متطلبات البند (7.1.6) من المواصفة الدولية ISO 9001:2015</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">مصادر المعرفة المؤسسية</div>
+      <p class="sec-desc" style="margin-top:-1rem">تعتمد العمادة في إدارة معرفتها المؤسسية على مجموعة من المصادر الرئيسة، من أبرزها</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+        <div class="card"><div class="card-icon">📜</div><h3>اللوائح والأنظمة المعتمدة</h3><p>في جامعة تبوك ذات العلاقة بالعمل الطلابي (لوائح الدراسة والاختبارات، السكن الطلابي، الأنشطة الطلابية، الصندوق والفعاليات... إلخ)</p></div>
+        <div class="card"><div class="card-icon">📋</div><h3>القرارات والتعاميم</h3><p>الصادرة من مجلس الجامعة أو الجهات العليا في الجامعة ذات الصلة بنشاط العمادة</p></div>
+        <div class="card"><div class="card-icon">📄</div><h3>الإجراءات والنماذج المعتمدة</h3><p>ضمن نظام إدارة الجودة في العمادة، وسجل الوثائق الخاص بها</p></div>
+        <div class="card"><div class="card-icon">📊</div><h3>التقارير الدورية</h3><p>ومؤشرات الأداء للعمليات التشغيلية والداعمة</p></div>
+        <div class="card"><div class="card-icon">🔍</div><h3>نتائج المراجعات</h3><p>الداخلية والخارجية وتقارير المتابعة</p></div>
+        <div class="card"><div class="card-icon">😊</div><h3>نتائج قياس رضا المستفيدين</h3><p>الصادرة من مركز القياس والتقويم في الجامعة</p></div>
+        <div class="card"><div class="card-icon">📝</div><h3>محاضر الاجتماعات الدورية</h3><p>للعمادة والإدارات والوحدات التابعة لها</p></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">حفظ المعرفة وإتاحتها للعاملين</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>الحفظ الإلكتروني والورقي</strong><p>حفظ دليل نظام إدارة الجودة والوثائق المعتمدة بصيغ إلكترونية في البريد الرسمي لوحدة التطوير والجودة، مع الاحتفاظ بنسخة ورقية معتمدة في مكتب عميد شؤون الطلاب عند الحاجة</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>التعميم على المنسوبين</strong><p>تعميم اللوائح والإجراءات والنماذج المعتمدة على منسوبي العمادة عبر البريد الإلكتروني الرسمي ونظام المراسلات الداخلية في الجامعة</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>تعريف الموظفين الجدد</strong><p>باللوائح والإجراءات ذات العلاقة بمهامهم عند المباشرة أو تغيير التكليف الوظيفي، بالتنسيق بين إدارة العمادة ووحدة التطوير والجودة</p></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>إتاحة الوصول المنضبط</strong><p>للوثائق المعتمدة من خلال القنوات الرسمية (البريد الإلكتروني، نظام المراسلات، الأدلة المعتمدة) مع ضبط الصلاحيات وفق ما تقرره الجامعة</p></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>الاجتماعات والورش التعريفية</strong><p>كأحد الوسائل لتوضيح السياسات والإجراءات وأي تحديثات تطرأ عليها</p></div></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">تطوير وتحديث المعرفة المؤسسية</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+        <div class="card"><div class="card-icon">📡</div><h3>متابعة التحديثات التنظيمية</h3><p>الصادرة من وزارة التعليم والجهات التنظيمية وإدارة الجامعة فيما يخص العمل الطلابي والخدمات المرتبطة به</p></div>
+        <div class="card"><div class="card-icon">🔄</div><h3>مراجعة أثر التغييرات</h3><p>التنظيمية أو التشغيلية على الإجراءات والخدمات، وتحديث الوثائق ذات الصلة ضمن نظام إدارة الجودة وسجل الوثائق</p></div>
+        <div class="card"><div class="card-icon">✅</div><h3>الاستفادة من المراجعات</h3><p>الداخلية والخارجية في رصد جوانب القصور المعرفي واقتراح إجراءات تحسين أو تحديث في اللوائح والإجراءات</p></div>
+        <div class="card"><div class="card-icon">💬</div><h3>التغذية الراجعة</h3><p>استخدام نتائج قياس رضا المستفيدين والتغذية الراجعة من الطلبة وأصحاب المصلحة كمصدر لتطوير المعرفة المؤسسية وتحسين الخدمات</p></div>
+      </div>
+      <p class="sec-desc" style="margin-top:1rem">وتُعد هذه الآلية جزءاً من التزام عمادة شؤون الطلاب بتوفير المعرفة اللازمة لتشغيل العمليات وتحقيق مطابقة الخدمات المقدمة مع متطلبات المستفيدين ومتطلبات المواصفة الدولية ISO 9001:2015</p>
+    </div>
+
+    <!-- COMMUNICATION -->
+    <div class="sec">
+      <div class="sec-title">التواصل الداخلي والخارجي</div>
+      <h2>آليات التواصل المعتمدة</h2>
+      <p class="sec-desc">تلتزم عمادة شؤون الطلاب بجامعة تبوك بتطبيق متطلبات البند (7.4) من المواصفة الدولية ISO 9001:2015 الخاصة بالتواصل الداخلي والخارجي، لضمان وصول المعلومات بدقة ووضوح لجميع أصحاب العلاقة داخل العمادة وخارجها، وبما يدعم جودة الخدمات المقدمة للطلبة والمستفيدين</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">التواصل الداخلي</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">📧</div><h3>البريد الإلكتروني الرسمي</h3><p>الوسيلة الأساسية لتبادل الرسائل الداخلية بين الإدارات والأقسام والوحدات: التعاميم الداخلية، خطط العمل، تحديثات النماذج والإجراءات، إشعارات الفعاليات. تُحفظ جميع الرسائل كسجل موثّق للتواصل</p></div>
+        <div class="card"><div class="card-icon">📮</div><h3>نظام المراسلات الإدارية (مسار)</h3><p>لإصدار المخاطبات الإدارية الرسمية بين العمادة وكل الجهات في الجامعة: خطط المراجعة، طلبات الموافقات، إشعارات اعتماد الإجراءات. تُعد المراسلات الصادرة والواردة سجلات رسمية تُحفظ وتُوثَّق تلقائياً</p></div>
+        <div class="card"><div class="card-icon">🗓️</div><h3>الاجتماعات الداخلية</h3><p>اجتماعات دورية بين الإدارات والوحدات لمناقشة متابعة مؤشرات الأداء وخطة الأنشطة ومعالجة الملاحظات والشكاوى. تُوثَّق جميعها بمحاضر رسمية تُرسل عبر مسار</p></div>
+        <div class="card"><div class="card-icon">📺</div><h3>لوحات وشاشات الإعلانات الداخلية</h3><p>تُستخدم لإعلان سياسات الجودة والتعاميم المهمة للطلبة، وتُعد وسيلة رسمية لإيصال المعلومات للموظفين والمستفيدين داخل مبنى العمادة</p></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">التواصل الخارجي</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">🏛️</div><h3>مع الجهات داخل جامعة تبوك</h3><p>يتم التواصل مع الوكالات والعمادات الأخرى من خلال: النظام الإداري للمراسلات، البريد الرسمي، الاجتماعات المشتركة</p></div>
+        <div class="card"><div class="card-icon">🌐</div><h3>مع الجهات خارج جامعة تبوك</h3><p>يمثّل العمادة في التواصل الخارجي عميد شؤون الطلاب أو من يفوّضه رسمياً، عبر: النظام الإداري، البريد الرسمي، المراسلات الورقية المعتمدة</p></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">آلية ضبط التواصل</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>تحديد الرسالة والجهة</strong><p>تحديد الرسالة أو الطلب وتحديد الجهة المستهدفة بوضوح</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>اختيار الوسيلة المناسبة</strong><p>البريد / النظام / الاجتماع / الإعلان</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>الإرسال عبر القناة الرسمية</strong><p>لضمان الحفظ والتوثيق</p></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>متابعة الردود</strong><p>وحفظها ضمن السجلات</p></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>إبلاغ الجهات ذات العلاقة</strong><p>عند الحاجة لضمان وضوح المعلومة</p></div></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">الجهات والمسؤوليات</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الجهة</th><th>المسؤولية</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">عميد شؤون الطلاب</td><td>الموافقة على الخطابات الخارجية والتعاميم الداخلية</td></tr>
+          <tr><td style="font-weight:700">وحدة التطوير والجودة</td><td>متابعة نشر التحديثات وسياسات الجودة على القنوات الرسمية</td></tr>
+          <tr><td style="font-weight:700">أخصائي الأنشطة الطلابية</td><td>نشر الإعلانات الموجهة للطلبة، وتنسيق الحملات التوعوية</td></tr>
+          <tr><td style="font-weight:700">جميع الإدارات</td><td>الالتزام بقنوات التواصل الرسمية والرد على الخطابات في الوقت المحدد</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- PLATFORMS TABLE -->
+    <div class="sec">
+      <div class="sec-title">المنصات الرسمية</div>
+      <h2>المنصات الرسمية لعمادة شؤون الطلاب</h2>
+      <p class="sec-desc">القنوات والمنصات الرسمية المعتمدة للتواصل داخل عمادة شؤون الطلاب وخارجها، مع تحديد الإدارة المسؤولة والجهة المشغلة ونوع الاستخدام المصرح وآلية ضبط المحتوى، بما يتوافق مع متطلبات البند (7.4) من ISO 9001:2015</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>المنصة</th><th>اسم المستخدم</th><th>الإدارة / القسم</th><th>المسؤول</th><th>الاستخدام المصرح</th><th>آلية التشغيل وضبط المحتوى</th><th>آلية قياس الفاعلية</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">البريد الإلكتروني الرسمي للعمادة</td><td class="code">St-alout.edu.sa</td><td>عمادة شؤون الطلاب</td><td>أ. ريم الناصر</td><td>الإعلانات الرسمية، الاستفسارات، التواصل الرسمي مع الجهات الداخلية والخارجية</td><td>الرد من قبل الجهة المختصة وتوثيق المراسلات ضمن النظام الرسمي</td><td>قياس عينة شهرية لزمن الاستجابة + ملاحظات استبانات الرضا</td></tr>
+          <tr><td style="font-weight:700">منصة X (تويتر سابقاً)</td><td class="code">شؤون الطلاب</td><td>عمادة شؤون الطلاب</td><td>أ. ريم الناصر</td><td>الإعلانات، البرامج، الفعاليات</td><td>نشر المحتوى من وحدة العلاقات العامة وفق الخطة الإعلامية المعتمدة</td><td>عدد التفاعلات، معدل الوصول، تحليل التعليقات</td></tr>
+          <tr><td style="font-weight:700">سناب شات</td><td class="code">شؤون الطلاب</td><td>عمادة شؤون الطلاب</td><td>أ. ريم الناصر</td><td>تغطية الفعاليات ومشاركات الطلبة</td><td>إشراف العلاقات العامة، مع الالتزام بسياسة المحتوى</td><td>عدد المشاهدات، تفاعل المتابعين</td></tr>
+          <tr><td style="font-weight:700">منصة Etar4</td><td class="code">Etar4</td><td>عمادة شؤون الطلاب</td><td>أ. ريم الناصر</td><td>البوسترات والمخاطبات المرئية التي تنتجها العمادة</td><td>تُشغَّل بالتنسيق مع الجهة المزوِّدة للخدمة</td><td>عدد المواد المنتجة، طلبات الإدارات</td></tr>
+          <tr><td style="font-weight:700">منصة X — مركز ذوي الإعاقة</td><td class="code">Motkreef.ut</td><td>مركز ضيافة الفئات الرعائية</td><td>أ. مها العميري</td><td>الإعلانات والاستفسارات الخاصة بالمركز</td><td>نشر من قبل فريق المركز بعد اعتماد المدير</td><td>نسبة رضا الطلبة ذوي الإعاقة، عدد الرسائل الواردة</td></tr>
+          <tr><td style="font-weight:700">تيك توك — مركز ذوي الإعاقة</td><td class="code">Motkreef.ut</td><td>مركز ضيافة الفئات الرعائية</td><td>أ. مها العميري</td><td>المحتوى التوعوي والمبادرات</td><td>إعداد المحتوى داخل المركز وفق سياسات الجامعة</td><td>عدد المشاهدات، التفاعل</td></tr>
+          <tr><td style="font-weight:700">إنستغرام — مركز ذوي الإعاقة</td><td class="code">Motkreef.ut</td><td>مركز ضيافة الفئات الرعائية</td><td>أ. مها العميري</td><td>الإعلانات والفعاليات الخاصة بالمركز</td><td>نشر بإشراف العلاقات العامة في المركز</td><td>التفاعل، الانطباعات، تقييم المستخدمين</td></tr>
+          <tr><td style="font-weight:700">الواتساب الرسمي للمركز</td><td class="code">966 14 456 7261</td><td>مركز ضيافة الفئات الرعائية</td><td>أ. مها العميري</td><td>الاستفسارات والتواصل</td><td>يستقبل موظفو المركز الرسائل خلال أوقات العمل</td><td>معدل الرد، تقييم الرضا</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">التحسين المستمر</div>
+      <h2>تقييم فاعلية التواصل</h2>
+      <p class="sec-desc">تقوم عمادة شؤون الطلاب بتقييم فاعلية قنوات التواصل الداخلية والخارجية بشكل دوري، وذلك من خلال قياس رضا المستفيدين عبر الاستبانات المعتمدة من مركز القياس والتقويم في الجامعة، إضافة إلى متابعة عينات شهرية من البريد الرسمي والرسائل الواردة عبر المنصات الإلكترونية للتأكد من جودة الرد وسرعة الاستجابة. وتُعرض نتائج التقييم ضمن تقارير المتابعة الداخلية وفي اجتماع مراجعة الإدارة بهدف التحسين المستمر</p>
+
+    <div class="sec">
+      <div class="sec-title">دليل التواصل الداخلي</div>
+      <h2>دليل موظفي عمادة شؤون الطلاب</h2>
+      <p class="sec-desc">بيانات التواصل الرسمية لمنسوبي عمادة شؤون الطلاب (الاسم، الرقم الوظيفي، رقم التحويلة، البريد الإلكتروني، الإدارة)</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الاسم</th><th>الرقم الوظيفي</th><th>التحويلة</th><th>البريد الإلكتروني</th><th>الإدارة / القسم</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">أحمد بن عوض العطيات</td><td class="code">770486</td><td class="code">3243</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aalatiat@ut.edu.sa" style="color:var(--gold);text-decoration:none">aalatiat@ut.edu.sa</a></td><td>وكالة الخريجين</td></tr>
+          <tr><td style="font-weight:600">أحمد عمر الشريف</td><td class="code">770</td><td class="code">3239</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ao.alsharif@ut.edu.sa" style="color:var(--gold);text-decoration:none">ao.alsharif@ut.edu.sa</a></td><td>إدارة العمل التطوعي</td></tr>
+          <tr><td style="font-weight:600">أسماء أحمد الفيفي</td><td class="code">999780</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:omega.sa2015@gmail.com" style="color:var(--gold);text-decoration:none">omega.sa2015@gmail.com</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">أسماء سليمان العقيلي</td><td class="code">770325</td><td class="code">7917</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:a.st.alatawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">a.st.alatawi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">آسيا بطي العتيبي</td><td class="code">14015</td><td class="code">7949</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aalotaybi@ut.edu.sa" style="color:var(--gold);text-decoration:none">aalotaybi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">أمل يسلم عمر</td><td class="code">770412</td><td class="code">3241</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:a_omer@ut.edu.sa" style="color:var(--gold);text-decoration:none">a_omer@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">آية منذر رمضان</td><td class="code">770415</td><td class="code">7903</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aramdan@ut.edu.sa" style="color:var(--gold);text-decoration:none">aramdan@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">أحمد عيد العقيلي</td><td class="code">770287</td><td class="code">3232</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:a.ealatawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">a.ealatawi@ut.edu.sa</a></td><td>إدارة المكافآت</td></tr>
+          <tr><td style="font-weight:600">أسماء جازي العنزي</td><td class="code">14011</td><td class="code">7918</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aj-alenazi@ut.edu.sa" style="color:var(--gold);text-decoration:none">aj-alenazi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">أمل دخيل الله البلوي</td><td class="code">770418</td><td class="code">7122</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ad_albalawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">ad_albalawi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">تمام سليمان الحويطي</td><td class="code">9376</td><td class="code">7914</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:talmshhorey@ut.edu.sa" style="color:var(--gold);text-decoration:none">talmshhorey@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">جمال الدين سر الختم أحمد</td><td class="code">770568</td><td class="code">3212</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:MOKAFAT-M@UT.EDU.SA" style="color:var(--gold);text-decoration:none">MOKAFAT-M@UT.EDU.SA</a></td><td>إدارة المكافآت</td></tr>
+          <tr><td style="font-weight:600">جيهان جمعه الحويطي</td><td class="code">14227</td><td class="code">7513</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:gshawamien@ut.edu.sa" style="color:var(--gold);text-decoration:none">gshawamien@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">حنان موسى البلوي</td><td class="code">14185</td><td class="code">7803</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:hm_alabalawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">hm_alabalawi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">د. عبد العزيز بن عبد الله الغامدي</td><td class="code">13893</td><td class="code">2834</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aalgamdy@ut.edu.sa" style="color:var(--gold);text-decoration:none">aalgamdy@ut.edu.sa</a></td><td>وكيل الأنشطة الطلابية</td></tr>
+          <tr><td style="font-weight:600">د. مبارك بن محمد الدوسري</td><td class="code">9291</td><td class="code">3230</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:maldossari@ut.edu.sa" style="color:var(--gold);text-decoration:none">maldossari@ut.edu.sa</a></td><td>وكيل شؤون الخريجين</td></tr>
+          <tr><td style="font-weight:600">د. محمد بن أحمد دعوري</td><td class="code">2000</td><td class="code">2455</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:mohammeddouri@ut.edu.sa" style="color:var(--gold);text-decoration:none">mohammeddouri@ut.edu.sa</a></td><td>عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td style="font-weight:600">د. وئام غازي الحربي</td><td class="code">12190</td><td class="code">7776</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:wgalharbi@ut.edu.sa" style="color:var(--gold);text-decoration:none">wgalharbi@ut.edu.sa</a></td><td>وكيلة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">دلال مرضى محمد العنزي</td><td class="code">999761</td><td class="code">5651</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:daleanzi@ut.edu.sa" style="color:var(--gold);text-decoration:none">daleanzi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">دلال ناصر الحويطي</td><td class="code">14063</td><td class="code">7923</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:dalhoiti@ut.edu.sa" style="color:var(--gold);text-decoration:none">dalhoiti@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">دينا عواد الشامان</td><td class="code">14012</td><td class="code">7912</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:dalshaman@ut.edu.sa" style="color:var(--gold);text-decoration:none">dalshaman@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">ريم صالح البلوي</td><td class="code">14014</td><td class="code">7921</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:rialabalawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">rialabalawi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">ريم صالح الحويطي</td><td class="code">770754</td><td class="code">3225</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ralhawiti@ut.edu.sa" style="color:var(--gold);text-decoration:none">ralhawiti@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">ريم ناصر إبراهيم</td><td class="code">770455</td><td class="code">2454</td><td class="code" style="direction:ltr;text-align:right">—</td><td>أخصائي الأنشطة الطلابية</td></tr>
+          <tr><td style="font-weight:600">زرعه علي علي الزبيدي</td><td class="code">770417</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:zalzbedy@ut.edu.sa" style="color:var(--gold);text-decoration:none">zalzbedy@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">زهوة سعد البلوي</td><td class="code">11445</td><td class="code">7901</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:zsalbalawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">zsalbalawi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">سامي صالح الشهري</td><td class="code">14303</td><td class="code">3000</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:S.shehri@ut.edu.sa" style="color:var(--gold);text-decoration:none">S.shehri@ut.edu.sa</a></td><td>إدارة النشاط الطلابي</td></tr>
+          <tr><td style="font-weight:600">سعيد سليم شتيوي</td><td class="code">770320</td><td class="code">3228</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:sshtewi@ut.edu.sa" style="color:var(--gold);text-decoration:none">sshtewi@ut.edu.sa</a></td><td>مركز خدمة الطالب</td></tr>
+          <tr><td style="font-weight:600">أ.د. سحر زيدان زبان</td><td class="code">58043</td><td class="code">3216</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:sshehath@ut.edu.sa" style="color:var(--gold);text-decoration:none">sshehath@ut.edu.sa</a></td><td>مشرفة وحدة التوجيه وحقوق الطالب</td></tr>
+          <tr><td style="font-weight:600">سلطان حمود البلوي</td><td class="code">15472</td><td class="code">3231</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:s.hamuwd@ut.edu.sa" style="color:var(--gold);text-decoration:none">s.hamuwd@ut.edu.sa</a></td><td>مدير مكتب التوظيف</td></tr>
+          <tr><td style="font-weight:600">سلطان عيد العقيلي</td><td class="code">770646</td><td class="code">3213</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:s_alatawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">s_alatawi@ut.edu.sa</a></td><td>الصالة الرياضية</td></tr>
+          <tr><td style="font-weight:600">سند خضران الحارثي</td><td class="code">14743</td><td class="code">3055</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:S-alharthi@ut.edu.sa" style="color:var(--gold);text-decoration:none">S-alharthi@ut.edu.sa</a></td><td>إدارة النشاط الرياضي</td></tr>
+          <tr><td style="font-weight:600">سهام سعيد القحطاني</td><td class="code">770434</td><td class="code">3201</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ss-alqahtani@ut.edu.sa" style="color:var(--gold);text-decoration:none">ss-alqahtani@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">صالح عبد الله الصيعري</td><td class="code">-</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right">—</td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">صباح تركي العنزي</td><td class="code">770420</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:sa_alenezi@ut.edu.sa" style="color:var(--gold);text-decoration:none">sa_alenezi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">صبحاء هليل البلوي</td><td class="code">14030</td><td class="code">7900</td><td class="code" style="direction:ltr;text-align:right">—</td><td>مدير وحدة ذوي الإعاقة</td></tr>
+          <tr><td style="font-weight:600">طلال عيد العقيلي</td><td class="code">770319</td><td class="code">3219</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:t.alatawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">t.alatawi@ut.edu.sa</a></td><td>إدارة الصندوق الطلابي</td></tr>
+          <tr><td style="font-weight:600">طيف عبد الرحمن القباع</td><td class="code">999826</td><td class="code">3225</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:talqabba@ut.edu.sa" style="color:var(--gold);text-decoration:none">talqabba@ut.edu.sa</a></td><td>إدارة الصندوق الطلابي</td></tr>
+          <tr><td style="font-weight:600">عايضة حسن القرني</td><td class="code">11438</td><td class="code">7908</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aalgarni@ut.edu.sa" style="color:var(--gold);text-decoration:none">aalgarni@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">عبد الله بن صالح جحلان</td><td class="code">9624</td><td class="code">3222</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ajahlan@ut.edu.sa" style="color:var(--gold);text-decoration:none">ajahlan@ut.edu.sa</a></td><td>مدير إدارة عمادة شؤون الطلاب</td></tr>
+          <tr><td style="font-weight:600">عطالله هليل العطوي</td><td class="code">9577</td><td class="code">3210</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ah.alatwi@ut.edu.sa" style="color:var(--gold);text-decoration:none">ah.alatwi@ut.edu.sa</a></td><td>مدير إدارة المكافآت</td></tr>
+          <tr><td style="font-weight:600">عفراء أحمد البلوي</td><td class="code">999751</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:afraa.albalawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">afraa.albalawi@ut.edu.sa</a></td><td>وكالة الخريجين</td></tr>
+          <tr><td style="font-weight:600">علاء الدين محمد عبد الحميد</td><td class="code">770626</td><td class="code">3220</td><td class="code" style="direction:ltr;text-align:right">—</td><td>إدارة الصندوق الطلابي</td></tr>
+          <tr><td style="font-weight:600">عواطف حسين عريشي</td><td class="code">999704</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:aarishi@ut.edu.sa" style="color:var(--gold);text-decoration:none">aarishi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">عيد رشيد البلوي</td><td class="code">13997</td><td class="code">3206</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:e-albalawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">e-albalawi@ut.edu.sa</a></td><td>إدارة التغذية</td></tr>
+          <tr><td style="font-weight:600">فاطمة جمعان الزهراني</td><td class="code">14065</td><td class="code">7922</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:fjalzahrani@ut.edu.sa" style="color:var(--gold);text-decoration:none">fjalzahrani@ut.edu.sa</a></td><td>إدارة العمل التطوعي</td></tr>
+          <tr><td style="font-weight:600">فهده سمر سعود العطوي</td><td class="code">999783</td><td class="code">-</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:f_salatawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">f_salatawi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">فيصل شاكر كريشان</td><td class="code">15273</td><td class="code">3203</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:fkreshan@ut.edu.sa" style="color:var(--gold);text-decoration:none">fkreshan@ut.edu.sa</a></td><td>نائب مدير إدارة عمادة شؤون الطلاب</td></tr>
+          <tr><td style="font-weight:600">محمد أحمد حكمي</td><td class="code">770306</td><td class="code">3766</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:malhakami@ut.edu.sa" style="color:var(--gold);text-decoration:none">malhakami@ut.edu.sa</a></td><td>إدارة الصندوق الطلابي</td></tr>
+          <tr><td style="font-weight:600">محمد فالح البلوي</td><td class="code">14593</td><td class="code">3227</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:mohammedefaleh1990@gmail.com" style="color:var(--gold);text-decoration:none">mohammedefaleh1990@gmail.com</a></td><td>المدير التنفيذي لصندوق الطالب</td></tr>
+          <tr><td style="font-weight:600">مسلم بن عوده العطوي</td><td class="code">14873</td><td class="code">3207</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:mo_alatawi@ut.edu.sa" style="color:var(--gold);text-decoration:none">mo_alatawi@ut.edu.sa</a></td><td>مدير إدارة وحدة المنح الطلابية</td></tr>
+          <tr><td style="font-weight:600">منيرة عودة العطوي</td><td class="code">770413</td><td class="code">3240</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:mon_alatwi@ut.edu.sa" style="color:var(--gold);text-decoration:none">mon_alatwi@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">مها عبد الله العميري</td><td class="code">770546</td><td class="code">7907</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:malomry@ut.edu.sa" style="color:var(--gold);text-decoration:none">malomry@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">نائف بن عبد الله الحويطي</td><td class="code">770299</td><td class="code">3208</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:NA.ALHWITI@UT.EDU.SA" style="color:var(--gold);text-decoration:none">NA.ALHWITI@UT.EDU.SA</a></td><td>مدير إدارة السكن الطلابي</td></tr>
+          <tr><td style="font-weight:600">نائف لافي العنزي</td><td class="code">14554</td><td class="code">3830</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:n.lafi@ut.edu.sa" style="color:var(--gold);text-decoration:none">n.lafi@ut.edu.sa</a></td><td>إدارة التغذية</td></tr>
+          <tr><td style="font-weight:600">نوال حسن الفيفي</td><td class="code">770547</td><td class="code">2454</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:nalfaifi@ut.edu.sa" style="color:var(--gold);text-decoration:none">nalfaifi@ut.edu.sa</a></td><td>مدير مكتب العميد / مدير الجودة</td></tr>
+          <tr><td style="font-weight:600">نوف خليل خليفة</td><td class="code">770410</td><td class="code">3242</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:nalkaifh@ut.edu.sa" style="color:var(--gold);text-decoration:none">nalkaifh@ut.edu.sa</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">نوف سليم العنزي</td><td class="code">999777</td><td class="code">3242</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ns_alenazi@ut.edu" style="color:var(--gold);text-decoration:none">ns_alenazi@ut.edu</a></td><td>وكالة شطر الطالبات</td></tr>
+          <tr><td style="font-weight:600">هناء بنت عبد الله الشهري</td><td class="code">379</td><td class="code">1451</td><td class="code" style="direction:ltr;text-align:right"><a href="mailto:ha.alshehri@ut.edu.sa" style="color:var(--gold);text-decoration:none">ha.alshehri@ut.edu.sa</a></td><td>إدارة العمل التطوعي</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">الشراكات الخارجية</div>
+      <h2>الشراكات والتواصل الخارجي</h2>
+      <p class="sec-desc">الجهات الشريكة الخارجية لعمادة شؤون الطلاب، مع ضابط الاتصال المسؤول وحالة استمرارية الشراكة</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الجهة</th><th>ضابط الاتصال</th><th>الاستمرارية</th></tr></thead>
+        <tbody>
+          <tr><td>شركة رمادا بلص المحدودة</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة جلنار</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مطعم بسمة عدن</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة شهية (كوفي دانكن)</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>قهوتك المعتدلة (آرابيا)</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة أربعة مية للترفيه</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة رواد تبوك جوس لاين</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>حمامة ورد</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مفتاح الخيار</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>ميدا للزهور (محل الورد والهدايا)</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة أولى المحدودة — النكهة الرائعة للتغذية</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة الرقم مائة</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة أمراح القادسية (مكائن البيع الذاتي)</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مطعم جودات فخري — الكلية الجامعية في حقل</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة ترامنتو كافي — الكلية الجامعية في حقل</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة جلنار لخدمات الإعاشة — كافيتريا الكلية الجامعية في ضباء</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة أضواء العزيزية لخدمات الإعاشة — كافيتريا الكلية الجامعية في الوجه</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة مطاعم فروج الهنا — كافيتريا الكلية الجامعية في أملج</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة ركن الزيادة لتقديم المشروبات — الكلية الجامعية في أملج</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة جلنار لخدمات الإعاشة — كافيتريا الكلية الجامعية في تيماء</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مقهى كافين كاف — الكلية الجامعية في تيماء (طالبات)</td><td>أ. طلال العطوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة مدين (ريشيو)</td><td>أ. محمد فالح</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>شركة نصير (بيت الدونات)</td><td>أ. محمد فالح</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>شركة المطاعم الأهلية (هارديز – كنتاكي)</td><td>أ. محمد فالح</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>عصائر طعم</td><td>أ. محمد فالح</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>دار الجداول للنشر والتوزيع</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>دار الإجادة الفضية للنشر والتوزيع</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>دار أطلس الخضراء للنشر والطباعة</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>دار الكتاب الجامعي</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة فيتك المتقدمة لتقنية المعلومات</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة الإصدار الحديث للجوالات</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>050 جوالات</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مكتبة خالد الشقري</td><td>أ. محمد فالح</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مكتبة صواري المستقبل</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة أسامة عبدالله الخريجي وشركاؤه محاسبون قانونيون</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مكتبة طيبة المتنبي</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مكتبة خوارزم العلمية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة اليواني</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مجموعة العصر التعليمية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة سيمبلسيتي</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>المعهد العالي لتقنيات المياه والكهرباء</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>صندوق تنمية الموارد البشرية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مصنع تبوك للصناعات الدوائية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة لارسن آند تبرو</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>FCC Construccion</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة كرافت</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة تلاد للاستشارات البيئية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة العيوني للاستثمار والمقاولات</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة القارة الأم لتنظيم الرحلات</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>PARSONS</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>BECHTEL</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة سامسونج سي آند تي كوربوريشن العربية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة أريب</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مدارس الملك عبدالعزيز النموذجية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة أيكوم العربية المحدودة</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>المجلس الثقافي البريطاني</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>المرصد الوطني للعمل</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مذكرة تفاهم بين جامعة تبوك والنظم المكانية</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>الشركة الوطنية الأولى للموارد البشرية (فتركو)</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة جسارة لإدارة المشاريع</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مسارات</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>شركة تعاوني</td><td>أ. سلطان البلوي</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>مؤسسة عبدالله الراجحي</td><td>أ. مها العميري</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>عبدالعزيز عبدالله الجميح</td><td>د. محمد دعوري</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>أبتا</td><td>أ. مها العميري</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>قيمة</td><td>أ. مها العميري</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>فرانكلين كوفي</td><td>أ. مها العميري</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>آدام</td><td>أ. مها العميري</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>محترف ابتكار جيني</td><td>أ. مها العميري</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>كابلان</td><td>أ. مها العميري</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>جمعية تبوك الخيرية</td><td>أ. مها العميري</td><td><span class="badge badge-red">انتهى العقد</span></td></tr>
+          <tr><td>الاتحاد السعودي للكشافة</td><td>أ. نادية العمراني</td><td><span class="badge badge-green">مستمر</span></td></tr>
+          <tr><td>الاتحاد السعودي للرياضات الجامعية</td><td>أ. سامي الشهري، أ. أثير دغريري، أ. فاطمة الزهراني</td><td><span class="badge badge-green">مستمر</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>    </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════ DOCS INFO ══════════ -->
+  <div class="page fade-in" id="page-docsinfo">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 7-5 من ISO 9001:2015</div><h1>توثيق <em>المعلومات</em></h1></div>
+
+    <div class="sec">
+      <div class="sec-title">نظام الترميز</div>
+      <h2>آلية ترميز الإجراءات والنماذج وتعليمات العمل</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>نوع الوثيقة</th><th>المقطع الأول</th><th>المقطع الثاني</th><th>المقطع الثالث</th><th>المقطع الرابع</th><th>المقطع الخامس</th><th>مثال الرمز الكامل</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">الإجراءات (Procedure)</td><td>UT (الجامعة)</td><td>DSA (العمادة)</td><td>A00 (رمز الإدارة)</td><td>00 (رقم الإجراء)</td><td>—</td><td class="code">UT-DSAP-A00-00</td></tr>
+          <tr><td style="font-weight:700">النماذج (Form)</td><td>UT</td><td>DSA</td><td>A00</td><td>00 (رمز الإجراء)</td><td>00 (رقم النموذج)</td><td class="code">UT-DSAF-A00-00-00</td></tr>
+          <tr><td style="font-weight:700">تعليمات العمل (Work Instructions)</td><td>UT</td><td>DSA</td><td>A00</td><td>00 (رمز الإجراء)</td><td>00 (رقم التعليمة)</td><td class="code">UT-DSAWI-A00-00-00</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sec-desc" style="margin-top:.5rem">يتم اختصار الترميز في هذا الدليل بحذف المقطعين الأول والثاني تسهيلاً للقراءة</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">إدارة الوثائق</div>
+      <h2>قائمة استلام وتسليم الوثائق</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الإدارة / الفرع / الوحدة</th><th>الوظيفة</th><th>الاسم</th></tr></thead>
+        <tbody>
+          <tr><td>وحدة ذوي الإعاقة</td><td>مدير إدارة وحدة ذوي الإعاقة</td><td>صبحاء البلوي</td></tr>
+          <tr><td>وحدة الحقوق وتوجيه الطالب</td><td>مشرف وحدة الحقوق وتوجيه الطالب</td><td>د. سحر زيدان</td></tr>
+          <tr><td>وحدة التطوير والجودة</td><td>مديرة الجودة</td><td>نوال الفيفي</td></tr>
+          <tr><td>مكتب العميد</td><td>مدير مكتب العميد</td><td>نوال الفيفي</td></tr>
+          <tr><td>مكتب التوظيف</td><td>مدير مكتب التوظيف</td><td>سلطان البلوي</td></tr>
+          <tr><td>مركز التدريب والتأهيل</td><td>مدير عمليات مركز التدريب والتأهيل</td><td>مها العميري</td></tr>
+          <tr><td>إدارة السكن الطلابي</td><td>مدير إدارة السكن الطلابي</td><td>نائف الحويطي</td></tr>
+          <tr><td>إدارة العمادة</td><td>مدير إدارة العمادة / نائب</td><td>فيصل كريشان</td></tr>
+          <tr><td>إدارة النقل الطلابي</td><td>مدير إدارة النقل الطلابي</td><td>فيصل التركي</td></tr>
+          <tr><td>إدارة النشاط الرياضي</td><td>مدير إدارة النشاط الرياضي</td><td>سامي الشهري</td></tr>
+          <tr><td>إدارة المنح الطلابية / الطالب الدولي</td><td>مدير إدارة المنح الطلابية</td><td>مسلم العطوي</td></tr>
+          <tr><td>إدارة الصندوق</td><td>محاسب</td><td>عصام الدين محمد</td></tr>
+          <tr><td>إدارة التغذية</td><td>مدير الإدارة</td><td>سامي العنزي</td></tr>
+          <tr><td>وحدة تطوير المهارات</td><td>مدير مكتب التوظيف</td><td>سلطان البلوي</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">صلاحيات التوثيق</div>
+      <h2>قائمة الأشخاص المرخّص لهم بإعداد ومراجعة واعتماد الوثائق</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الإدارة / القسم</th><th>الإعداد</th><th>المراجعة</th><th>الاعتماد</th></tr></thead>
+        <tbody>
+          <tr><td>إدارة العمادة</td><td>فيصل كريشان — نائب مدير إدارة</td><td>عبد الله جحلان — مدير إدارة العمادة</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة الصندوق الطلابي</td><td>عصام الدين محمد — محاسب</td><td>محمد البلوي — مدير إدارة الصندوق</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة الاستثمار</td><td>طلال العطوي — مدير إدارة الاستثمار</td><td>محمد البلوي — مدير إدارة الصندوق</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة المكافآت</td><td>أحمد العقيلي — مدخل بيانات</td><td>عطالله العطوي — مدير إدارة المكافآت</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>مركز التدريب والتأهيل (محترف)</td><td>مها العميري — مدير عمليات المركز</td><td>د. وئام الحربي — مشرف المركز</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>مكتب التوظيف / وحدة تطوير المهارات</td><td>سلطان البلوي — مدير مكتب التوظيف</td><td>د. مبارك الدوسري — وكيل وكالة الخريجين</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>وحدة الحقوق والتوجيه</td><td>رائد جبر — مشرف الوحدة</td><td>د. وئام الحربي — وكيلة شطر الطالبات</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>وحدة ذوي الإعاقة</td><td>صبحاء البلوي — مدير الوحدة</td><td>د. عبد العزيز الغامدي — وكيل الأنشطة الطلابية</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة المنح الطلابية</td><td>مسلم العطوي — مدير الإدارة</td><td>د. عبد العزيز الغامدي — وكيل الأنشطة الطلابية</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة التغذية</td><td>سامي العنزي — مدير الإدارة</td><td>د. عبد العزيز الغامدي — وكيل الأنشطة الطلابية</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة النشاط الرياضي</td><td>سامي الشهري — مدير الإدارة</td><td>د. عبد العزيز الغامدي — وكيل الأنشطة الطلابية</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة النقل الطلابي</td><td>فيصل التركي — مدير الإدارة</td><td>د. عبد العزيز الغامدي — وكيل الأنشطة الطلابية</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>إدارة السكن الطلابي</td><td>نائف الحويطي — مدير الإدارة</td><td>د. عبد العزيز الغامدي — وكيل الأنشطة الطلابية</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+          <tr><td>مكتب العميد</td><td>نوال الفيفي — مدير المكتب</td><td>نوال الفيفي — مدير المكتب</td><td>د. محمد دعوري — عميد عمادة شؤون الطلاب</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">آلية الاعتماد</div>
+      <h2>آلية اعتماد الإجراءات والوثائق</h2>
+      <p class="sec-desc">تعتمد عمادة شؤون الطلاب آلية إلكترونية لاعتماد الوثائق والإجراءات ضمن نظام إدارة الجودة، من خلال إرسال ملف الوثائق والإجراءات المحدثة إلى الإدارات المعنية عبر نظام المراسلات الداخلية للجامعة</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>مراجعة كل إدارة</strong><p>يقوم كل مدير إدارة بمراجعة الوثائق وإبداء ملاحظاته أو الموافقة عليها ضمن الميقات المحدد للمراجعة والاعتماد</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>توثيق الرد إلكترونياً</strong><p>يُعد هذا الرد إثباتاً رسمياً للمراجعة، ويُحفظ ضمن الأرشيف الإلكتروني لمحل المراسلة، ويُحفظ ضمن أرشيف العمادة كدليل توثيق</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>اعتماد النسخة النهائية</strong><p>تُعتمد النسخة النهائية بعد استلام جميع الردود أو استكمال مدة المراجعة المحددة</p></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>إضافتها للسجل ونشرها</strong><p>تُضاف الوثيقة المعتمدة إلى سجل ضبط الوثائق، وتُنشر النسخة الجارية عبر القنوات الرسمية</p></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">صلاحيات التعديل والإصدار</div>
+      <h2>التفويض الممنوح لوحدة التطوير والجودة</h2>
+      <p class="sec-desc">وفقاً للتفويض المعتمد من عميد شؤون الطلاب، تُمنح وحدة التطوير والجودة صلاحية تنفيذ التعديلات والتحسينات الجوهرية على الوثائق والإجراءات والنماذج المعتمدة ضمن نظام إدارة الجودة، وذلك في حال التأكد من عدم مساس التغيير بجوهر السياسة أو أهداف الجودة أو الهيكل التنظيمي للعمادة</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">نطاق الصلاحية</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">📝</div><h3>تعديل النماذج التشغيلية والإدارية</h3><p>بناءً على نتائج المراجعة الداخلية أو توصيات فرق التحسين</p></div>
+        <div class="card"><div class="card-icon">⚙️</div><h3>تحديث الإجراءات وتعليمات التنفيذ</h3><p>بما يحقق الامتثال الجوهري لمتطلبات ISO 9001</p></div>
+        <div class="card"><div class="card-icon">🔄</div><h3>تنفيذ التحديثات المستمرة</h3><p>التي لا تتطلب اعتماداً استراتيجياً من الإدارة العليا</p></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">ضوابط التطبيق</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">📋</div><h3>توثيق كل تعديل</h3><p>في سجل ضبط الوثائق مع تحديد رقم الإصدار وتاريخ التعديل والجهة التي أجرته</p></div>
+        <div class="card"><div class="card-icon">📢</div><h3>إبلاغ الإدارات المعنية</h3><p>بالتعديل من قِبل تعميم داخلي يصدر عن وحدة الجودة خلال ثلاثة أيام عمل من تاريخ التنفيذ</p></div>
+        <div class="card"><div class="card-icon">🗂️</div><h3>حفظ النسخ المعدَّلة</h3><p>في القائمة الرئيسية للوثائق المعتمدة، وتُسحب النسخ القديمة فوراً من التداول</p></div>
+        <div class="card"><div class="card-icon">⬆️</div><h3>تصعيد التغييرات الجوهرية</h3><p>إذا كان التغيير يمس أحد عناصر النظام الجوهرية (السياسة، الأهداف، الهيكل، خريطة العمليات)، يُرفع مباشرة لعميد شؤون الطلاب لاعتماده قبل التنفيذ</p></div>
+      </div>
+      <p class="sec-desc" style="margin-top:1rem">تُعد جميع التغييرات المنفَّذة وفق هذا التفويض معتمدة رسمياً من الإدارة العليا ما دامت موثقة في سجل ضبط الوثائق وممهورة بتوقيع مدير وحدة الجودة</p>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ PRIVACY ══════════ -->
+  <div class="page fade-in" id="page-privacy">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">سياسة الخصوصية المعتمدة بجامعة تبوك</div><h1>البيانات الشخصية <em>جمعها وحفظها والوصول إليها</em></h1></div>
+    <p class="sec-desc">تطبّق عمادة شؤون الطلاب سياسة الخصوصية المتبعة في جامعة تبوك والمعلَنة عبر الموقع الإلكتروني، وذلك على النحو الآتي</p>
+
+    <div class="sec">
+      <div class="sec-title">جمع البيانات</div>
+      <h2>أنواع البيانات الشخصية التي يتم جمعها من قِبل عمادة شؤون الطالب</h2>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">💬</div><h3>بيانات التواصل الأولي</h3><p>البيانات الأولية التي يتم تزويدها بها عند التواصل معنا من قبل البريد أو وسائل التواصل الاجتماعي أو عند التسجيل في الخدمات الإلكترونية الخاصة بالجامعة</p></div>
+        <div class="card"><div class="card-icon">🎓</div><h3>عند الالتحاق بالجامعة</h3><p>تُجمع البيانات الإضافية التالية: البيانات البنكية</p></div>
+        <div class="card"><div class="card-icon">💼</div><h3>عند تقديم طلب توظيف</h3><p>الاسم، بيانات الهوية، المنطقة، المدينة، بيانات الاتصال، بيانات المؤهلات العلمية والخبرات والشهادات الاحترافية</p></div>
+        <div class="card"><div class="card-icon">📚</div><h3>عند الالتحاق كطالب بالبرامج التدريبية</h3><p>المقدَّمة من مركز خدمة المستفيدين: الاسم، بيانات الهوية، بيانات الاتصال، المستوى التعليمي، المنطقة، المدينة، البيانات الوظيفية</p></div>
+        <div class="card"><div class="card-icon">📊</div><h3>عند المشاركة في الاستطلاعات</h3><p>البيانات الشخصية التي يتم تزويدنا بها من قبل المشاركة في الاستبيانات والاستطلاعات</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">الغرض من الجمع</div>
+      <h2>الغرض من جمع البيانات الشخصية، وكيفية استخدامها</h2>
+      <p class="sec-desc">الأغراض الرئيسة التي تُستقدَم فيها البيانات الشخصية من جمع البيانات ومعالجتها تهدف تحسين ورفع مستوى خدمات الجامعة، وهي</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="card"><h3>أغراض تعليمية وإدارية</h3></div>
+        <div class="card"><h3>إتمام الطلبات والخدمات</h3><p>الخاصة بالطالب أو التدريب</p></div>
+        <div class="card"><h3>إجراء تحليلات وإحصائيات</h3><p>لأصحاب القرار</p></div>
+        <div class="card"><h3>إرسال رسائل توعوية</h3><p>أو رسائل تتعلق بالخدمات المقدمة</p></div>
+        <div class="card"><h3>استيفاء متطلبات قانونية أو أمنية</h3></div>
+        <div class="card"><h3>إتمام عملية قبول الطالب</h3><p>ومتابعة مسيرته التعليمية، وتزويد جهات التوظيف ببياناته بعد التخرج</p></div>
+        <div class="card"><h3>مصادقة هوية المتقدم</h3><p>عند التسجيل في خدمات الجامعة</p></div>
+        <div class="card"><h3>الرد على الطلبات والاستفسارات</h3><p>من قبل المستفيدين</p></div>
+        <div class="card"><h3>تطوير وتحسين تجربة المستفيد</h3></div>
+        <div class="card"><h3>تمكين وتقديم خدمات الجامعة</h3></div>
+        <div class="card"><h3>إعداد الدراسات</h3><p>التي تقدمها الجامعة</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">الإفصاح عن البيانات</div>
+      <h2>المصرَّح لهم بجمع البيانات</h2>
+      <p class="sec-desc">تحرص جامعة تبوك على ألّا تكون البيانات الشخصية متاحة إلا لمنسوبي الجامعة المصرَّح لهم حسب طبيعة عملهم، وفيما يلي بيان الأشخاص المصرَّح لهم في عمادة شؤون الطلاب بالوصول إلى البيانات وجمعها</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>القسم</th><th>المسؤول</th><th>الفئة</th><th>الغرض</th></tr></thead>
+        <tbody>
+          <tr><td>مكتب التوظيف</td><td>أ. سلطان البلوي</td><td>خريجو وخريجات جامعة تبوك</td><td>تأسيس قاعدة الخريجين وتحديث معلوماتهم</td></tr>
+          <tr><td>النشاط الطلابي</td><td>أ. ريم الناصر</td><td>طلبة الجامعة</td><td>تأسيس قاعدة المتقدمين إلى الأنشطة الطلابية والمشاركين فيها</td></tr>
+          <tr><td>النشاط الرياضي</td><td>أ. سامي الشهري</td><td>طلبة الجامعة المشاركين في الأنشطة الرياضية</td><td>تأسيس قاعدة المشاركين في الأنشطة الرياضية</td></tr>
+          <tr><td>مركز محترف</td><td>أ. مها العميري</td><td>المتدربين والمتدربات والمهتمين بالبرامج التدريبية</td><td>تأسيس قاعدة المسجلين والمشاركين في البرامج التدريبية</td></tr>
+          <tr><td>وحدة ذوي الإعاقة</td><td>أ. صبحاء البلوي</td><td>طلبة ذوي الإعاقة</td><td>تأسيس قاعدة طلبة ذوي الإعاقة في الجامعة</td></tr>
+          <tr><td>وحدة التوجيه وحقوق الطالب</td><td>د. سحر زيدان</td><td>طلبة الجامعة المستفيدين من خدمات الوحدة</td><td>تأسيس قاعدة بيانات المستفيدين من خدمات الوحدة والمراجعين لها</td></tr>
+          <tr><td>إدارة الصندوق الطلابي</td><td>أ. محمد البلوي</td><td>طلبة الجامعة المستفيدين من خدمات الصندوق</td><td>لتقديم الخدمة للمستفيدين من خدمات الصندوق</td></tr>
+          <tr><td>إدارة المكافآت</td><td>أ. أحمد العقيلي</td><td>طلبة الجامعة</td><td>لتقديم خدمات المكافآت والأقساط</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="sec-title" style="margin-top:1.5rem">المصرَّح لهم بالوصول إلى البيانات المحفوظة</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الجهة</th><th>المسؤول</th><th>الفئة</th><th>الغرض</th></tr></thead>
+        <tbody>
+          <tr><td>عميد شؤون الطلاب</td><td>د. محمد دعوري</td><td>جميع البيانات</td><td>التحقق مما تقدم من المستهدفات</td></tr>
+          <tr><td>وكيل شؤون الخريجين</td><td>د. مبارك الدوسري</td><td>جميع البيانات</td><td>التحقق مما تقدم من المستهدفات، ورفع التقارير</td></tr>
+          <tr><td>وكيل الأنشطة الطلابية</td><td>د. عبد العزيز الغامدي</td><td>جميع البيانات</td><td>التحقق مما تقدم من المستهدفات، ورفع التقارير</td></tr>
+          <tr><td>وكيلة شطر الطالبات</td><td>د. وئام الحربي</td><td>جميع البيانات</td><td>التحقق مما تقدم من المستهدفات، ورفع التقارير</td></tr>
+          <tr><td>إدارة العمادة</td><td>أ. فيصل كريشان</td><td>جميع البيانات</td><td>تأسيس قاعدة بيانات العمادة وحفظها وتحديثها</td></tr>
+          <tr><td>وحدة التطوير والجودة</td><td>أ. نوال الفيفي</td><td>جميع البيانات</td><td>التحقق مما تقدم من المستهدفات، ورفع التقارير والحفظ</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">مشاركة البيانات</div>
+      <h2>مشاركة البيانات داخل الجامعة وخارجها</h2>
+      <p class="sec-desc">تقوم عمادة شؤون الطلاب بمشاركة البيانات مع الجهات الداخلية الأخرى في جامعة تبوك من قِبل ضباط الاتصال حسب ما تقتضيه مصلحة العمل</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>القسم</th><th>المسؤول</th><th>البريد الإلكتروني</th></tr></thead>
+        <tbody>
+          <tr><td>وكيل شؤون الخريجين</td><td>د. مبارك الدوسري</td><td class="code">maldossari@ut.edu.sa</td></tr>
+          <tr><td>وكيل الأنشطة الطلابية</td><td>د. عبد العزيز الغامدي</td><td class="code">aalgamdy@ut.edu.sa</td></tr>
+          <tr><td>وكيلة شطر الطالبات</td><td>د. وئام الحربي</td><td class="code">wgalharbi@ut.edu.sa</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="sec-title" style="margin-top:1.5rem">مشاركة البيانات مع الجهات الخارجية</div>
+      <p class="sec-desc">تقوم عمادة شؤون الطلاب بمشاركة البيانات مع الجهات الخارجية من قِبل ضباط الاتصال حتى الآتي</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="card"><h3>الجهات الحكومية</h3></div>
+        <div class="card"><h3>جهات شريكة</h3><p>تم التعاقد معها لتقديم خدمات للطلبة أو الخريجين</p></div>
+        <div class="card"><h3>جهات التوظيف</h3></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">طريقة مشاركة البيانات</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>داخلياً</strong><p>يتم مشاركة البيانات داخلياً من قِبل الوسائل المعمول بها في جامعة تبوك</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>خارجياً</strong><p>يتم مشاركة البيانات خارجياً من قِبل البريد الإلكتروني</p></div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">ضوابط إدارة البيانات</div>
+      <h2>ضوابط إدارة البيانات في عمادة شؤون الطلاب</h2>
+      <p class="sec-desc">تُقصِّص عمادة شؤون الطلاب هذا القسم لضبط عملية إدارة البيانات من قِبل ضباط الاتصال، لضمان حفظها ومشاركتها بطريقة آمنة وسليمة، وتُلزَم الجهات الداخلية بالآتي</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">✉️</div><h3>إبلاغ وحدة الجودة</h3><p>يجب على المسؤولين المخوّلين بجمع البيانات في جميع الجهات التابعة لعمادة شؤون الطلاب إضافة البريد الإلكتروني لوحدة التطوير والجودة (quality.dsa@ut.edu.sa) إلى أي بيانات مقيسة في التقييم تحت تصنيف "مُحرَّر"</p></div>
+        <div class="card"><div class="card-icon">📤</div><h3>نسخة عند المشاركة</h3><p>في حال تمت مشاركة البيانات مع أي جهة داخل الجامعة أو خارجها من أي بريد إلكتروني تابع للعمادة، سواء لأشخاص أو إدارات، فيجب إرسال نسخة من البريد الإلكتروني إلى البريد الإلكتروني (St-af@ut.edu.sa)</p></div>
+        <div class="card"><div class="card-icon">📆</div><h3>رفع شهري للبيانات</h3><p>يجب على الإدارات رفع البيانات بشكل ربع سنوي إلى وحدة التطوير والجودة (quality.dsa@ut.edu.sa) من قِبل النموذج المعتمد</p></div>
+        <div class="card"><div class="card-icon">🗄️</div><h3>حفظ مركزي</h3><p>تتولى وحدة التطوير والجودة عملية متابعة البيانات وتنقيتها وتصنيفها وحفظها، مع إرسال نسخة من البيانات النهائية المعتمدة إلى الوكلاء عبر نظام مسار للحفظ</p></div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ KPI ══════════ -->
+  <div class="page fade-in" id="page-kpi">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 9-1 من ISO 9001:2015</div><h1>قياس العمليات التشغيلية <em>وتحليل الأداء</em></h1><p class="page-hero-desc">تماشياً مع متطلبات البند (9.1) من المواصفة الدولية ISO 9001:2015، تعتمد عمادة شؤون الطلاب منهجية واضحة لقياس ومراقبة أداء العمليات التشغيلية، بما يضمن جودة الخدمات المقدمة للطلبة وتلبية متطلبات العملاء. وتُستمد مؤشرات القياس في العمادة من المستهدفات التشغيلية والاستراتيجية المعتمدة من الجامعة، لضمان الاتساق مع توجهات جامعة تبوك</p></div>
+
+    <div class="sec">
+      <div class="sec-title">مبادئ القياس</div>
+      <h2>المبادئ العامة لقياس العمليات</h2>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="card"><h3>الارتباط بالأهداف التشغيلية</h3><p>الارتباط المباشر بالأهداف التشغيلية للجامعة</p></div>
+        <div class="card"><h3>موثوقية البيانات</h3><p>الاعتماد على بيانات موثوقة من إدارات العمادة ومركز القياس والتقويم</p></div>
+        <div class="card"><h3>سهولة القياس</h3><p>وعدم تحميل الإدارات أعباءً إضافية</p></div>
+        <div class="card"><h3>قابلية المقارنة</h3><p>اعتماد مؤشرات قابلة للقياس (قابلة للزيادة/الانخفاض/التحسن)</p></div>
+        <div class="card"><h3>المراجعة الدورية</h3><p>مراجعة دورية للمؤشرات ونتائجها ورفعها لعميد شؤون الطلاب</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">العمليات المعتمدة للقياس</div>
+      <h2>قائمة العمليات التشغيلية المعتمدة للقياس</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>العملية التشغيلية</th><th>مؤشر القياس</th><th>مصدر البيانات</th><th>تكرار القياس</th><th>الجهة المسؤولة</th><th>طريقة التحليل واتخاذ القرار</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">الأنشطة الطلابية</td><td>عدد المشاركين في الأنشطة</td><td>تقارير إدارة النشاط الطلابي</td><td>شهري</td><td>إدارة النشاط + وحدة الجودة</td><td>تحليل الزيادة/النقصان واتخاذ إجراءات</td></tr>
+          <tr><td style="font-weight:700">الأنشطة الرياضية</td><td>عدد الممارسين + عدد البطولات الرياضية</td><td>مجلات المشاركات + التقارير الرسمية</td><td>شهري</td><td>إدارة النشاط الرياضي</td><td>مقارنة الأداء بالمستهدفات الوطنية وتحليل البرامج</td></tr>
+          <tr><td style="font-weight:700">ذوو الإعاقة</td><td>عدد الخدمات + نسبة الرضا</td><td>تقارير الرضا من مركز القياس</td><td>شهري</td><td>وحدة ذوي الإعاقة</td><td>تحليل جودة الخدمة المقدمة واتخاذ إجراءات تحسين الاستجابة</td></tr>
+          <tr><td style="font-weight:700">الإرشاد المهني</td><td>عدد المستفيدين من الجلسات + عدد البرامج</td><td>رفع شهري من وحدة الإرشاد</td><td>شهري</td><td>وحدة الإرشاد والبرامج</td><td>تحليل الفجوات في الاستفادة وتحسين البرامج</td></tr>
+          <tr><td style="font-weight:700">التغذية والإعاشة</td><td>عدد الجولات + الملاحظات</td><td>تقارير مركز القياس + الشكاوى</td><td>شهري</td><td>إدارة التغذية</td><td>اتخاذ إجراءات تصحيحية بالتنسيق مع الموردين</td></tr>
+          <tr><td style="font-weight:700">النقل الطلابي</td><td>نسبة رضا طلبة النقل</td><td>استبانات مركز القياس</td><td>شهري</td><td>إدارة النقل</td><td>تحليل رضا النقل وتحسين تجربة الطالب</td></tr>
+          <tr><td style="font-weight:700">المناقصات</td><td>نسبة الالتزام بمواعيد الصرف</td><td>مجلات المالية والمناقصات</td><td>شهري</td><td>إدارة المناقصات</td><td>تحديد أسباب التأخير إن وُجد واتخاذ الإجراء</td></tr>
+          <tr><td style="font-weight:700">العمل التطوعي</td><td>ساعات التطوع + عدد المتطوعين</td><td>رفع شهري + تقارير العمادة</td><td>شهري</td><td>وحدة العمل التطوعي</td><td>مراقبة الزيادة في عدد الساعات ومقارنة الأداء بالمستهدفات الوطنية</td></tr>
+          <tr><td style="font-weight:700">التدريب والتأهيل</td><td>عدد المستفيدين من البرامج</td><td>مجلات المشاركة</td><td>رفع شهري</td><td>مركز التدريب والتأهيل</td><td>تحليل نوع البرامج ومناسبتها لاحتياجات الطلبة</td></tr>
+          <tr><td style="font-weight:700">المنح الدراسية</td><td>نسبة الرضا</td><td>مجلات وحدة المنح + مركز القياس</td><td>رفع شهري</td><td>وحدة المنح الدراسية والدوليين</td><td>تحليل رضا الطلبة الدوليين واتخاذ إجراءات تحسين بناءً على الشكاوى والاحتياجات</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">المستهدفات</div>
+      <h2>مستهدفات الأداء 2025 مقارنة بخط الأساس 2024</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الهدف</th><th>خط الأساس (2024)</th><th>المستهدف (2025)</th><th>أداة القياس</th><th>المسؤول</th><th>المدة الزمنية</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">زيادة عدد المشاركين في الأنشطة الطلابية</td><td>8,600</td><td>10,000 طالب/ة</td><td>إحصاءات وحدة الأنشطة</td><td>وكالة الأنشطة الطلابية</td><td>سنوي</td></tr>
+          <tr><td style="font-weight:700">إنشاء مجالس طلابية فعّالة</td><td>17 مجلس</td><td>18 مجلس</td><td>محاضر الاجتماعات</td><td>وكالة شطر الطالبات</td><td>نصف سنوي</td></tr>
+          <tr><td style="font-weight:700">زيادة عدد المجتازين لبرامج التدريب الاحترافي</td><td>918</td><td>6,000 متدرب</td><td>شهادات اجتياز التدريب</td><td>مركز التدريب والتأهيل</td><td>ربع سنوي</td></tr>
+          <tr><td style="font-weight:700">تحقيق نسبة رضا عن مركز خدمات الطالب</td><td>غير مقاس</td><td>≥ 90%</td><td>استبانات رضا المستفيدين</td><td>مركز خدمات الطالب</td><td>سنوي</td></tr>
+          <tr><td style="font-weight:700">زيادة عدد المتطوعين الجدد</td><td>6,254</td><td>4,500</td><td>إحصائيات منصة العمل التطوعي</td><td>وحدة التطوع والمسؤولية المجتمعية</td><td>ربع سنوي</td></tr>
+          <tr><td style="font-weight:700">زيادة عدد المستفيدين من الإرشاد المهني</td><td>2,208</td><td>3,000</td><td>تقارير الإرشاد المهني</td><td>وحدة التدريب والإرشاد المهني</td><td>ربع سنوي</td></tr>
+          <tr><td style="font-weight:700">زيادة نسبة توظيف الخريجين</td><td>27.16%</td><td>30%</td><td>إحصاءات الخريجين وسوق العمل</td><td>وحدة الخريجين والتوظيف</td><td>سنوي</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">المتابعة الفعلية</div>
+      <h2>قياس أداء العمليات — المبادرات الاستراتيجية 2024</h2>
+      <p class="sec-desc">متابعة ربعية لتقدّم إنجاز المستهدفات الاستراتيجية مقارنة بالمستهدف السنوي، موضحة حالة كل مبادرة</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>المبادرة الاستراتيجية</th><th>المستهدف 2024</th><th>المنجز (الربع الأول)</th><th>الحالة (الربع الأول)</th><th>المنجز (الربع الثاني)</th><th>الحالة (الربع الثاني)</th></tr></thead>
+        <tbody>
+          <tr><td>استبقاء الطالب في المدينة الجامعية</td><td>219</td><td>137</td><td><span class="badge badge-green">مستقر</span></td><td>127</td><td><span class="badge badge-gold">متقدم</span></td></tr>
+          <tr><td>زيادة عدد المشاركين في الأنشطة الطلابية</td><td>10,000</td><td>9,421</td><td><span class="badge badge-green">مستقر</span></td><td>55,538</td><td><span class="badge badge-green">مستقر</span></td></tr>
+          <tr><td>إنشاء المجالس الطلابية</td><td>18</td><td>17</td><td><span class="badge badge-green">مستقر</span></td><td>17</td><td><span class="badge badge-green">مستقر</span></td></tr>
+          <tr><td>زيادة عدد المجتازين للتدريب الاحترافي</td><td>6,000</td><td>918</td><td><span class="badge badge-blue">دعم</span></td><td>6,294</td><td>—</td></tr>
+          <tr><td>مركز خدمات الطالب</td><td>غير مقارَن</td><td>10,525 مستفيد</td><td>—</td><td>22,850</td><td>—</td></tr>
+          <tr><td>زيادة عدد المتطوعين الجدد</td><td>6,254</td><td>6,493</td><td>—</td><td>6,493</td><td><span class="badge badge-gold">غير واضح</span></td></tr>
+          <tr><td>زيادة عدد المستفيدين من الإرشاد المهني</td><td>16,000</td><td>1,153</td><td><span class="badge badge-blue">دعم</span></td><td>1,820</td><td><span class="badge badge-blue">دعم</span></td></tr>
+          <tr><td>زيادة نسبة توظيف الخريجين</td><td>27.16%</td><td>0%</td><td>سنوي</td><td>44.84%</td><td>سنوي</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ MANAGEMENT REVIEW ══════════ -->
+  <div class="page fade-in" id="page-mgmtreview">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 9-3 من ISO 9001:2015</div><h1>مراجعة <em>الإدارة</em></h1><p class="page-hero-desc">تلتزم عمادة شؤون الطلاب بعقد اجتماعات مراجعة الإدارة وفق منهجية مخططة ومنتظمة، تهدف إلى ضمان فعالية نظام إدارة الجودة ومتابعة أداء العمادة بشكل مستمر</p></div>
+
+    <div class="sec">
+      <div class="sec-title">الاجتماع الرئيسي</div>
+      <h2>اجتماع مراجعة الإدارة الرئيسي</h2>
+      <p class="sec-desc">يُعقد هذا الاجتماع مرة واحدة سنوياً برئاسة عميد شؤون الطلاب، ويهدف إلى تقييم الأداء الشامل لنظام إدارة الجودة، بما في ذلك</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+        <div class="card"><div class="card-icon">📊</div><h3>مؤشرات الأداء التشغيلية والداعمة</h3></div>
+        <div class="card"><div class="card-icon">🔍</div><h3>نتائج المراجعات الداخلية</h3></div>
+        <div class="card"><div class="card-icon">⚠️</div><h3>حالة الإجراءات التصحيحية</h3></div>
+        <div class="card"><div class="card-icon">😊</div><h3>نتائج قياس رضا المستفيدين</h3><p>الصادرة من مركز القياس والتقويم</p></div>
+        <div class="card"><div class="card-icon">🎯</div><h3>مدى تحقيق الأهداف التشغيلية</h3><p>المرتبطة بمستهدفات الجامعة</p></div>
+        <div class="card"><div class="card-icon">🗂️</div><h3>حالة الموارد المتاحة</h3></div>
+        <div class="card"><div class="card-icon">🛡️</div><h3>تحليل المخاطر والفرص</h3></div>
+        <div class="card"><div class="card-icon">🔄</div><h3>أي تغييرات داخلية أو خارجية</h3><p>مؤثرة على نظام الجودة</p></div>
+      </div>
+      <p class="sec-desc" style="margin-top:1rem">ويُتَّبَع الاجتماع إصدار القرارات والتوصيات واعتماد خطة العمل للفترة التالية</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">المتابعة الدورية</div>
+      <h2>اجتماعات المتابعة الدورية</h2>
+      <p class="sec-desc">تعقد العمادة اجتماعات متابعة ربع سنوية (كل ثلاثة أشهر) لضمان الرقابة المستمرة على سير العمليات التشغيلية ومتابعة مؤشرات الأداء بشكل أكثر انتظاماً، وتشمل هذه الاجتماعات ما يلي</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>مراجعة الأداء الفعلي للعمليات التشغيلية</strong><p>النشاط الطلابي، النشاط الرياضي، التغذية، الصندوق، التطوع، ذوو الإعاقة... إلخ</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>متابعة حالة الإجراءات التصحيحية</strong><p>وقياس تقدّمها</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>استعراض مستجدات المخاطر والفرص</strong></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>مناقشة أي تغييرات تشغيلية أو تنظيمية</strong></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>اتخاذ قرارات فورية</strong><p>لمعالجة القضايا المستجدة وتحسين الأداء</p></div></div>
+      </div>
+      <p class="sec-desc" style="margin-top:1rem">وتُسهم هذه الاجتماعات في تعزيز التحسين المستمر وضمان الاستجابة السريعة للمتغيرات في بيئة العمل الطلابي</p>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ CORRECTIVE ACTIONS ══════════ -->
+  <div class="page fade-in" id="page-corrective">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 10-2 من ISO 9001:2015</div><h1>الإجراءات <em>التصحيحية</em></h1><p class="page-hero-desc">تلتزم عمادة شؤون الطلاب بتطبيق متطلبات البند (10.2) من المواصفة الدولية ISO 9001:2015، وذلك من خلال منهجية واضحة لمعالجة حالات عدم المطابقة واتخاذ الإجراءات التصحيحية المناسبة لمنع تكرارها، بما يحقق التحسين المستمر في الأداء</p></div>
+
+    <div class="sec">
+      <div class="sec-title">التعريف</div>
+      <h2>ما هو الإجراء التصحيحي</h2>
+      <p class="sec-desc">هو الإجراء المتخذ لإزالة سبب عدم المطابقة ومنع تكراره، بناءً على حالة عدم مطابقة موثقة كشفتها إحدى القنوات الآتية</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="card"><h3>1. المراجعات الداخلية</h3></div>
+        <div class="card"><h3>2. الإجراءات اليومية</h3></div>
+        <div class="card"><h3>3. شكاوى المستفيدين</h3></div>
+        <div class="card"><h3>4. قياس العمليات</h3></div>
+        <div class="card"><h3>5. التقارير الرسمية</h3></div>
+        <div class="card"><h3>6. محاضر مراجعة الإدارة</h3></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">حالات تستوجب الإجراء التصحيحي</div>
+      <h2>أمثلة على حالات عدم المطابقة التي تتطلب معالجة تصحيحية</h2>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+        <div class="card"><div class="card-icon">⏱️</div><h3>تأخير في إنجاز الخدمات التشغيلية</h3></div>
+        <div class="card"><div class="card-icon">📉</div><h3>انخفاض نسبة رضا المستفيدين عن الخدمة</h3></div>
+        <div class="card"><div class="card-icon">📢</div><h3>شكاوى متكررة من الطلبة أو المستفيدين</h3></div>
+        <div class="card"><div class="card-icon">⚠️</div><h3>عدم تطابق الخدمات مع الإجراءات المعتمدة</h3></div>
+        <div class="card"><div class="card-icon">🔀</div><h3>مشاكل في التنسيق بين الإدارات</h3></div>
+        <div class="card"><div class="card-icon">📋</div><h3>مخالفات تشغيلية أو تنظيمية</h3></div>
+        <div class="card"><div class="card-icon">🔍</div><h3>ملاحظات من المدققين (داخلي/خارجي)</h3></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">خطوات التنفيذ</div>
+      <h2>خطوات تنفيذ الإجراء التصحيحي</h2>
+      <p class="sec-desc">تتبع العمادة المنهجية التالية لمعالجة عدم المطابقة</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>الخطوة</th><th>الوصف</th><th>الجهة المسؤولة</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">1. تحديد عدم المطابقة</td><td>يتم تسجيل الحالة من قبل الإدارة المعنية أو وحدة التطوير والجودة، وتوثيق المسألة بدقة (الوصف، التاريخ، الجهة المسؤولة) في تقرير المراجعة الداخلية (UT-DSA-A01-21-01)</td><td>الإدارة المعنية</td></tr>
+          <tr><td style="font-weight:700">2. تحديد السبب الجذري للمسألة</td><td>تحليل العوامل المؤثرة الجذرية وراء عدم المطابقة</td><td>الإدارة المعنية + وحدة الجودة</td></tr>
+          <tr><td style="font-weight:700">3. وضع خطة الإجراء التصحيحي</td><td>تشمل: وصف الإجراء المقترح، الجهة المسؤولة، المدة الزمنية للتنفيذ، الموارد المطلوبة (إن وُجدت)</td><td>الإدارة المقترحة</td></tr>
+          <tr><td style="font-weight:700">4. اعتماد الإجراء والتوجيه</td><td>اعتماد خطة الإجراء التصحيحي والتوجيه بتنفيذها</td><td>عميد شؤون الطلاب</td></tr>
+          <tr><td style="font-weight:700">5. تنفيذ الإجراء</td><td>تقوم الإدارة المعنية بتنفيذ الإجراء وضمان فعاليته</td><td>الإدارة المعنية</td></tr>
+          <tr><td style="font-weight:700">6. متابعة التنفيذ والتحقق من الفاعلية</td><td>متابعة نتائج التنفيذ، والتأكد من عدم عودة المسألة، وإغلاق الحالة رسمياً في سجل الإجراءات التصحيحية</td><td>وحدة التطوير والجودة</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">سجل الإجراءات</div>
+      <h2>سجل الإجراءات التصحيحية</h2>
+      <p class="sec-desc">يتم توثيق الإجراءات التصحيحية في سجل مخصص يشمل</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+        <div class="card"><h3>رقم الحالة</h3></div>
+        <div class="card"><h3>وصف عدم المطابقة</h3></div>
+        <div class="card"><h3>سبب المسألة</h3></div>
+        <div class="card"><h3>خطة الإجراء التصحيحي</h3></div>
+        <div class="card"><h3>تاريخ التنفيذ</h3></div>
+        <div class="card"><h3>نتائج التحقق</h3></div>
+        <div class="card"><h3>حالة الإغلاق</h3></div>
+      </div>
+      <p class="sec-desc" style="margin-top:1rem">يُحفظ السجل لدى وحدة التطوير والجودة، ويُراجَع في اجتماع مراجعة الإدارة السنوي</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">استخدام نتائج الإجراءات التصحيحية</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="card"><h3>مراجعات العمليات</h3></div>
+        <div class="card"><h3>تحديث الإجراءات عند الحاجة</h3></div>
+        <div class="card"><h3>تحسين جودة الخدمات</h3></div>
+        <div class="card"><h3>دعم القرارات في اجتماع مراجعة الإدارة</h3></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">السجلات المرتبطة</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>السجل</th><th>الرمز</th></tr></thead>
+        <tbody>
+          <tr><td>تقرير المراجعة الداخلية</td><td class="code">UT-DSA-A01-21-01</td></tr>
+          <tr><td>تقارير رضا المستفيدين</td><td class="code">—</td></tr>
+          <tr><td>سجل المخاطر والفرص (في حال ارتباط الإجراء بمخاطر تشغيلية)</td><td class="code">—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ IMPROVEMENT ══════════ -->
+  <div class="page fade-in" id="page-improvement">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 10-3 من ISO 9001:2015</div><h1>التحسين <em>المستمر</em></h1><p class="page-hero-desc">تلتزم عمادة شؤون الطلاب بتطبيق التحسين المستمر على نظام إدارة الجودة وجميع الخدمات المقدمة للطلبة، وفقاً لمتطلبات البند (10.3) من المواصفة الدولية ISO 9001:2015، ويهدف التحسين المستمر إلى رفع مستوى الأداء وزيادة رضا المستفيدين وتعزيز كفاءة العمليات التشغيلية والداعمة</p></div>
+
+    <div class="sec">
+      <div class="sec-title">مصادر التحسين</div>
+      <h2>مصادر التحسين المستمر</h2>
+      <p class="sec-desc">يعتمد التحسين في العمادة على مصادر متعددة، تشمل</p>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+        <div class="card"><div class="card-icon">🔍</div><h3>نتائج المراجعات الداخلية</h3></div>
+        <div class="card"><div class="card-icon">📋</div><h3>مخرجات اجتماع مراجعة الإدارة</h3></div>
+        <div class="card"><div class="card-icon">😊</div><h3>نتائج قياس رضا المستفيدين</h3><p>من مركز القياس والتقويم</p></div>
+        <div class="card"><div class="card-icon">✅</div><h3>سجل الإجراءات التصحيحية والوقائية</h3></div>
+        <div class="card"><div class="card-icon">🛡️</div><h3>سجل المخاطر والفرص</h3></div>
+        <div class="card"><div class="card-icon">📊</div><h3>تحليل مؤشرات الأداء</h3><p>للعمليات التشغيلية</p></div>
+        <div class="card"><div class="card-icon">📢</div><h3>الشكاوى والملاحظات الواردة من الطلبة</h3></div>
+        <div class="card"><div class="card-icon">🏛️</div><h3>المقارنات المرجعية</h3><p>مع أفضل الممارسات الجامعية</p></div>
+        <div class="card"><div class="card-icon">📜</div><h3>التغيرات في التعليمات والالتزامات الجامعية</h3></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">أنماط التحسين</div>
+      <h2>أنماط التحسين المستمر المطبقة في العمادة</h2>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">⚙️</div><h3>تحسين العمليات</h3><p>مراجعة العمليات التشغيلية باستمرار، تبسيط الإجراءات وتعزيز كفاءة سير العمل، معالجة أعطال المشكلات الجديدة والمتكررة</p></div>
+        <div class="card"><div class="card-icon">⭐</div><h3>تطوير جودة الخدمات الطلابية</h3><p>تحسين تجربة المستفيد في التغذية، النقل، ذوي الإعاقة، النقل، التطوع... إلخ، وتطوير البرامج المقدمة للطلبة حسب الاحتياجات</p></div>
+        <div class="card"><div class="card-icon">📈</div><h3>التحسين المبني على البيانات</h3><p>تحليل مؤشرات الأداء بصفة دورية، ومقارنة النتائج بالمستهدفات التشغيلية والاستراتيجية</p></div>
+        <div class="card"><div class="card-icon">⚡</div><h3>التحسين القائم على الاستجابة السريعة</h3><p>معالجة الملاحظات والشكاوى مباشرة، واتخاذ إجراءات تحسين قصيرة المدى</p></div>
+        <div class="card"><div class="card-icon">🏗️</div><h3>التحسين طويل المدى</h3><p>تنفيذ مشاريع تطويرية ضمن خطة العمادة السنوية، وتحسين البنية التحتية أو الموارد عند الحاجة</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">آلية الإدارة</div>
+      <h2>آلية إدارة التحسين المستمر</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>المرحلة</th><th>الوصف</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:700">رصد فرص التحسين</td><td>من قِبل المؤشرات، الشكاوى، المراجعات، أو الاجتماعات</td></tr>
+          <tr><td style="font-weight:700">تقييم مدى أهمية الفرصة</td><td>ترتبط بالأثر على المستفيد أو سير العملية</td></tr>
+          <tr><td style="font-weight:700">اقتراح الإجراء أو المشروع</td><td>من الإدارة المعنية أو وحدة التطوير والجودة</td></tr>
+          <tr><td style="font-weight:700">اعتماد قرار التحسين</td><td>من عميد شؤون الطلاب</td></tr>
+          <tr><td style="font-weight:700">التنفيذ</td><td>من الإدارة المختصة</td></tr>
+          <tr><td style="font-weight:700">متابعة الفاعلية</td><td>وحدة التطوير والجودة</td></tr>
+          <tr><td style="font-weight:700">توثيق التحسين</td><td>في سجل التحسين المستمر أو الإجراءات التصحيحية</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="sec-title" style="margin-top:1.5rem">السجلات المرتبطة</div>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="card"><h3>تقرير المراجعة الداخلية</h3></div>
+        <div class="card"><h3>سجل المخاطر والفرص</h3></div>
+        <div class="card"><h3>تقارير مؤشرات الأداء</h3></div>
+        <div class="card"><h3>تقارير رضا المستفيدين</h3></div>
+        <div class="card"><h3>محضر اجتماع مراجعة الإدارة</h3></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">مبادرة نوعية</div>
+      <h2>مبادرة THE ARC للتحسين المستمر</h2>
+      <p class="sec-desc">تعتمد عمادة شؤون الطلاب مبادرة THE ARC كأحد الآليات الداعمة لتطبيق متطلبات التحسين المستمر وفق البند (10.3) من المواصفة الدولية ISO 9001:2015، وذلك من خلال إشراك الطلبة في مراجعة وتطوير إجراءات العمادة خلال فترة الإجازة الصيفية</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">مدة البرنامج وفئته المستهدفة</div>
+      <p class="sec-desc" style="margin-top:-1rem">يُنفَّذ البرنامج خلال فترة الصيف لمدة شهر واحد، ويستهدف مجموعة من طلبة الجامعة ممن لديهم الاستعداد والاهتمام بمجال الجودة وتطوير الخدمات الطلابية، وفق ضوابط الترشيح والقبول التي تحددها العمادة</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">المكونات الرئيسة للبرنامج</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>المرحلة الأولى (أسبوعان)</strong><p>تدريب مكثف للطلبة المشاركين على مفاهيم إدارة الجودة ومتطلبات المواصفة الدولية ISO 9001:2015، مع التركيز على البنود المرتبطة بعمليات عمادة شؤون الطلاب وإجراءاتها</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>المرحلة الثانية (أسبوعان)</strong><p>تكليف الطلبة، تحت إشراف وحدة التطوير والجودة ومسؤول الإجراءات، بمراجعة مجموعة مختارة من الإجراءات والنماذج والعمليات التشغيلية، ورصد فرص التحسين واقتراح التعديلات أو المبادرات التي من شأنها رفع كفاءة وفاعلية الخدمات الطلابية</p></div></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">مخرجات المبادرة واستخدامها في التحسين</div>
+      <p class="sec-desc" style="margin-top:-1rem">يتم مراجعة مقترحات المشاركين وعرضها على أصحاب العلاقة من الوكلاء أو العميد لأخذ آرائهم حولها ومدى إمكانية تنفيذها</p>
+      <p class="sec-desc">وبذلك تُسهم مبادرة THE ARC في نشر ثقافة الجودة بين الطلبة، واستثمار وجهات نظرهم في تطوير الخدمات، وتعزيز منهجية التحسين المستمر لنظام إدارة الجودة في عمادة شؤون الطلاب</p>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ SATISFACTION ══════════ -->
+  <div class="page fade-in" id="page-satisfaction">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">العلاقات العامة والتواصل مع المستفيدين</div><h1>قياس رضا <em>المستفيدين</em></h1></div>
+
+    <div class="sec">
+      <div class="sec-title">الإطار العام</div>
+      <p class="sec-desc">تلتزم عمادة شؤون الطلاب بجامعة تبوك بقياس وتحليل رضا المستفيدين عن الخدمات المقدمة، وذلك بالتعاون مع مركز القياس والتقويم بالجامعة، الذي يتولى إعداد وإدارة أدوات القياس الخاصة بالخدمات الجامعية وتزويد العمادة بنتائج القياس الدورية</p>
+
+      <div class="sec-title" style="margin-top:1.5rem">آلية قياس رضا المستفيدين</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>إعداد استبانات الرضا</strong><p>يقوم مركز القياس والتقويم بإعداد استبانات رضا المستفيدين المعتمدة لكل خدمة تقدمها العمادة بناءً على طلب العمادة</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>تزويد العمادة بالروابط</strong><p>يتم تزويد العمادة بروابط الاستبانات المعتمدة من قِبل نظام مسار لنشرها على المستفيدين</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>تقرير رسمي بعد جمع البيانات</strong><p>بعد انتهاء فترة جمع البيانات، يزوّد المركز العمادة بتقرير رسمي يتضمن النتائج</p></div></div>
+        <div class="step"><div class="step-num">4</div><div><strong>تحليل النتائج ومقارنتها</strong><p>تقوم وحدة التطوير والجودة بتحليل النتائج ومقارنتها بالمستهدفات السنوية المدرجة ضمن أهداف الجودة</p></div></div>
+        <div class="step"><div class="step-num">5</div><div><strong>عرضها في مراجعة الإدارة</strong><p>تُعرض نتائج الرضا والتوصيات ضمن اجتماع مراجعة الإدارة (البند 9-3)، وتُعتمد الإجراءات التحسينية اللازمة بناءً على مخرجات التقرير</p></div></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:1.5rem">مبدأ الاعتماد</div>
+      <div class="card-accent card" style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.5rem">
+        <p style="font-size:.85rem;color:var(--text);line-height:1.8">تُعتبر تقارير مركز القياس والتقويم هي المرجع الرسمي المعتمد لقياس رضا المستفيدين، ولا تُعتمد أي أدوات داخلية مماثلة تُعَدّ داخل العمادة، لضمان توحيد أدوات القياس على مستوى الجامعة وتعزيز موثوقية النتائج</p>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ INTERNAL AUDIT ══════════ -->
+  <div class="page fade-in" id="page-internalaudit">
+    <div style="max-width:1100px">
+    <div class="page-hero"><div class="page-hero-eye">البند 9-2 من ISO 9001:2015</div><h1>المراجعة <em>الداخلية</em></h1></div>
+
+    <div class="sec">
+      <div class="sec-title">دورية المراجعة</div>
+      <h2>آلية تنفيذ المراجعة الداخلية</h2>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">📅</div><h3>دورة سنوية</h3><p>تُعقد فعالية المراجعة الداخلية في عمادة شؤون الطلاب وفق متطلبات المواصفة الدولية ISO 9001:2015 (البند 9.2)، وتُصدرها وحدة التطوير والجودة بشكل سنوي خلال شهر يوليو من كل عام ميلادي</p></div>
+        <div class="card"><div class="card-icon">📋</div><h3>خطة مبنية على المخاطر</h3><p>يتم إعداد الخطة بناءً على نتائج المراجعات السابقة، ومخرجات اجتماعات مراجعة الإدارة، ومستوى المخاطر في العمليات</p></div>
+        <div class="card"><div class="card-icon">📤</div><h3>تعميم الخطة رسمياً</h3><p>بعد اعتمادها من عميد شؤون الطلاب، تُرسل الخطة رسمياً إلى جميع الإدارات والوحدات التابعة للعمادة عبر نظام المراسلات الداخلي للجامعة (مسار)، ويُعتبر هذا الإشعار بمثابة إخطار رسمي بموعد وتفاصيل المراجعة</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">الاستقلالية والحياد</div>
+      <h2>استقلالية التدقيق الداخلي</h2>
+      <div class="cards" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+        <div class="card"><div class="card-icon">⚖️</div><h3>ضمان الموضوعية</h3><p>تلتزم عمادة شؤون الطلاب بضمان استقلالية المدققين الداخليين وموضوعيتهم وفق البند (9.2.2) من المواصفة الدولية ISO 9001:2015، بحيث لا يقوم المدقق بمراجعة الأنشطة أو التجهيزات التي تقع ضمن نطاق مسؤولياته المباشرة</p></div>
+        <div class="card"><div class="card-icon">🔄</div><h3>حياد التدقيق المتبادل</h3><p>يقوم مدير إدارة الجودة بتنفيذ المراجعة الداخلية على جميع الإدارات والوحدات التابعة للعمادة، باستثناء وحدة التطوير والجودة نفسها، التي يتم تدقيقها من قِبل جهة محايدة داخل الجامعة (مثل وكالة الجامعة للجودة أو مدقق داخلي من عمادة أخرى)، لضمان الحياد والموضوعية التامة في نتائج المراجعة</p></div>
+        <div class="card"><div class="card-icon">📝</div><h3>قائمة استقلالية موثقة</h3><p>تُحدَّث قائمة الاستقلالية مرفقة ضمن سجل خطة المراجعة الداخلية لتوضيح أسماء المدققين والجهات المدقَّقة، والتحقق من عدم وجود تضارب مصالح</p></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">بناء القدرات</div>
+      <h2>مشاركة المدققين المساعدين (المتدربين)</h2>
+      <p class="sec-desc">في إطار تطوير القدرات الداخلية في مجال الجودة، تعتمد عمادة شؤون الطلاب إشراك المتدربين ضمن برنامج تمهير أو أي برامج تدريبية أخرى في أعمال المراجعة الداخلية، وذلك بعد تدريبهم على متطلبات المواصفة الدولية ISO 9001:2015 ومبادئ التدقيق الداخلي</p>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">أحكام ختامية</div>
+      <p class="sec-desc">يلتزم جميع منسوبي عمادة شؤون الطلاب بتطبيق ما ورد في هذا الدليل من أحكام وضوابط وإجراءات، باعتباره المرجع الرسمي لنظام إدارة الجودة المعتمد في العمادة. ويتم مراجعة هذا الدليل وتحديثه دورياً أو كلما دعت الحاجة، بما يضمن استمرارية توافق نظام إدارة الجودة مع متطلبات المواصفة الدولية ISO 9001:2015 والتوجهات الاستراتيجية لجامعة تبوك</p>
+    </div>
+
+    </div>
+  </div>
 
 </main>
 
@@ -1303,7 +2114,8 @@ const pages = {
   'context':'القضايا والسياق','stakeholders':'الأطراف المعنية','risks':'المخاطر التنظيمية','services':'الخدمات الطلابية',
   'org':'الهيكل التنظيمي','dean':'عمادة شؤون الطلاب','deptA':'وكالة الأنشطة الطلابية','deptB':'وكالة الخريجين والتدريب','deptC':'وكالة شطر الطالبات',
   'objectives':'أهداف الجودة','processes':'إجراءات عمادة شؤون الطلاب',
-  'docs':'التخطيط للتغيرات','suppliers':'الموردون والمستثمرون','regulations':'اللوائح والوثائق'
+  'docs':'التخطيط للتغيرات','kpi':'قياس العمليات وتحليل الأداء','mgmtreview':'مراجعة الإدارة','corrective':'الإجراءات التصحيحية','improvement':'التحسين المستمر','internalaudit':'المراجعة الداخلية',
+  'docsinfo':'توثيق المعلومات','privacy':'البيانات الشخصية والخصوصية','satisfaction':'قياس رضا المستفيدين','knowledge':'المعرفة المؤسسية والتواصل','suppliers':'الموردون والمستثمرون','regulations':'اللوائح والوثائق'
 };
 
 function showPage(id) {
@@ -1319,6 +2131,25 @@ function showPage(id) {
 }
 
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+function toggleCard(headEl) {
+  const card = headEl.closest('.person-card');
+  if (card) card.classList.toggle('expanded');
+}
+
+function goToProcedures(sectionId) {
+  showPage('processes');
+  setTimeout(() => {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.style.transition = 'background-color .3s ease';
+    const prevBg = el.style.backgroundColor;
+    el.style.backgroundColor = '#f5e9c8';
+    setTimeout(() => { el.style.backgroundColor = prevBg; }, 1800);
+  }, 150);
+  return false;
+}
 
 // ═══════ SEARCH ═══════
 let searchIndex = [];
@@ -1430,6 +2261,8 @@ function goToSearchResult(pageId, query) {
       if (node.textContent.toLowerCase().includes(q)) {
         const parent = node.parentElement;
         if (parent) {
+          const card = parent.closest('.person-card');
+          if (card && !card.classList.contains('expanded')) card.classList.add('expanded');
           parent.scrollIntoView({ behavior: 'smooth', block: 'center' });
           const original = parent.style.transition;
           parent.style.transition = 'background-color .3s ease';
