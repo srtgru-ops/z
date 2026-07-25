@@ -161,18 +161,83 @@
   }
   const PERIODS=generatePeriods(WEEKLY_REPORT_YEAR);
 
+  /* مزامنة التقارير مع Firebase Realtime Database */
+  const FIREBASE_DATABASE_URL="https://ut-weekly-reports-default-rtdb.europe-west1.firebasedatabase.app";
+  const FIREBASE_WEEKLY_PATH="weeklyReports";
   let memoryStore={};
-  function loadStore(){
+  let cloudLoaded=false;
+
+  function readLocalBackup(){
     try{
       const raw=localStorage.getItem(WEEKLY_STORAGE_KEY);
       const v=JSON.parse(raw||"{}");
-      memoryStore=v&&typeof v==="object"?v:{};
-      return memoryStore;
-    }catch(e){return memoryStore&&typeof memoryStore==="object"?memoryStore:{}}
+      return v&&typeof v==="object"?v:{};
+    }catch(e){return {}}
   }
-  function saveStore(store){
+
+  function saveLocalBackup(store){
+    try{
+      localStorage.setItem(WEEKLY_STORAGE_KEY,JSON.stringify(store||{}));
+      return true;
+    }catch(e){return false}
+  }
+
+  function loadStore(){
+    return memoryStore&&typeof memoryStore==="object"?memoryStore:{};
+  }
+
+  async function fetchCloudStore(){
+    const response=await fetch(`${FIREBASE_DATABASE_URL}/${FIREBASE_WEEKLY_PATH}.json`,{
+      method:"GET",
+      cache:"no-store"
+    });
+    if(!response.ok)throw new Error(`Firebase read failed: ${response.status}`);
+    const data=await response.json();
+    return data&&typeof data==="object"?data:{};
+  }
+
+  async function uploadCloudStore(store){
+    const response=await fetch(`${FIREBASE_DATABASE_URL}/${FIREBASE_WEEKLY_PATH}.json`,{
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(store||{})
+    });
+    if(!response.ok)throw new Error(`Firebase write failed: ${response.status}`);
+    return true;
+  }
+
+  async function initializeStore(){
+    const local=readLocalBackup();
+    try{
+      const remote=await fetchCloudStore();
+      if(Object.keys(remote).length){
+        memoryStore=remote;
+        saveLocalBackup(remote);
+      }else{
+        memoryStore=local;
+        if(Object.keys(local).length)await uploadCloudStore(local);
+      }
+      cloudLoaded=true;
+    }catch(error){
+      console.error("تعذر تحميل البيانات من Firebase:",error);
+      memoryStore=local;
+      cloudLoaded=false;
+      showMessage("تعذر الاتصال بالحفظ السحابي؛ سيتم استخدام النسخة المحلية مؤقتًا.",false);
+    }
+  }
+
+  async function saveStore(store){
     memoryStore=store&&typeof store==="object"?store:{};
-    try{localStorage.setItem(WEEKLY_STORAGE_KEY,JSON.stringify(memoryStore));return true}catch(e){return false}
+    saveLocalBackup(memoryStore);
+    try{
+      await uploadCloudStore(memoryStore);
+      cloudLoaded=true;
+      return true;
+    }catch(error){
+      console.error("تعذر الحفظ في Firebase:",error);
+      cloudLoaded=false;
+      return false;
+    }
   }
 
   function splitLegacyInvestmentEmployeesReport(report){
@@ -191,7 +256,7 @@
     const base={...source};delete base.items;
     return {investment:{...base,items:investmentItems},employees:{...base,responsible:"",people:Array.isArray(source.people)?source.people:[],items:employeeItems}};
   }
-  function migrateLegacyInvestmentEmployeesReports(){
+  async function migrateLegacyInvestmentEmployeesReports(){
     const store=loadStore();
     if(store.__investmentEmployeesSplitV3)return;
     Object.keys(store).forEach(periodId=>{
@@ -204,11 +269,22 @@
       delete store[periodId]["investment-employees"];
     });
     store.__investmentEmployeesSplitV3=true;
-    saveStore(store);
+    await saveStore(store);
   }
   function getReport(periodId,deptId){return loadStore()?.[periodId]?.[deptId]||null}
-  function setReport(periodId,deptId,data){const store=loadStore();if(!store[periodId])store[periodId]={};store[periodId][deptId]=data;return saveStore(store)}
-  function deleteReport(periodId,deptId){const store=loadStore();if(store[periodId]?.[deptId]){delete store[periodId][deptId];saveStore(store)}}
+  async function setReport(periodId,deptId,data){
+    const store=loadStore();
+    if(!store[periodId])store[periodId]={};
+    store[periodId][deptId]=data;
+    return await saveStore(store);
+  }
+  async function deleteReport(periodId,deptId){
+    const store=loadStore();
+    if(store[periodId]?.[deptId]){
+      delete store[periodId][deptId];
+      await saveStore(store);
+    }
+  }
   function currentPeriodIndex(){const now=new Date();if(now.getFullYear()<WEEKLY_REPORT_YEAR)return 0;if(now.getFullYear()>WEEKLY_REPORT_YEAR)return PERIODS.length-1;let found=0;PERIODS.forEach((p,i)=>{if(p.start<=now)found=i});return found}
   function selectedPeriod(){return PERIODS.find(p=>p.id===selectedPeriodId)||PERIODS[currentPeriodIndex()]}
   function reportState(report){if(!report?.items?.length)return {label:"لم يتم الإدخال",className:"empty"};if(report.status==="complete")return {label:"مكتمل",className:"complete"};return {label:"مسودة",className:"draft"}}
@@ -257,14 +333,21 @@
 
   function chooseDepartment(index){selectedDepartmentIndex=index;$("departmentSelect").value=String(index);loadForm()}
   function collectItems(){return [...document.querySelectorAll(".entry-row")].map(row=>({statement:row.querySelector(".statement").value.trim(),quantity:row.querySelector(".quantity").value.trim(),status:row.querySelector(".status").value,notes:row.querySelector(".notes").value.trim()})).filter(x=>x.statement||x.quantity||x.notes)}
-  function saveReport(status){
+  async function saveReport(status){
     const items=collectItems();if(!items.length){showMessage("أضف بندًا واحدًا على الأقل قبل الحفظ.",false);return}
     const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];
-    const saved=setReport(period.id,dept.id,{responsible:$("responsibleInput").value.trim()||dept.defaultResponsible,status,updatedAt:new Date().toISOString(),items});
-    if(!saved){showMessage("تعذر حفظ البيانات لأن المتصفح منع التخزين المحلي. جرّب تحديث الصفحة أو السماح ببيانات المواقع.",false);return}
-    showMessage(status==="complete"?"تم اعتماد التقرير، وسيظهر تلقائيًا في صفحة الإدارات.":"تم حفظ التقرير كمسودة، وسيظهر تلقائيًا في صفحة الإدارات.",true);renderDepartmentCards();renderSummary();$("formState").textContent=status==="complete"?"مكتمل":"مسودة";
+    const saved=await setReport(period.id,dept.id,{responsible:$("responsibleInput").value.trim()||dept.defaultResponsible,status,updatedAt:new Date().toISOString(),items});
+    if(!saved){showMessage("تم حفظ نسخة محلية فقط، لكن تعذر الحفظ في Firebase. تحقق من الإنترنت وقواعد قاعدة البيانات.",false);return}
+    showMessage(status==="complete"?"تم اعتماد التقرير وحفظه سحابيًا.":"تم حفظ التقرير كمسودة في Firebase.",true);
+    renderDepartmentCards();renderSummary();$("formState").textContent=status==="complete"?"مكتمل":"مسودة";
   }
-  function clearReport(){const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];if(!confirm("هل تريد مسح تقرير هذه الإدارة للأسبوع المحدد؟"))return;deleteReport(period.id,dept.id);loadForm();showMessage("تم مسح بيانات التقرير.",true)}
+  async function clearReport(){
+    const period=selectedPeriod(),dept=WEEKLY_DEPARTMENTS[selectedDepartmentIndex];
+    if(!confirm("هل تريد مسح تقرير هذه الإدارة للأسبوع المحدد؟"))return;
+    await deleteReport(period.id,dept.id);
+    loadForm();
+    showMessage("تم مسح بيانات التقرير من Firebase.",true);
+  }
   function showMessage(text,success){const m=$("message");m.textContent=text;m.className=`message show ${success?"success":"error"}`}
   function hideMessage(){$("message").className="message"}
 
@@ -306,18 +389,28 @@
     }
   }
 
-  function init(){
+  async function init(){
     if(!storageIsAvailable()){
-      showMessage("المتصفح يمنع حفظ البيانات محليًا. افتح الصفحة من رابط GitHub Pages العادي وتأكد أن التخزين المحلي غير محظور.",false);
+      showMessage("المتصفح يمنع النسخة الاحتياطية المحلية، لكن الحفظ السحابي سيظل يعمل عند توفر الإنترنت.",false);
     }
-    migrateLegacyInvestmentEmployeesReports();
+    await initializeStore();
+    await migrateLegacyInvestmentEmployeesReports();
     let stored="";try{stored=localStorage.getItem(WEEKLY_SELECTED_PERIOD_KEY)||""}catch(e){}
     selectedPeriodId=PERIODS.some(p=>p.id===stored)?stored:PERIODS[currentPeriodIndex()].id;
     $("weekSelect").innerHTML=PERIODS.map(p=>`<option value="${p.id}">${esc(p.label)}</option>`).join("");$("weekSelect").value=selectedPeriodId;
     $("departmentSelect").innerHTML=WEEKLY_DEPARTMENTS.map((d,i)=>`<option value="${i}">${d.name_ar}</option>`).join("");
     $("weekSelect").addEventListener("change",()=>{selectedPeriodId=$("weekSelect").value;localStorage.setItem(WEEKLY_SELECTED_PERIOD_KEY,selectedPeriodId);loadForm()});
     $("departmentSelect").addEventListener("change",()=>chooseDepartment(Number($("departmentSelect").value)||0));
-    window.addEventListener("storage",e=>{if(e.key===WEEKLY_STORAGE_KEY)loadForm()});
+    window.addEventListener("storage",e=>{
+      if(e.key===WEEKLY_STORAGE_KEY){
+        memoryStore=readLocalBackup();
+        loadForm();
+      }
+    });
+    window.addEventListener("online",async()=>{
+      await initializeStore();
+      loadForm();
+    });
     loadForm();
   }
   init();
