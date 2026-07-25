@@ -41,6 +41,16 @@ body{font-family:'Tajawal',sans-serif;background:var(--off);color:var(--text);di
 .topbar-title{font-size:1rem;font-weight:700;color:var(--navy)}
 .topbar-sub{font-size:.75rem;color:var(--gray);margin-top:.1rem}
 .topbar-actions{display:flex;gap:.75rem;align-items:center}
+.home-return-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  min-height:42px;padding:.55rem 1rem;border-radius:12px;text-decoration:none;
+  background:linear-gradient(135deg,var(--navy),#14663f);color:#fff;
+  border:1px solid rgba(201,168,76,.55);box-shadow:0 7px 18px rgba(11,77,51,.16);
+  font-size:.8rem;font-weight:800;white-space:nowrap;transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.home-return-btn .home-icon{color:var(--gold-light);font-size:1rem;line-height:1}
+.home-return-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(11,77,51,.23);filter:brightness(1.05)}
+.home-return-btn:focus-visible{outline:3px solid rgba(201,168,76,.38);outline-offset:3px}
 
 /* PAGE */
 .page{display:none;padding:2rem;max-width:1100px}
@@ -216,7 +226,7 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
 .mobile-toggle{display:none;position:fixed;top:1rem;right:1rem;z-index:300;background:var(--navy);color:var(--gold);border:none;width:44px;height:44px;border-radius:10px;font-size:1.2rem;cursor:pointer}
 
 /* PRINT */
-@media print{.sidebar,.topbar,.mobile-toggle{display:none!important}.main{margin-right:0!important}.page{display:block!important;break-before:page}}
+@media print{.sidebar,.topbar,.mobile-toggle,.home-return-btn{display:none!important}.main{margin-right:0!important}.page{display:block!important;break-before:page}}
 
 @media(max-width:900px){
   .sidebar{transform:translateX(100%);transition:transform .3s}
@@ -226,11 +236,18 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
   .pdca{grid-template-columns:repeat(2,1fr)}
 }
 
+@media(max-width:900px){
+  .topbar{padding:.75rem 4.5rem .75rem 1rem;gap:.75rem}
+  .home-return-btn{min-height:40px;padding:.5rem .8rem;font-size:.75rem}
+}
+@media(max-width:560px){
+  .topbar{align-items:flex-start;flex-wrap:wrap}
+  .home-return-btn{width:100%;margin-top:.2rem}
+}
+
 .fade-in{animation:fadeIn .4s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-.portal-home-link{color:#fff;background:rgba(201,168,76,.12);border-right-color:var(--gold);font-weight:700;margin-bottom:.35rem}
-.portal-home-link:hover{background:rgba(201,168,76,.22);color:var(--gold-light)}
 </style>
 </head>
 <body>
@@ -246,7 +263,6 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
   </div>
   <div class="sidebar-nav">
     <div class="nav-group-label">الرئيسية</div>
-    <a class="nav-item portal-home-link" href="index.html"><span class="icon">↩️</span> العودة لبوابة الأداء والجودة</a>
     <a class="nav-item active" onclick="showPage('home')" href="#"><span class="icon">🏠</span> الصفحة الرئيسية</a>
     <a class="nav-item" onclick="showPage('scope')" href="#"><span class="icon">📋</span> نطاق التطبيق</a>
     <a class="nav-item" onclick="showPage('policy')" href="#"><span class="icon">📜</span> سياسة الجودة</a>
@@ -300,6 +316,10 @@ mark.hit-highlight{background:var(--gold-light);color:var(--navy);border-radius:
       <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
       <div class="search-results" id="searchResults"></div>
     </div>
+    <a class="home-return-btn" href="index.html" aria-label="العودة إلى الصفحة الرئيسية">
+      <span class="home-icon">⌂</span>
+      <span>العودة إلى الصفحة الرئيسية</span>
+    </a>
   </div>
 
   <!-- ══════════ HOME ══════════ -->
