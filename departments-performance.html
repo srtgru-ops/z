@@ -3446,6 +3446,7 @@
           { name_ar:"مكتب التوظيف والإرشاد المهني", name_en:"Employment Office", score:100, status:"ontime" },
           { name_ar:"إدارة المنح الدراسية", name_en:"Student Grants", score:100, status:"ontime" },
           { name_ar:"إدارة النشاط الرياضي", name_en:"Sports Activities", score:100, status:"ontime" },
+          { name_ar:"إدارة الأنشطة الطلابية", name_en:"Student Activities", score:0, status:"missing" },
           { name_ar:"وحدة عشائر الجوالة", name_en:"Scout Unit", score:100, status:"ontime" },
           { name_ar:"مركز محترف", name_en:"Professional Center", score:100, status:"ontime" }
         ],
@@ -7138,6 +7139,42 @@
         </div>
       </div>`;
 
+      const studentActivitiesPanel = `<div class="detail-panel">
+        <div class="detail-panel-head">
+          <div>
+            <h4>🎭 تفصيل شهري للأداء التشغيلي</h4>
+            <p>ملخص مؤشرات إدارة الأنشطة الطلابية — للقراءة فقط.</p>
+          </div>
+          <span class="tag" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.18)">${d.name_ar}</span>
+        </div>
+        <div class="detail-table-wrap">
+          <div class="detail-quarter-box active" data-quarter="Q1">
+            <table class="detail-month-table">
+              <thead><tr><th>البند</th><th>الرقم</th></tr></thead>
+              <tbody>
+                <tr><td class="metric-cell">عدد الأنشطة والبرامج المنفذة</td><td>211</td></tr>
+                <tr><td class="metric-cell">عدد المنضمين للأنشطة الطلابية</td><td>549</td></tr>
+                <tr><td class="metric-cell">عدد المنشورات</td><td>548</td></tr>
+                <tr><td class="metric-cell">عدد الأنشطة بعد الساعة 2:00م</td><td>93</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="detail-quarter-box" data-quarter="Q2">
+            <table class="detail-month-table">
+              <thead><tr><th>البند</th><th>الرقم</th></tr></thead>
+              <tbody>
+                <tr><td class="metric-cell">عدد البرامج المنفذة</td><td>15</td></tr>
+                <tr><td class="metric-cell">عدد الأنشطة المنفذة</td><td>84</td></tr>
+                <tr><td class="metric-cell">عدد المنضمين للأنشطة الطلابية</td><td>397</td></tr>
+                <tr><td class="metric-cell">عدد المنشورات</td><td>321</td></tr>
+                <tr><td class="metric-cell">عدد الأنشطة بعد الساعة 2:00م</td><td>81</td></tr>
+                <tr><td class="metric-cell">عدد الفرص التطوعية المرفوعة</td><td>21</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+
       const sportsActivityPanel = `<div class="detail-panel">
         <div class="detail-panel-head">
           <div>
@@ -7152,7 +7189,11 @@
         </div>
       </div>`;
 
-      const performanceDetailPanel = isSportsDept ? sportsActivityPanel : genericMonthlyPanel;
+      const performanceDetailPanel = isSportsDept
+        ? sportsActivityPanel
+        : d.name_ar === "إدارة الأنشطة الطلابية"
+          ? studentActivitiesPanel
+          : genericMonthlyPanel;
       const muhtarafFinancePanel = d.name_ar === "مركز محترف" ? buildMuhtarafFinancePanel(index, "Q1") : "";
 
       detail.innerHTML = `<div class="dept-detail-toolbar">
