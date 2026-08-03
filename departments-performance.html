@@ -1030,6 +1030,7 @@
     .score-badge.slight{background:rgba(240,180,41,.15);color:#8a6400}
     .score-badge.excuse{background:rgba(87,92,199,.12);color:#3941aa}
     .score-badge.noexcuse{background:rgba(228,88,88,.12);color:#9f2828}
+    .score-badge.noevidence{background:rgba(245,158,11,.14);color:#9a5b00}
     .score-badge.missing{background:rgba(156,163,175,.16);color:#475569}
     .mini-kpis{
       display:grid;
@@ -1249,6 +1250,7 @@
     .dept-status-badge.slight{background:rgba(240,180,41,.15);color:#8a6400}
     .dept-status-badge.excuse{background:rgba(87,92,199,.12);color:#3941aa}
     .dept-status-badge.noexcuse{background:rgba(228,88,88,.12);color:#9f2828}
+    .dept-status-badge.noevidence{background:rgba(245,158,11,.14);color:#9a5b00}
     .dept-status-badge.missing{background:rgba(156,163,175,.16);color:#475569}
     .mini-kpi-grid{
       display:grid;
@@ -2577,7 +2579,7 @@
     };
 
     const statusLabels = {
-      all:{ar:"الكل",en:"All"}, ontime:{ar:"ملتزم",en:"Compliant"}, slight:{ar:"متأخر قليلاً",en:"Slightly Late"}, excuse:{ar:"متأخر بعذر",en:"Late w/ Excuse"}, noexcuse:{ar:"متأخر بدون عذر",en:"Late Without Excuse"}, missing:{ar:"لم يُرسَل",en:"Not Submitted"}
+      all:{ar:"الكل",en:"All"}, ontime:{ar:"ملتزم",en:"Compliant"}, slight:{ar:"متأخر قليلاً",en:"Slightly Late"}, excuse:{ar:"متأخر بعذر",en:"Late w/ Excuse"}, noexcuse:{ar:"متأخر بدون عذر",en:"Late Without Excuse"}, noevidence:{ar:"أرسل ولكن من غير شواهد",en:"Submitted without evidence"}, missing:{ar:"لم يُرسَل",en:"Not Submitted"}
     };
 
     const SENSITIVE_ACCESS_HASH = "884222efb729780eb7860a80398c145ae4fa0f65f8192258344f1cc553981adc";
@@ -2625,7 +2627,8 @@
       { name_ar:"إدارة النشاط الرياضي", name_en:"Sports Activities", score:60, status:"noexcuse" },
       { name_ar:"وحدة ذوي الإعاقة", name_en:"Disability Unit", score:65, status:"noexcuse" },
       { name_ar:"إدارة المنح الدراسية", name_en:"Student Grants", score:0, status:"missing" },
-      { name_ar:"إدارة العمل التطوعي", name_en:"Volunteer Work", score:0, status:"missing" }
+      { name_ar:"إدارة العمل التطوعي", name_en:"Volunteer Work", score:100, status:"ontime" },
+      { name_ar:"وحدة عشائر الجوالة", name_en:"Scout Unit", score:100, status:"ontime" }
     ];
 
     const DEPARTMENT_TARGETS = [
@@ -3446,7 +3449,8 @@
           { name_ar:"مكتب التوظيف والإرشاد المهني", name_en:"Employment Office", score:100, status:"ontime" },
           { name_ar:"إدارة المنح الدراسية", name_en:"Student Grants", score:100, status:"ontime" },
           { name_ar:"إدارة النشاط الرياضي", name_en:"Sports Activities", score:100, status:"ontime" },
-          { name_ar:"إدارة الأنشطة الطلابية", name_en:"Student Activities", score:0, status:"missing" },
+          { name_ar:"إدارة الأنشطة الطلابية", name_en:"Student Activities", score:100, status:"ontime" },
+          { name_ar:"وحدة ذوي الإعاقة", name_en:"Disability Unit", score:50, status:"noevidence" },
           { name_ar:"وحدة عشائر الجوالة", name_en:"Scout Unit", score:100, status:"ontime" },
           { name_ar:"مركز محترف", name_en:"Professional Center", score:100, status:"ontime" }
         ],
@@ -3625,7 +3629,7 @@
       return n ?? "—";
     };
     const nameOf = (d, key) => lang === "ar" ? (d[key + "_ar"] || d[key]) : d[key];
-    const statusColor = (status) => status === "ontime" ? COLORS.green : status === "excuse" ? COLORS.amber : status === "noexcuse" ? COLORS.red : COLORS.gray;
+    const statusColor = (status) => status === "ontime" ? COLORS.green : (status === "excuse" || status === "noevidence") ? COLORS.amber : status === "noexcuse" ? COLORS.red : COLORS.gray;
     const scoreColor = (score) => score >= 90 ? COLORS.green : score >= 80 ? COLORS.amber : score >= 60 ? COLORS.red : COLORS.gray;
 
     function setTheme(){
@@ -5414,6 +5418,37 @@
       "mainScore:4:Q1":"65",
       "mainStatus:4:Q1":"noexcuse",
       "rec:4:Q1:1":"يتم عقد اجتماع لمراجعة الأداء، وتتولى إدارة العمادة تحديد الوقت والتنسيق مع الجهة.",
+      "month:4:0:Q2:1":"1",
+      "month:4:0:Q2:2":"1",
+      "month:4:0:Q2:3":"0",
+      "op:4:0:Q2":"2",
+      "month:4:1:Q2:1":"1",
+      "month:4:1:Q2:2":"1",
+      "month:4:1:Q2:3":"0",
+      "op:4:1:Q2":"2",
+      "month:4:2:Q2:1":"4",
+      "month:4:2:Q2:2":"4",
+      "month:4:2:Q2:3":"0",
+      "op:4:2:Q2":"8",
+      "month:4:3:Q2:1":"155",
+      "month:4:3:Q2:2":"155",
+      "month:4:3:Q2:3":"155",
+      "op:4:3:Q2":"155",
+      "month:4:4:Q2:1":"173",
+      "month:4:4:Q2:2":"173",
+      "month:4:4:Q2:3":"173",
+      "op:4:4:Q2":"173",
+      "month:4:5:Q2:1":"الرد خلال مدة العمل من يوم إلى أسبوع",
+      "month:4:5:Q2:2":"الرد خلال مدة العمل من يوم إلى أسبوع",
+      "month:4:5:Q2:3":"الرد خلال مدة العمل من يوم إلى أسبوع",
+      "op:4:5:Q2":"الرد خلال مدة العمل من يوم إلى أسبوع",
+      "month:4:6:Q2:1":"99",
+      "month:4:6:Q2:2":"99",
+      "month:4:6:Q2:3":"99",
+      "op:4:6:Q2":"99",
+      "op:4:7:Q2":"حركية، بصرية، سمعية، تشوهات خلقية",
+      "mainScore:4:Q2":"50",
+      "mainStatus:4:Q2":"noevidence",
       "month:5:0:Q1:1":"0",
       "month:5:0:Q1:2":"0",
       "month:5:0:Q1:3":"0",
@@ -5463,6 +5498,8 @@
       "op:6:2:Q1":"105",
       "mainScore:6:Q1":"90",
       "mainStatus:6:Q1":"excuse",
+      "mainScore:6:Q2":"100",
+      "mainStatus:6:Q2":"ontime",
       "rec:6:Q1:1":"يتم اعتماد السنة الميلادية في خطة الأنشطة الطلابية لتوافق قياس الأرباع السنوية والسنة المالية.",
       "rec:6:Q1:2":"دراسة تقديم دعم للأندية الطلابية لدعم تحقيق الاستبقاء الطلابي.",
       "rec:6:Q1:3":"إرسال خطاب إلى وكيل الجامعة لتوفير موظفة أمن خاصة بالأنشطة الطلابية ودعم الاستبقاء.",
@@ -5472,8 +5509,8 @@
       "rec:7:Q1:1":"تعديل نموذج المتابعة لموافقة الموسم الرياضي وتوسيع عمل الإدارة ليغطي السنة الميلادية.",
       "rec:7:Q1:2":"تحسين خطة استهداف الموسم القادم.",
       "rec:7:Q1:3":"توسيع نطاق الفئات المستهدفة للإدارة لتشمل أعضاء هيئة التدريس والموظفين والطلاب الناشطين.",
-      "mainScore:8:Q1":"0",
-      "mainStatus:8:Q1":"missing",
+      "mainScore:8:Q1":"100",
+      "mainStatus:8:Q1":"ontime",
       "mainScore:8:Q2":"100",
       "mainStatus:8:Q2":"ontime",
       "month:9:0:Q1:1":"0",
@@ -5508,8 +5545,8 @@
       "month:9:7:Q1:2":"0",
       "month:9:7:Q1:3":"0",
       "op:9:7:Q1":"0",
-      "mainScore:9:Q1":"0",
-      "mainStatus:9:Q1":"missing",
+      "mainScore:9:Q1":"100",
+      "mainStatus:9:Q1":"ontime",
       "rec:9:Q1:1":"يتم عقد اجتماع لمناقشة التعثر، وتتولى إدارة العمادة تحديد الوقت والتنسيق مع الجهة.",
       "month:10:0:Q1:1":"1",
       "month:10:0:Q1:2":"1",
@@ -5987,7 +6024,7 @@
 
     function getOperationalValueType(name){
       const isPercent = /نسبة|رضا|التزام|إنجاز|انجاز|تغطية/.test(String(name || ""));
-      const isTextLike = /(تقييم|الأثر|قاعدة|اعتماد|إعداد|تحقيق|تنوع|سجل|أنواع)/.test(String(name || ""));
+      const isTextLike = /(تقييم|الأثر|قاعدة|اعتماد|إعداد|تحقيق|تنوع|سجل|أنواع|زمن الاستجابة)/.test(String(name || ""));
       if(isPercent) return "percent";
       if(isTextLike) return "text";
       return "number";
@@ -7246,6 +7283,7 @@
                   <option value="slight">متأخر قليلاً</option>
                   <option value="excuse">متأخر بعذر</option>
                   <option value="noexcuse">متأخر بدون عذر</option>
+                  <option value="noevidence">أرسل ولكن من غير شواهد</option>
                   <option value="missing">لم يرسل</option>
                 </select>
               </td>
@@ -7260,6 +7298,7 @@
                   <option value="slight">متأخر قليلاً</option>
                   <option value="excuse">متأخر بعذر</option>
                   <option value="noexcuse">متأخر بدون عذر</option>
+                  <option value="noevidence">أرسل ولكن من غير شواهد</option>
                   <option value="missing">لم يرسل</option>
                 </select>
               </td>
