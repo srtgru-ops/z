@@ -86,7 +86,7 @@
       align-items:center;
       justify-content:space-between;
       gap:18px;
-      flex-wrap:wrap;
+      flex-wrap:nowrap;
     }
     .brand{display:flex;align-items:center;gap:14px;min-width:260px}
     .brand-icon{
@@ -99,22 +99,45 @@
     }
     .brand h1{margin:0 0 4px;font-size:20px;letter-spacing:-.2px;line-height:1.25}
     .brand p{margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.5}
-    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .header-tools{position:relative;margin-inline-start:auto;z-index:30}
+    .menu-toggle{
+      width:58px;height:58px;padding:0;display:grid;place-content:center;gap:6px;
+      border-radius:20px;border:2px solid rgba(222,230,238,.96);background:#fff;
+      color:var(--purple);cursor:pointer;box-shadow:0 8px 20px rgba(3,32,49,.14);
+      transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
+    }
+    .menu-toggle:hover,.menu-toggle[aria-expanded="true"]{
+      transform:translateY(-2px);background:#F7FAFC;box-shadow:0 12px 26px rgba(3,32,49,.20);
+    }
+    .menu-toggle:focus-visible{outline:3px solid rgba(255,255,255,.78);outline-offset:3px}
+    .menu-line{display:block;width:26px;height:4px;border-radius:999px;background:var(--purple);transition:transform .2s ease,opacity .2s ease}
+    .menu-toggle[aria-expanded="true"] .menu-line:nth-child(1){transform:translateY(10px) rotate(45deg)}
+    .menu-toggle[aria-expanded="true"] .menu-line:nth-child(2){opacity:0}
+    .menu-toggle[aria-expanded="true"] .menu-line:nth-child(3){transform:translateY(-10px) rotate(-45deg)}
+    .actions{
+      position:absolute;top:calc(100% + 13px);inset-inline-end:0;width:min(540px,calc(100vw - 32px));
+      display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;
+      border:1px solid rgba(218,226,235,.96);border-radius:22px;background:rgba(255,255,255,.98);
+      box-shadow:0 20px 42px rgba(3,32,49,.22);backdrop-filter:blur(16px);
+    }
+    .actions.is-open{display:grid;animation:menuReveal .18s ease-out}
+    @keyframes menuReveal{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
     .iso-pill,
     .btn{
-      height:38px;
+      height:46px;
       display:inline-flex;align-items:center;justify-content:center;gap:7px;
-      border-radius:999px;
-      padding:0 14px;
-      font-size:13px;
+      border-radius:14px;
+      padding:0 15px;
+      font-size:14px;
       font-weight:800;
       white-space:nowrap;
-      color:#fff;
-      background:rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.24);
+      color:#0C3547;
+      background:#F8FAFC;
+      border:1px solid #E1E8EF;
     }
-    .btn{cursor:pointer;font-family:inherit;transition:.2s ease}
-    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.22)}
+    .btn{cursor:pointer;font-family:inherit;transition:.2s ease;text-decoration:none}
+    .btn:hover{transform:translateY(-1px);background:var(--green-soft);border-color:rgba(29,158,117,.35)}
+    .home-inline-btn{grid-column:1 / -1}
 
     .container{max-width:1500px;margin:auto;padding:24px clamp(14px, 3vw, 34px) 44px}
 
@@ -485,7 +508,7 @@
       .hero{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(3, 1fr)}.grid{grid-template-columns:1fr}.full{grid-column:auto}
     }
     @media(max-width:760px){
-      .topbar-inner{align-items:flex-start}.brand{min-width:0}.brand-icon{width:50px;height:50px;border-radius:16px}.brand h1{font-size:17px}.brand p{font-size:12px}
+      .topbar{padding:12px 16px}.topbar-inner{align-items:center}.brand{min-width:0;gap:10px}.brand-icon{width:50px;height:50px;border-radius:16px}.brand h1{font-size:17px}.brand p{font-size:12px}.menu-toggle{width:52px;height:52px;border-radius:18px}.actions{width:min(360px,calc(100vw - 32px));grid-template-columns:1fr}.home-inline-btn{grid-column:auto}
       .container{padding-top:16px}.hero-card{padding:18px}.summary-panel{padding:14px}.kpi-grid{grid-template-columns:repeat(2, 1fr)}
       .toolbar{align-items:flex-start}.toolbar-note{width:100%}.score-row{grid-template-columns:1fr;gap:8px}.score-value{text-align:start;width:max-content;min-width:62px}.donut-layout{grid-template-columns:1fr}.coverage-row{grid-template-columns:1fr}.coverage-pct{text-align:start}.chart-card{padding:16px}.chart-box{min-height:315px}.chart-box.compact{min-height:275px}
     }
@@ -932,7 +955,7 @@
     @media(max-width:900px){.quarter-overview{grid-template-columns:repeat(2, minmax(130px, 1fr))}.quarter-compare-grid{grid-template-columns:1fr}}
     @media(max-width:430px){.quarter-overview{grid-template-columns:1fr}.quarter-compare-row{grid-template-columns:76px 1fr 70px}}
 
-    @media print{.topbar{position:static}.actions,.toolbar{display:none}.chart-card,.kpi-card,.hero-card,.summary-panel,.insights{box-shadow:none}body{background:#fff}}
+    @media print{.topbar{position:static}.header-tools,.toolbar{display:none}.chart-card,.kpi-card,.hero-card,.summary-panel,.insights{box-shadow:none}body{background:#fff}}
   
     .month-input,
     .sports-category-input,
@@ -2290,11 +2313,11 @@
   
     .home-inline-btn{
       text-decoration:none;
-      background:rgba(255,255,255,.18);
-      border-color:rgba(255,255,255,.34);
+      background:linear-gradient(135deg, var(--green-2), var(--green));
+      border-color:transparent;
       color:#fff;
     }
-    .home-inline-btn:hover{background:rgba(255,255,255,.28)}
+    .home-inline-btn:hover{background:linear-gradient(135deg, #0B5A46, #178864);border-color:transparent}
     .departments-actions .dept-page-btn:first-child{
       background:rgba(255,255,255,.26);
       border-color:rgba(255,255,255,.42);
@@ -2311,13 +2334,20 @@
           <p data-t="brandSub">جامعة تبوك • تقرير الأداء للربع الأول 2026</p>
         </div>
       </div>
-      <div class="actions">
-        <a class="btn home-inline-btn" href="./index.html" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</a>
-        <span class="iso-pill">ISO 9001:2015 ✓</span>
-        <button class="btn" id="themeBtn" type="button">🌙 الوضع الداكن</button>
-        <button class="btn" id="langBtn" type="button">English</button>
-        <button class="btn" type="button" onclick="window.print()" data-t="printBtn">طباعة / PDF</button>
-        <button class="btn" id="departmentsBtn" type="button">🏢 الإدارات</button>
+      <div class="header-tools">
+        <button class="menu-toggle" id="mainMenuBtn" type="button" aria-label="فتح قائمة الأدوات" aria-expanded="false" aria-controls="headerActions">
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+        </button>
+        <div class="actions" id="headerActions" aria-label="أدوات لوحة الأداء">
+          <a class="btn home-inline-btn" href="./index.html" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</a>
+          <span class="iso-pill">ISO 9001:2015 ✓</span>
+          <button class="btn" id="themeBtn" type="button">🌙 الوضع الداكن</button>
+          <button class="btn" id="langBtn" type="button">English</button>
+          <button class="btn" type="button" onclick="window.print()" data-t="printBtn">طباعة / PDF</button>
+          <button class="btn" id="departmentsBtn" type="button">🏢 الإدارات</button>
+        </div>
       </div>
     </div>
   </header>
@@ -7690,6 +7720,27 @@
       renderSummary(); renderKpis(); renderScoreList(); drawCharts(); renderInsights();
       updateSensitiveSections();
     }
+
+    const mainMenuBtn = $("mainMenuBtn");
+    const headerActions = $("headerActions");
+    function setMainMenu(open){
+      if(!mainMenuBtn || !headerActions) return;
+      headerActions.classList.toggle("is-open", open);
+      mainMenuBtn.setAttribute("aria-expanded", String(open));
+      mainMenuBtn.setAttribute("aria-label", open ? "إغلاق قائمة الأدوات" : "فتح قائمة الأدوات");
+    }
+    if(mainMenuBtn){
+      mainMenuBtn.addEventListener("click", () => setMainMenu(!headerActions.classList.contains("is-open")));
+    }
+    document.addEventListener("click", (event) => {
+      if(headerActions?.classList.contains("is-open") && !event.target.closest(".header-tools")) setMainMenu(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if(event.key === "Escape") setMainMenu(false);
+    });
+    document.querySelectorAll("#headerActions .btn").forEach(button => {
+      button.addEventListener("click", () => setMainMenu(false));
+    });
 
     $("themeBtn").addEventListener("click", () => { theme = theme === "dark" ? "light" : "dark"; localStorage.setItem("quarters_dashboard_theme", theme); renderAll(); });
     $("langBtn").addEventListener("click", () => { lang = lang === "ar" ? "en" : "ar"; renderAll(); });
