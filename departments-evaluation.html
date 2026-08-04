@@ -29,6 +29,10 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='130' viewBox='0 0 130 130'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-width='1'%3E%3Ccircle cx='65' cy='65' r='40'/%3E%3Cpath d='M65 40 L78 48 L78 78 L65 88 L52 78 L52 48 Z'/%3E%3C/g%3E%3C/svg%3E");
     background-size:150px 150px;
   }
+  .home-return{position:absolute;top:20px;right:20px;z-index:2;display:inline-flex;align-items:center;gap:7px;
+    min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);
+    color:#fff;text-decoration:none;font-size:13px;font-weight:700;transition:background .15s ease,transform .15s ease;}
+  .home-return:hover{background:rgba(255,255,255,.22);transform:translateY(-1px);}
   .emblem{width:72px;height:72px;border-radius:50%;margin:0 auto 14px;background:#FFFFFF;overflow:hidden;
     display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.25), inset 0 0 0 3px var(--accent);
     position:relative;z-index:1;}
@@ -87,7 +91,7 @@
 
   .loading-wrap{padding:40px 0;text-align:center;color:var(--text-muted);font-size:14px;}
 
-  @media (max-width:640px){ .card{padding:20px;} }
+  @media (max-width:640px){ .card{padding:20px;}.home-return{top:14px;right:14px;font-size:12px;min-height:36px;padding:7px 11px;} }
 </style>
 </head>
 <body>
@@ -299,6 +303,7 @@ function renderInner(){
 function render(){
   document.getElementById("app").innerHTML = `
     <div class="rate-page">
+      <a class="home-return" href="./index.html" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</a>
       <div class="rate-wrap">
         <div class="rate-intro">
           <div class="emblem"><img src="${LOGO_DATA_URI}" alt="شعار جامعة تبوك"></div>
