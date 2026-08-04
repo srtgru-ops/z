@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- تحديث: نقل داشبورد الإدارة أسفل المستهدفات الرسمية وإضافة مقارنة الربع الأول والثاني -->
+<!-- آخر تعديل: زر القائمة أقصى اليمين بلون أخضر داكن، مع حذف ISO وEnglish -->
 <html lang="ar" dir="rtl" data-theme="light">
 <head>
 <!-- النسخة المستقلة: تم تعطيل التحقق والتحويل إلى index.html مؤقتًا حتى يتم الربط لاحقًا -->
@@ -80,15 +81,19 @@
       box-shadow:0 14px 35px rgba(0,0,0,.15);
     }
     .topbar-inner{
-      max-width:1500px;
-      margin:auto;
+      max-width:none;
+      width:100%;
+      margin:0;
+      min-height:58px;
+      padding-right:76px;
+      position:relative;
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      justify-content:flex-start;
       gap:18px;
       flex-wrap:nowrap;
     }
-    .brand{display:flex;align-items:center;gap:14px;min-width:260px}
+    .brand{display:flex;align-items:center;gap:14px;min-width:260px;margin:0}
     .brand-icon{
       width:58px;height:58px;border-radius:18px;
       display:grid;place-items:center;
@@ -99,23 +104,23 @@
     }
     .brand h1{margin:0 0 4px;font-size:20px;letter-spacing:-.2px;line-height:1.25}
     .brand p{margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.5}
-    .header-tools{position:relative;margin-inline-start:auto;z-index:30}
+    .header-tools{position:absolute;right:0;top:50%;transform:translateY(-50%);margin:0;z-index:30}
     .menu-toggle{
-      width:58px;height:58px;padding:0;display:grid;place-content:center;gap:6px;
-      border-radius:20px;border:2px solid rgba(222,230,238,.96);background:#fff;
-      color:var(--purple);cursor:pointer;box-shadow:0 8px 20px rgba(3,32,49,.14);
+      width:54px;height:54px;padding:0;display:grid;place-content:center;gap:6px;
+      border-radius:17px;border:1px solid rgba(255,255,255,.30);background:rgba(4,69,66,.42);
+      color:#fff;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 18px rgba(3,32,49,.16);
       transition:transform .2s ease,background .2s ease,box-shadow .2s ease;
     }
     .menu-toggle:hover,.menu-toggle[aria-expanded="true"]{
-      transform:translateY(-2px);background:#F7FAFC;box-shadow:0 12px 26px rgba(3,32,49,.20);
+      transform:translateY(-1px);background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 12px 24px rgba(3,32,49,.20);
     }
     .menu-toggle:focus-visible{outline:3px solid rgba(255,255,255,.78);outline-offset:3px}
-    .menu-line{display:block;width:26px;height:4px;border-radius:999px;background:var(--purple);transition:transform .2s ease,opacity .2s ease}
+    .menu-line{display:block;width:25px;height:3px;border-radius:999px;background:#fff;transition:transform .2s ease,opacity .2s ease}
     .menu-toggle[aria-expanded="true"] .menu-line:nth-child(1){transform:translateY(10px) rotate(45deg)}
     .menu-toggle[aria-expanded="true"] .menu-line:nth-child(2){opacity:0}
     .menu-toggle[aria-expanded="true"] .menu-line:nth-child(3){transform:translateY(-10px) rotate(-45deg)}
     .actions{
-      position:absolute;top:calc(100% + 13px);inset-inline-end:0;width:min(540px,calc(100vw - 32px));
+      position:absolute;top:calc(100% + 13px);right:0;width:min(540px,calc(100vw - 32px));
       display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;
       border:1px solid rgba(218,226,235,.96);border-radius:22px;background:rgba(255,255,255,.98);
       box-shadow:0 20px 42px rgba(3,32,49,.22);backdrop-filter:blur(16px);
@@ -508,7 +513,7 @@
       .hero{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(3, 1fr)}.grid{grid-template-columns:1fr}.full{grid-column:auto}
     }
     @media(max-width:760px){
-      .topbar{padding:12px 16px}.topbar-inner{align-items:center}.brand{min-width:0;gap:10px}.brand-icon{width:50px;height:50px;border-radius:16px}.brand h1{font-size:17px}.brand p{font-size:12px}.menu-toggle{width:52px;height:52px;border-radius:18px}.actions{width:min(360px,calc(100vw - 32px));grid-template-columns:1fr}.home-inline-btn{grid-column:auto}
+      .topbar{padding:12px 16px}.topbar-inner{min-height:50px;padding-right:62px;align-items:center;gap:12px}.brand{min-width:0;gap:10px}.brand-icon{width:50px;height:50px;border-radius:16px}.brand h1{font-size:17px}.brand p{font-size:12px}.menu-toggle{width:50px;height:50px;border-radius:16px}.actions{width:min(360px,calc(100vw - 32px));grid-template-columns:1fr}.home-inline-btn{grid-column:auto}
       .container{padding-top:16px}.hero-card{padding:18px}.summary-panel{padding:14px}.kpi-grid{grid-template-columns:repeat(2, 1fr)}
       .toolbar{align-items:flex-start}.toolbar-note{width:100%}.score-row{grid-template-columns:1fr;gap:8px}.score-value{text-align:start;width:max-content;min-width:62px}.donut-layout{grid-template-columns:1fr}.coverage-row{grid-template-columns:1fr}.coverage-pct{text-align:start}.chart-card{padding:16px}.chart-box{min-height:315px}.chart-box.compact{min-height:275px}
     }
@@ -2342,9 +2347,7 @@
         </button>
         <div class="actions" id="headerActions" aria-label="أدوات لوحة الأداء">
           <a class="btn home-inline-btn" href="./index.html" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</a>
-          <span class="iso-pill">ISO 9001:2015 ✓</span>
           <button class="btn" id="themeBtn" type="button">🌙 الوضع الداكن</button>
-          <button class="btn" id="langBtn" type="button">English</button>
           <button class="btn" type="button" onclick="window.print()" data-t="printBtn">طباعة / PDF</button>
           <button class="btn" id="departmentsBtn" type="button">🏢 الإدارات</button>
         </div>
@@ -3670,7 +3673,7 @@
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
       document.querySelectorAll("[data-t]").forEach(el => el.textContent = tr(el.dataset.t));
-      $("langBtn").textContent = lang === "ar" ? "English" : "عربي";
+      if($("langBtn")) $("langBtn").textContent = lang === "ar" ? "English" : "عربي";
       document.querySelectorAll(".filter-btn").forEach(btn => btn.textContent = statusLabels[btn.dataset.filter][lang]);
       setTheme();
     }
@@ -7743,7 +7746,7 @@
     });
 
     $("themeBtn").addEventListener("click", () => { theme = theme === "dark" ? "light" : "dark"; localStorage.setItem("quarters_dashboard_theme", theme); renderAll(); });
-    $("langBtn").addEventListener("click", () => { lang = lang === "ar" ? "en" : "ar"; renderAll(); });
+    if($("langBtn")) $("langBtn").addEventListener("click", () => { lang = lang === "ar" ? "en" : "ar"; renderAll(); });
     document.querySelectorAll(".filter-btn").forEach(btn => btn.addEventListener("click", () => { document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); currentFilter = btn.dataset.filter; renderScoreList(); }));
     window.addEventListener("resize", () => { clearTimeout(window.__dashResize); window.__dashResize = setTimeout(drawCharts, 140); });
 
