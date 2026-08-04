@@ -1964,6 +1964,43 @@
     .department-view-only .weekly-delete-row{
       display:none !important;
     }
+    /* استثناء محدود: إدخال اتجاه الأنشطة الشهري للربع الثاني فقط. */
+    .student-activities-entry-note{
+      margin:0 0 12px;
+      padding:11px 13px;
+      border:1px solid rgba(29,158,117,.28);
+      border-radius:14px;
+      background:var(--green-soft);
+      color:var(--text);
+      font-size:12px;
+      font-weight:900;
+      line-height:1.75;
+    }
+    .student-activities-quarter-summary{
+      margin:0 0 12px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:var(--card-2);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      line-height:1.8;
+    }
+    .department-view-only .student-activities-live-input{
+      pointer-events:auto !important;
+      cursor:text !important;
+      opacity:1 !important;
+      color:var(--text) !important;
+      -webkit-text-fill-color:var(--text) !important;
+      background:var(--card) !important;
+      border:2px solid rgba(29,158,117,.52) !important;
+      box-shadow:0 0 0 3px rgba(29,158,117,.08) !important;
+    }
+    .department-view-only .student-activities-live-input:focus{
+      border-color:var(--green-2) !important;
+      box-shadow:0 0 0 4px rgba(29,158,117,.17) !important;
+      outline:none;
+    }
     @media(max-width:760px){
       .departments-navigation{grid-template-columns:1fr}
     }
@@ -2541,7 +2578,6 @@
         <div class="departments-actions">
           <a class="dept-page-btn" href="weekly-reports-entry.html" role="button">📝 إدخال التقارير الأسبوعية</a>
           <button class="dept-page-btn" type="button" onclick="window.location.href='index.html'">🏠 الصفحة الرئيسية</button>
-          <button class="dept-page-btn" id="departmentsBackBtn" type="button">رجوع للوحة الرئيسية</button>
           <button class="dept-page-btn" id="departmentsCloseBtn" type="button">إغلاق</button>
         </div>
       </div>
@@ -3403,9 +3439,9 @@
       { month:"Mar", month_ar:"مارس", expenditure:2588, net:10774.52 }
     ];
     const ACTIVITIES_DATA = [
-      { month:"Jan", month_ar:"يناير", students:145, activities:43, retention:16 },
-      { month:"Feb", month_ar:"فبراير", students:307, activities:113, retention:68 },
-      { month:"Mar", month_ar:"مارس", students:57, activities:48, retention:21 }
+      { month:"Jan", month_ar:"يناير", students:145, activities:43, receptionHours:16 },
+      { month:"Feb", month_ar:"فبراير", students:307, activities:113, receptionHours:68 },
+      { month:"Mar", month_ar:"مارس", students:57, activities:48, receptionHours:21 }
     ];
     const SPORTS_DATA = [
       { category:"Championships", category_ar:"البطولات", male:2010, female:3285 },
@@ -6115,6 +6151,94 @@
       return (DEPARTMENT_TARGETS || []).findIndex(d => normalizeArabicText(d.name_ar).includes(target));
     }
 
+    /*
+      بيانات اتجاه الأنشطة للربع الثاني مستقلة عن ملخص الربع؛ لأن الرسم يحتاج
+      أرقام أبريل ومايو ويونيو كلًّا على حدة. تحفظ محليًا حتى تبقى بعد تحديث الصفحة.
+    */
+    const STUDENT_ACTIVITIES_TREND_STORAGE_KEY = "student_affairs_activities_monthly_q2_v1";
+    const STUDENT_ACTIVITIES_TREND_METRICS = ["students", "activities", "receptionHours"];
+
+    function studentActivitiesTrendStorageKey(metric, monthNo){
+      return `Q2:${metric}:${monthNo}`;
+    }
+
+    function loadStudentActivitiesTrendData(){
+      try{
+        const raw = localStorage.getItem(STUDENT_ACTIVITIES_TREND_STORAGE_KEY);
+        const parsed = JSON.parse(raw || "{}");
+        if(!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {};
+        const clean = {};
+        STUDENT_ACTIVITIES_TREND_METRICS.forEach(metric => {
+          [1,2,3].forEach(monthNo => {
+            const key = studentActivitiesTrendStorageKey(metric, monthNo);
+            const value = parseDepartmentChartNumber(parsed[key]);
+            if(value !== null) clean[key] = String(value);
+          });
+        });
+        return clean;
+      }catch(e){
+        return {};
+      }
+    }
+
+    let studentActivitiesTrendData = loadStudentActivitiesTrendData();
+
+    function getStudentActivitiesTrendValue(metric, monthNo){
+      if(!STUDENT_ACTIVITIES_TREND_METRICS.includes(metric) || ![1,2,3].includes(Number(monthNo))) return null;
+      const input = document.querySelector(`[data-student-activities-input="${metric}_${monthNo}"]`);
+      const raw = input ? input.value : studentActivitiesTrendData[studentActivitiesTrendStorageKey(metric, monthNo)];
+      return parseDepartmentChartNumber(raw);
+    }
+
+    function getStudentActivitiesTrendInputValue(metric, monthNo){
+      const value = getStudentActivitiesTrendValue(metric, monthNo);
+      return value === null ? "" : String(value);
+    }
+
+    function getStudentActivitiesTrendSeries(metric){
+      return [1,2,3].map(monthNo => getStudentActivitiesTrendValue(metric, monthNo));
+    }
+
+    function persistStudentActivitiesTrendData(){
+      try{
+        localStorage.setItem(STUDENT_ACTIVITIES_TREND_STORAGE_KEY, JSON.stringify(studentActivitiesTrendData));
+      }catch(e){
+        // يظل التحديث الحالي ظاهرًا حتى لو كان التخزين المحلي محظورًا.
+      }
+    }
+
+    function refreshStudentActivitiesTrend(){
+      const deptIndex = findDepartmentIndexByName("الأنشطة الطلابية");
+      refreshDashboardViewsForQuarter("Q2");
+      if(deptIndex >= 0){
+        updateDepartmentLiveStrip(deptIndex, "Q2");
+        renderDepartmentCharts(deptIndex);
+      }
+    }
+
+    function saveStudentActivitiesTrendValue(metric, monthNo, value){
+      if(!STUDENT_ACTIVITIES_TREND_METRICS.includes(metric) || ![1,2,3].includes(Number(monthNo))) return;
+      const key = studentActivitiesTrendStorageKey(metric, monthNo);
+      const normalized = parseDepartmentChartNumber(value);
+      if(normalized === null){
+        delete studentActivitiesTrendData[key];
+      }else{
+        studentActivitiesTrendData[key] = String(normalized);
+      }
+      persistStudentActivitiesTrendData();
+      refreshStudentActivitiesTrend();
+    }
+
+    window.addEventListener("storage", event => {
+      if(event.key !== STUDENT_ACTIVITIES_TREND_STORAGE_KEY) return;
+      studentActivitiesTrendData = loadStudentActivitiesTrendData();
+      document.querySelectorAll("[data-student-activities-input]").forEach(input => {
+        const [metric, monthNo] = String(input.dataset.studentActivitiesInput || "").split("_");
+        input.value = getStudentActivitiesTrendInputValue(metric, Number(monthNo));
+      });
+      if(currentQuarter === "Q2") refreshStudentActivitiesTrend();
+    });
+
     function readMonthlyOperationalNumber(deptIndex, opIndex, quarter, monthNo){
       const selector = `[data-month-input="${deptIndex}_${opIndex}_${quarter}_${monthNo}"]`;
       const key = monthSaveKey(deptIndex, opIndex, quarter, monthNo);
@@ -6137,13 +6261,20 @@
       if(deptIndex < 0) return ACTIVITIES_DATA;
 
       // مؤشرات إدارة الأنشطة الطلابية:
-      // 0 = الطلبة المنضمون، 1 = الأنشطة المقامة، 2 = ساعات استقبال الطالب
-      const students = getDepartmentMonthlySeries(deptIndex, quarter, 0);
-      const activities = getDepartmentMonthlySeries(deptIndex, quarter, 1);
-      const receptionHours = getDepartmentMonthlySeries(deptIndex, quarter, 2);
+      // 0 = الطلبة المنضمون، 1 = الأنشطة المقامة، 2 = ساعات استقبال الطالب.
+      // في الربع الثاني تُعطى أولوية لمدخلات أبريل/مايو/يونيو من ملخص الأنشطة.
+      const savedStudents = getDepartmentMonthlySeries(deptIndex, quarter, 0);
+      const savedActivities = getDepartmentMonthlySeries(deptIndex, quarter, 1);
+      const savedReceptionHours = getDepartmentMonthlySeries(deptIndex, quarter, 2);
+      const enteredStudents = quarter === "Q2" ? getStudentActivitiesTrendSeries("students") : [null,null,null];
+      const enteredActivities = quarter === "Q2" ? getStudentActivitiesTrendSeries("activities") : [null,null,null];
+      const enteredReceptionHours = quarter === "Q2" ? getStudentActivitiesTrendSeries("receptionHours") : [null,null,null];
+      const students = savedStudents.map((value, i) => enteredStudents[i] ?? value);
+      const activities = savedActivities.map((value, i) => enteredActivities[i] ?? value);
+      const receptionHours = savedReceptionHours.map((value, i) => enteredReceptionHours[i] ?? value);
       const hasAny = [...students, ...activities, ...receptionHours].some(v => v !== null);
 
-      if(!hasAny) return ACTIVITIES_DATA;
+      if(!hasAny) return (QUARTER_DATA[quarter]?.activities || ACTIVITIES_DATA);
 
       return monthLabels.map((m, idx) => ({
         ...m,
@@ -7085,6 +7216,7 @@
       if(!root) return;
       root.classList.add("department-view-only");
       root.querySelectorAll("input, textarea, select").forEach(control => {
+        if(control.classList.contains("student-activities-live-input")) return;
         control.disabled = true;
         control.readOnly = true;
         control.tabIndex = -1;
@@ -7213,7 +7345,7 @@
         <div class="detail-panel-head">
           <div>
             <h4>🎭 تفصيل شهري للأداء التشغيلي</h4>
-            <p>ملخص مؤشرات إدارة الأنشطة الطلابية — للقراءة فقط.</p>
+            <p>ملخص مؤشرات إدارة الأنشطة الطلابية، مع ربط مباشر للرسم الشهري في الصفحة الرئيسية.</p>
           </div>
           <span class="tag" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.18)">${d.name_ar}</span>
         </div>
@@ -7230,15 +7362,29 @@
             </table>
           </div>
           <div class="detail-quarter-box" data-quarter="Q2">
+            <p class="student-activities-entry-note">✍️ أدخل أرقام أبريل ومايو ويونيو هنا؛ سيُحدَّث مخطط <b>اتجاه الأنشطة الطلابية الشهري</b> في الصفحة الرئيسية فورًا عند كل تعديل.</p>
+            <p class="student-activities-quarter-summary">ملخص الربع الثاني الحالي: 15 برنامجًا منفذًا • 84 نشاطًا منفذًا • 397 منضمًا للأنشطة • 321 منشورًا • 81 نشاطًا بعد الساعة 2:00م • 21 فرصة تطوعية. لا يوزَّع إجمالي الربع تلقائيًا على الأشهر حتى لا تظهر أرقام غير دقيقة في الرسم.</p>
             <table class="detail-month-table">
-              <thead><tr><th>البند</th><th>الرقم</th></tr></thead>
+              <thead><tr><th>المؤشر الذي يظهر في الرسم</th><th>أبريل</th><th>مايو</th><th>يونيو</th></tr></thead>
               <tbody>
-                <tr><td class="metric-cell">عدد البرامج المنفذة</td><td>15</td></tr>
-                <tr><td class="metric-cell">عدد الأنشطة المنفذة</td><td>84</td></tr>
-                <tr><td class="metric-cell">عدد المنضمين للأنشطة الطلابية</td><td>397</td></tr>
-                <tr><td class="metric-cell">عدد المنشورات</td><td>321</td></tr>
-                <tr><td class="metric-cell">عدد الأنشطة بعد الساعة 2:00م</td><td>81</td></tr>
-                <tr><td class="metric-cell">عدد الفرص التطوعية المرفوعة</td><td>21</td></tr>
+                <tr>
+                  <td class="metric-cell">عدد المنضمين للأنشطة الطلابية</td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="students_1" value="${getStudentActivitiesTrendInputValue("students", 1)}" oninput="saveStudentActivitiesTrendValue('students', 1, this.value)" aria-label="عدد المنضمين للأنشطة في أبريل"></td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="students_2" value="${getStudentActivitiesTrendInputValue("students", 2)}" oninput="saveStudentActivitiesTrendValue('students', 2, this.value)" aria-label="عدد المنضمين للأنشطة في مايو"></td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="students_3" value="${getStudentActivitiesTrendInputValue("students", 3)}" oninput="saveStudentActivitiesTrendValue('students', 3, this.value)" aria-label="عدد المنضمين للأنشطة في يونيو"></td>
+                </tr>
+                <tr>
+                  <td class="metric-cell">عدد الأنشطة المنفذة</td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="activities_1" value="${getStudentActivitiesTrendInputValue("activities", 1)}" oninput="saveStudentActivitiesTrendValue('activities', 1, this.value)" aria-label="عدد الأنشطة المنفذة في أبريل"></td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="activities_2" value="${getStudentActivitiesTrendInputValue("activities", 2)}" oninput="saveStudentActivitiesTrendValue('activities', 2, this.value)" aria-label="عدد الأنشطة المنفذة في مايو"></td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="activities_3" value="${getStudentActivitiesTrendInputValue("activities", 3)}" oninput="saveStudentActivitiesTrendValue('activities', 3, this.value)" aria-label="عدد الأنشطة المنفذة في يونيو"></td>
+                </tr>
+                <tr>
+                  <td class="metric-cell">ساعات استقبال الطالب للنشاط الطلابي</td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="receptionHours_1" value="${getStudentActivitiesTrendInputValue("receptionHours", 1)}" oninput="saveStudentActivitiesTrendValue('receptionHours', 1, this.value)" aria-label="ساعات استقبال الطالب في أبريل"></td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="receptionHours_2" value="${getStudentActivitiesTrendInputValue("receptionHours", 2)}" oninput="saveStudentActivitiesTrendValue('receptionHours', 2, this.value)" aria-label="ساعات استقبال الطالب في مايو"></td>
+                  <td><input class="month-input student-activities-live-input" type="number" min="0" step="any" inputmode="decimal" data-student-activities-input="receptionHours_3" value="${getStudentActivitiesTrendInputValue("receptionHours", 3)}" oninput="saveStudentActivitiesTrendValue('receptionHours', 3, this.value)" aria-label="ساعات استقبال الطالب في يونيو"></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -7265,6 +7411,9 @@
           ? studentActivitiesPanel
           : genericMonthlyPanel;
       const muhtarafFinancePanel = d.name_ar === "مركز محترف" ? buildMuhtarafFinancePanel(index, "Q1") : "";
+      const detailAccessNotice = d.name_ar === "إدارة الأنشطة الطلابية"
+        ? "✍️ تفاصيل الإدارة للقراءة فقط، باستثناء جدول اتجاه الأنشطة الشهري للربع الثاني؛ يمكن إدخال بياناته ليتحدث الرسم في الصفحة الرئيسية مباشرة."
+        : "👁️ تفاصيل الإدارة في وضع العرض فقط. إدخال البيانات متاح حصريًا من خانة التقارير الأسبوعية في صفحة الإدارات.";
 
       detail.innerHTML = `<div class="dept-detail-toolbar">
         <button class="dept-back-light" type="button" onclick="backToDepartmentsList()">← رجوع لقائمة الإدارات</button>
@@ -7273,7 +7422,7 @@
           <button class="dept-page-btn" type="button" onclick="closeDepartmentsPage()">إغلاق</button>
         </div>
       </div>
-      <div class="view-only-notice">👁️ تفاصيل الإدارة في وضع العرض فقط. إدخال البيانات متاح حصريًا من خانة التقارير الأسبوعية في صفحة الإدارات.</div>
+      <div class="view-only-notice">${detailAccessNotice}</div>
       <div class="dept-detail-title">
         <div>
           <span class="tag" style="background:${meta.color}22;color:${meta.color}">${d.source}</span>
@@ -7755,7 +7904,6 @@
       const btn = e.target.closest(".data-entry-toggle");
       if(btn) return;
     });
-    if($("departmentsBackBtn")) $("departmentsBackBtn").addEventListener("click", closeDepartmentsPage);
     if($("departmentsCloseBtn")) $("departmentsCloseBtn").addEventListener("click", closeDepartmentsPage);
     document.querySelectorAll(".quarter-btn").forEach(btn => btn.addEventListener("click", () => switchQuarter(btn.dataset.quarter)));
     if($("deptSearchInput")) $("deptSearchInput").addEventListener("input", renderDepartmentsPage);
