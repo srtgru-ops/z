@@ -16,12 +16,30 @@
     --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
     --shadow-md:0 8px 24px rgba(6,61,34,0.14);
   }
+  [data-theme="dark"]{
+    --bg:#0E1712; --surface:#152019; --surface-alt:#1C2A22;
+    --primary:#2FA968; --primary-light:#3ECB80; --primary-dark:#0A5C34;
+    --accent:#D4C169; --accent-light:#E4D68C;
+    --text:#EAF2ED; --text-muted:#8FA398; --border:#28382F;
+    --shadow-md:0 8px 24px rgba(0,0,0,0.4);
+  }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  body{background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;
+    transition:background .25s ease,color .25s ease;}
   h1,h2,h3{font-family:'Cairo',sans-serif;}
   button{font-family:inherit;cursor:pointer;}
   textarea,select{font-family:inherit;}
+
+  .theme-toggle{position:fixed;top:16px;left:16px;z-index:50;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.3);
+    display:flex;align-items:center;justify-content:center;color:#fff;transition:background .15s ease;}
+  .theme-toggle:hover{background:rgba(255,255,255,0.28);}
+  .theme-toggle svg{width:19px;height:19px;}
+  .home-return{position:fixed;top:16px;right:16px;z-index:50;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.15);backdrop-filter:blur(6px);
+    color:#fff;text-decoration:none;font-size:13px;font-weight:700;transition:background .15s ease,transform .15s ease;}
+  .home-return:hover{background:rgba(255,255,255,.28);transform:translateY(-1px);}
 
   .rate-page{min-height:100vh;background:linear-gradient(180deg,var(--primary-dark),var(--bg) 300px);padding:0 20px 50px;position:relative;}
   .rate-page::before{
@@ -29,10 +47,6 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='130' viewBox='0 0 130 130'%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-width='1'%3E%3Ccircle cx='65' cy='65' r='40'/%3E%3Cpath d='M65 40 L78 48 L78 78 L65 88 L52 78 L52 48 Z'/%3E%3C/g%3E%3C/svg%3E");
     background-size:150px 150px;
   }
-  .home-return{position:absolute;top:20px;right:20px;z-index:2;display:inline-flex;align-items:center;gap:7px;
-    min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);
-    color:#fff;text-decoration:none;font-size:13px;font-weight:700;transition:background .15s ease,transform .15s ease;}
-  .home-return:hover{background:rgba(255,255,255,.22);transform:translateY(-1px);}
   .emblem{width:72px;height:72px;border-radius:50%;margin:0 auto 14px;background:#FFFFFF;overflow:hidden;
     display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.25), inset 0 0 0 3px var(--accent);
     position:relative;z-index:1;}
@@ -74,6 +88,36 @@
     font-size:13.8px;resize:vertical;background:var(--surface-alt);color:var(--text);}
   .comment-input:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
   select.comment-input{min-height:auto;cursor:pointer;}
+
+  .service-select{position:relative;}
+  .service-select-input{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    border:1px solid var(--border);border-radius:var(--radius-md);padding:13px 14px;background:var(--surface-alt);
+    cursor:pointer;font-size:14px;color:var(--text-muted);user-select:none;}
+  .service-select-input.filled{color:var(--text);font-weight:700;}
+  .service-select-input .chev{flex:0 0 auto;color:var(--text-muted);transition:transform .15s ease;}
+  .service-select.open .service-select-input .chev{transform:rotate(180deg);}
+  .service-panel{margin-top:8px;background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-md);overflow:hidden;}
+  .service-search-row{padding:10px;border-bottom:1px solid var(--border);}
+  .service-search-row input{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:10px 12px;font-size:13.8px;background:var(--surface-alt);color:var(--text);}
+  .service-search-row input:focus{outline:2px solid var(--primary-light);outline-offset:1px;}
+  .service-panel-list{max-height:300px;overflow-y:auto;padding:6px;}
+  .service-group{margin-bottom:2px;}
+  .service-group-label{font-size:11.5px;font-weight:800;color:var(--primary);padding:10px 10px 5px;letter-spacing:.2px;}
+  .service-option{display:flex;align-items:center;width:100%;text-align:right;background:none;border:none;
+    padding:10px 10px;border-radius:var(--radius-sm);font-size:13.4px;color:var(--text);}
+  .service-option:hover{background:var(--surface-alt);}
+  .service-no-results{padding:22px;text-align:center;color:var(--text-muted);font-size:13px;}
+  .dept-row{display:flex;align-items:center;gap:10px;width:100%;text-align:right;background:none;border:none;
+    padding:10px 8px;border-radius:var(--radius-sm);font-size:13.6px;font-weight:700;color:var(--text);}
+  .dept-row:hover{background:var(--surface-alt);}
+  .dept-row .icon-badge{width:30px;height:30px;flex:0 0 30px;border-radius:9px;}
+  .dept-row .icon-badge svg{width:16px;height:16px;}
+  .dept-row .chev-left{margin-right:auto;color:var(--text-muted);flex:0 0 auto;}
+  .panel-back-row{display:flex;align-items:center;gap:8px;padding:8px 8px 10px;border-bottom:1px solid var(--border);margin-bottom:6px;}
+  .panel-back-row button{background:none;border:none;color:var(--primary);font-weight:700;font-size:13px;display:flex;align-items:center;gap:5px;padding:2px;}
+  .panel-back-row .dept-title{font-weight:800;font-size:13.5px;color:var(--text);}
   .complaint-box{background:var(--surface-alt);border:1px dashed var(--border);border-radius:var(--radius-md);padding:16px;margin-top:22px;}
   .complaint-box .comment-label{margin-top:0;}
 
@@ -83,15 +127,26 @@
   .btn-primary:hover{background:var(--primary-light);}
   .btn-primary:disabled{background:#AEB9C2;cursor:not-allowed;}
 
-  .done-wrap{text-align:center;padding:20px 0;}
-  .done-icon{width:60px;height:60px;border-radius:50%;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+  .done-wrap{text-align:center;padding:20px 0;position:relative;overflow:hidden;}
+  .done-icon{width:60px;height:60px;border-radius:50%;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+    animation:pop .5s cubic-bezier(.34,1.56,.64,1);}
   .done-icon svg{width:30px;height:30px;stroke:var(--primary);}
   .done-wrap h3{font-size:19px;font-weight:800;margin:0 0 8px;color:var(--primary-dark);}
   .done-wrap p{color:var(--text-muted);font-size:13.8px;margin:0 0 22px;}
+  @keyframes pop{0%{transform:scale(0);opacity:0;}60%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}
+  .confetti-piece{position:absolute;top:-10px;border-radius:2px;animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(220px) rotate(360deg);opacity:0;}}
 
-  .loading-wrap{padding:40px 0;text-align:center;color:var(--text-muted);font-size:14px;}
+  .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:50px 0;color:var(--text-muted);font-size:13.5px;}
+  .spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--primary);animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
-  @media (max-width:640px){ .card{padding:20px;}.home-return{top:14px;right:14px;font-size:12px;min-height:36px;padding:7px 11px;} }
+  .progress-wrap{margin-bottom:20px;}
+  .progress-track{width:100%;height:7px;border-radius:99px;background:var(--surface-alt);overflow:hidden;}
+  .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--primary-light));transition:width .3s ease;}
+  .progress-label{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-muted);margin-top:6px;font-weight:600;}
+
+  @media (max-width:640px){ .card{padding:20px;} }
 </style>
 </head>
 <body>
@@ -100,20 +155,21 @@
 <script>
 /* عدّل أسماء الإدارات هنا فقط — لازم تطابق نفس الترتيب والأرقام الموجودة بملف الداشبورد */
 const DEPARTMENTS_CONFIG = [
-  { id: 1,  name: "إدارة السكن الطلابي",              icon: "home"      },
-  { id: 2,  name: "إدارة النقل الطلابي",               icon: "compass"   },
-  { id: 3,  name: "وحدة التوجيه وحقوق الطالب",          icon: "shield"    },
-  { id: 4,  name: "وحدة ذوي الإعاقة",                  icon: "medical"   },
-  { id: 5,  name: "إدارة المنح الدراسية",               icon: "trophy"    },
-  { id: 6,  name: "إدارة الأنشطة الطلابية",             icon: "star"      },
-  { id: 7,  name: "إدارة النشاط الرياضي",               icon: "flag"      },
-  { id: 8,  name: "وحدة عشائر الجوالة",                icon: "users"     },
-  { id: 9,  name: "إدارة العمل التطوعي",               icon: "heart"     },
-  { id: 10, name: "مركز محترف",                        icon: "book"      },
-  { id: 11, name: "مكتب التوظيف والإرشاد المهني",       icon: "briefcase" },
-  { id: 12, name: "إدارة المكافآت",                    icon: "calendar"  },
-  { id: 13, name: "إدارة الصندوق",                     icon: "building"  },
-];
+  { id: 1,  name: "إدارة السكن الطلابي",              icon: "home",      services: ["حجز سكن","تجديد سكن","نقل غرفة/سكن","شكوى صيانة","إخلاء سكن"] },
+  { id: 2,  name: "إدارة النقل الطلابي",               icon: "compass",   services: ["الاشتراك بخط نقل","الاستفسار عن مواعيد الباصات","الإبلاغ عن تأخير/تعطل","طلب خط جديد"] },
+  { id: 3,  name: "وحدة التوجيه وحقوق الطالب",          icon: "shield",    services: ["تقديم شكوى أو تظلم","استشارة حقوقية","الإبلاغ عن مخالفة","طلب توجيه ونصح"] },
+  { id: 4,  name: "وحدة ذوي الإعاقة",                  icon: "medical",   services: ["طلب دعم أكاديمي","تجهيزات خاصة بالقاعات","طلب مرافق","خدمات النقل الخاصة"] },
+  { id: 5,  name: "إدارة المنح الدراسية",               icon: "trophy",    services: ["التقديم على منحة","الاستفسار عن حالة الطلب","تجديد منحة","صرف مستحقات المنحة"] },
+  { id: 6,  name: "إدارة الأنشطة الطلابية",             icon: "star",      services: ["التسجيل بنشاط/فعالية","اقتراح فعالية جديدة","طلب شهادة مشاركة","حجز قاعة لنشاط"] },
+  { id: 7,  name: "إدارة النشاط الرياضي",               icon: "flag",      services: ["التسجيل ببطولة/فريق","حجز الملاعب","طلب معدات رياضية","الاستفسار عن جدول المباريات"] },
+  { id: 8,  name: "وحدة عشائر الجوالة",                icon: "users",     services: ["التسجيل بالكشافة","التسجيل برحلة/مخيم","طلب شهادة انتساب"] },
+  { id: 9,  name: "إدارة العمل التطوعي",               icon: "heart",     services: ["التسجيل كمتطوع","طلب ساعات تطوعية","إصدار شهادة تطوع","اقتراح مبادرة تطوعية"] },
+  { id: 10, name: "مركز محترف",                        icon: "book",      services: ["التسجيل بدورة تدريبية","طلب شهادة اجتياز","الاستفسار عن برامج التدريب"] },
+  { id: 11, name: "مكتب التوظيف",                       icon: "briefcase", services: ["التسجيل بمعرض توظيف","مراجعة السيرة الذاتية","ربط بفرص توظيف","الاستفسار عن وظائف شاغرة"] },
+  { id: 12, name: "إدارة المكافآت",                    icon: "calendar",  services: ["الاستفسار عن صرف المكافأة","تحديث بيانات الحساب البنكي","تقديم اعتراض على مبلغ"] },
+  { id: 13, name: "إدارة الصندوق",                     icon: "building",  services: ["طلب قرض/سلفة طلابية","الاستفسار عن حالة الطلب","سداد مستحقات"] },
+  { id: 14, name: "الإرشاد المهني",                    icon: "chat",      services: ["طلب استشارة مهنية","تحديد المسار الوظيفي","تقييم الميول والقدرات","ربط بفرص تدريب"] },
+].map(d => ({ ...d, services: [...d.services, "خدمة أخرى / عامة"].map((s,i) => ({ id: `${d.id}-${i}`, name: s })) }));
 const CATEGORY_LABELS = {
   quality: "جودة الخدمة", speed: "سرعة الإنجاز", staff: "تعامل الموظفين",
   clarity: "وضوح الإجراءات", access: "سهولة الوصول للخدمة"
@@ -163,9 +219,9 @@ async function loadDeptNames(){
     }
   }catch(e){ /* عند تعذر الاتصال تُستخدم الأسماء الافتراضية */ }
 }
-async function submitRating(deptId, values, comment, complaintType, complaintText){
+async function submitRating(deptId, values, comment, complaintType, complaintText, service){
   const payload = JSON.stringify({
-    deptId, ...values, comment: comment || "",
+    deptId, service: service || "", ...values, comment: comment || "",
     complaintType: complaintType || "", complaintText: complaintText || ""
   });
   const res = await withTimeout(fetch(API_URL, {
@@ -186,8 +242,161 @@ const state = {
   submitting: false
 };
 
-function pickDept(id){
-  state.draft = { deptId:id, quality:0, speed:0, staff:0, clarity:0, access:0 };
+/* ================= الوضع الليلي ================= */
+function themeIcon(){
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  return isDark
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>`;
+}
+function toggleTheme(){
+  const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  try{ localStorage.setItem("uni-eval-theme", next); }catch(e){}
+  render();
+}
+(function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem("uni-eval-theme"); }catch(e){}
+  if(!saved){
+    saved = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  document.documentElement.setAttribute("data-theme", saved);
+})();
+
+/* ================= تأثير كونفيتي بسيط عند النجاح ================= */
+function launchConfetti(){
+  const wrap = document.getElementById("doneWrap");
+  if(!wrap) return;
+  const colors = ["#0A5C34","#0F884C","#BAA228","#D4C169","#2FA968"];
+  for(let i=0;i<24;i++){
+    const piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    const size = 5 + Math.random()*4;
+    piece.style.width = size + "px";
+    piece.style.height = (size*0.4) + "px";
+    piece.style.left = (Math.random()*100) + "%";
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (0.9 + Math.random()*0.8) + "s";
+    piece.style.animationDelay = (Math.random()*0.3) + "s";
+    wrap.appendChild(piece);
+    setTimeout(() => piece.remove(), 2000);
+  }
+}
+
+/* ================= منع تكرار تقييم نفس الخدمة خلال فترة قصيرة ================= */
+const RATING_COOLDOWN_MS = 5 * 60 * 1000; // 5 دقائق
+function getLastRatedAt(serviceId){
+  try{
+    const raw = localStorage.getItem("uni-eval-last-" + serviceId);
+    return raw ? Number(raw) : 0;
+  }catch(e){ return 0; }
+}
+function setLastRatedAt(serviceId){
+  try{ localStorage.setItem("uni-eval-last-" + serviceId, String(Date.now())); }catch(e){}
+}
+
+const svcPanel = { view: "depts", deptId: null };
+
+function toggleServicePanel(){
+  const panel = document.getElementById("servicePanel");
+  if(!panel) return;
+  const isOpen = panel.style.display !== "none";
+  if(isOpen){ closeServicePanel(); return; }
+  const wrap = document.getElementById("serviceSelectWrap");
+  panel.style.display = "block";
+  if(wrap) wrap.classList.add("open");
+  svcPanel.view = "depts"; svcPanel.deptId = null;
+  const search = document.getElementById("serviceSearchInput");
+  if(search) search.value = "";
+  renderServicePanel();
+  if(search) search.focus();
+  setTimeout(() => { if(panel.scrollIntoView) panel.scrollIntoView({behavior:"smooth", block:"nearest"}); }, 50);
+}
+function closeServicePanel(){
+  const panel = document.getElementById("servicePanel");
+  const wrap = document.getElementById("serviceSelectWrap");
+  if(panel) panel.style.display = "none";
+  if(wrap) wrap.classList.remove("open");
+}
+function drillIntoDept(deptId){
+  svcPanel.view = "services"; svcPanel.deptId = deptId;
+  renderServicePanel();
+}
+function backToDeptList(){
+  svcPanel.view = "depts"; svcPanel.deptId = null;
+  const search = document.getElementById("serviceSearchInput");
+  if(search) search.value = "";
+  renderServicePanel();
+}
+function renderServicePanel(){
+  const list = document.getElementById("servicePanelList");
+  if(!list) return;
+
+  if(svcPanel.view === "depts"){
+    list.innerHTML = DEPARTMENTS.map(d => `
+      <button type="button" class="dept-row" onclick="drillIntoDept(${d.id})">
+        <div class="icon-badge">${iconSvg(d.icon,16)}</div>
+        <span>${d.name}</span>
+        <svg class="chev-left" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,6 9,12 15,18"/></svg>
+      </button>
+    `).join("");
+    return;
+  }
+
+  if(svcPanel.view === "services"){
+    const dept = DEPARTMENTS.find(d => d.id === svcPanel.deptId);
+    if(!dept){ svcPanel.view = "depts"; renderServicePanel(); return; }
+    list.innerHTML = `
+      <div class="panel-back-row">
+        <button type="button" onclick="backToDeptList()">→ كل الإدارات</button>
+        <span class="dept-title">${dept.name}</span>
+      </div>
+      ${(dept.services||[]).map(s => `
+        <button type="button" class="service-option" onclick="pickService('${s.id}')">${s.name}</button>
+      `).join("")}`;
+    return;
+  }
+
+  // svcPanel.view === "search"
+  const query = svcPanel.query || "";
+  let anyVisible = false;
+  const html = DEPARTMENTS.map(d => {
+    const matches = (d.services||[]).filter(s => (d.name + " " + s.name).toLowerCase().includes(query));
+    if(!matches.length) return "";
+    anyVisible = true;
+    return `
+      <div class="service-group">
+        <div class="service-group-label">${d.name}</div>
+        ${matches.map(s => `<button type="button" class="service-option" onclick="pickService('${s.id}')">${s.name}</button>`).join("")}
+      </div>`;
+  }).join("");
+  list.innerHTML = anyVisible ? html : `<div class="service-no-results">لا توجد نتائج مطابقة</div>`;
+}
+function filterServicePanel(q){
+  const query = (q || "").trim().toLowerCase();
+  if(!query){
+    svcPanel.view = "depts"; svcPanel.deptId = null;
+  }else{
+    svcPanel.view = "search"; svcPanel.query = query;
+  }
+  renderServicePanel();
+}
+document.addEventListener("click", function(e){
+  const wrap = document.getElementById("serviceSelectWrap");
+  if(wrap && !wrap.contains(e.target)) closeServicePanel();
+}, true);
+
+function pickService(serviceId){
+  if(!serviceId) return;
+  let service = null, dept = null;
+  for(const d of DEPARTMENTS){
+    const s = (d.services||[]).find(s => s.id === serviceId);
+    if(s){ service = s; dept = d; break; }
+  }
+  if(!service) return;
+  state.draft = { deptId: dept.id, serviceId: service.id, serviceName: service.name, quality:0, speed:0, staff:0, clarity:0, access:0 };
   state.step = "form"; state.formError = "";
   window.scrollTo({top:0, behavior:"instant"});
   render();
@@ -202,6 +411,11 @@ function setRating(key, val){ state.draft[key] = val; state.formError = ""; rend
 async function handleSubmitRating(){
   const missing = CATEGORY_KEYS.some(k => !state.draft[k]);
   if(missing){ state.formError = "يرجى تقييم جميع المعايير الخمسة قبل الإرسال."; render(); return; }
+  const lastRated = getLastRatedAt(state.draft.serviceId);
+  if(lastRated && (Date.now() - lastRated) < RATING_COOLDOWN_MS){
+    state.formError = "لقد قيّمت هذه الخدمة قبل قليل، يرجى الانتظار بضع دقائق قبل إرسال تقييم آخر لنفس الخدمة.";
+    render(); return;
+  }
   const commentEl = document.getElementById("commentInput");
   const comment = commentEl ? commentEl.value : "";
   const complaintTypeEl = document.getElementById("complaintType");
@@ -213,7 +427,8 @@ async function handleSubmitRating(){
     await submitRating(state.draft.deptId, {
       quality: state.draft.quality, speed: state.draft.speed, staff: state.draft.staff,
       clarity: state.draft.clarity, access: state.draft.access
-    }, comment, complaintType, complaintText);
+    }, comment, complaintType, complaintText, state.draft.serviceName);
+    setLastRatedAt(state.draft.serviceId);
     state.submitting = false;
     state.step = "done";
     window.scrollTo({top:0, behavior:"instant"});
@@ -226,7 +441,7 @@ async function handleSubmitRating(){
 }
 function rateAnother(){
   state.step = "select";
-  state.draft = { deptId:null, quality:0, speed:0, staff:0, clarity:0, access:0 };
+  state.draft = { deptId:null, serviceId:null, serviceName:"", quality:0, speed:0, staff:0, clarity:0, access:0 };
   window.scrollTo({top:0, behavior:"instant"});
   render();
 }
@@ -243,29 +458,41 @@ function renderStarsRow(key){
 }
 
 function renderInner(){
-  if(state.loading) return `<div class="loading-wrap">جاري التحميل…</div>`;
+  if(state.loading) return `<div class="loading-wrap"><div class="spinner"></div><div>جاري التحميل…</div></div>`;
 
   if(state.step === "select"){
     return `
-      <h2 style="font-size:17px;margin:0 0 16px;">اختر الإدارة التي ترغب بتقييم خدماتها</h2>
-      <div class="dept-pick-grid">
-        ${DEPARTMENTS.map(d => `
-          <button class="dept-pick" onclick="pickDept(${d.id})">
-            <div class="icon-badge">${iconSvg(d.icon,20)}</div>
-            <div class="name">${d.name}</div>
-          </button>
-        `).join("")}
+      <h2 style="font-size:17px;margin:0 0 16px;">اختر الخدمة التي ترغب بتقييمها</h2>
+      <div class="service-select" id="serviceSelectWrap">
+        <div class="service-select-input" id="serviceSelectTrigger" tabindex="0" onclick="toggleServicePanel()">
+          <span>اختر الإدارة ثم الخدمة، أو ابحث مباشرة…</span>
+          <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+        </div>
+        <div class="service-panel" id="servicePanel" style="display:none;">
+          <div class="service-search-row">
+            <input type="text" id="serviceSearchInput" placeholder="ابحث عن خدمة أو إدارة…" oninput="filterServicePanel(this.value)" autocomplete="off">
+          </div>
+          <div class="service-panel-list" id="servicePanelList"></div>
+        </div>
       </div>`;
   }
 
   if(state.step === "form"){
     const dept = DEPARTMENTS.find(d => d.id === state.draft.deptId);
     return `
-      <button class="back-btn" onclick="backToSelect()">→ رجوع لاختيار الإدارة</button>
+      <button class="back-btn" onclick="backToSelect()">→ رجوع لاختيار الخدمة</button>
       <div class="selected-dept-strip">
         <div class="icon-badge">${iconSvg(dept.icon,22)}</div>
-        <div class="name">${dept.name}</div>
+        <div>
+          <div class="name">${state.draft.serviceName}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${dept.name}</div>
+        </div>
       </div>
+      ${(() => { const done = CATEGORY_KEYS.filter(k => state.draft[k]).length; const pct = Math.round(done/CATEGORY_KEYS.length*100); return `
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
+        <div class="progress-label"><span>${done} من ${CATEGORY_KEYS.length} معايير</span><span>${pct}%</span></div>
+      </div>`; })()}
       <div>${CATEGORY_KEYS.map(renderStarsRow).join("")}</div>
       <label class="comment-label" for="commentInput">تعليق (اختياري)</label>
       <textarea id="commentInput" class="comment-input" placeholder="شاركنا ملاحظاتك حول تجربتك مع هذه الإدارة…"></textarea>
@@ -292,16 +519,17 @@ function renderInner(){
   }
 
   return `
-    <div class="done-wrap">
+    <div class="done-wrap" id="doneWrap">
       <div class="done-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS.check}</svg></div>
       <h3>شكراً لك!</h3>
       <p>تم إرسال تقييمك بنجاح، ونقدّر وقتك في مشاركة رأيك معنا.</p>
-      <button class="btn-primary" style="width:auto;padding:10px 24px;" onclick="rateAnother()">تقييم إدارة أخرى</button>
+      <button class="btn-primary" style="width:auto;padding:10px 24px;" onclick="rateAnother()">تقييم خدمة أخرى</button>
     </div>`;
 }
 
 function render(){
   document.getElementById("app").innerHTML = `
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل الوضع الليلي">${themeIcon()}</button>
     <div class="rate-page">
       <a class="home-return" href="./index.html" aria-label="العودة إلى الصفحة الرئيسية">⌂ العودة إلى الصفحة الرئيسية</a>
       <div class="rate-wrap">
@@ -315,6 +543,7 @@ function render(){
         <div class="card">${renderInner()}</div>
       </div>
     </div>`;
+  if(state.step === "done") launchConfetti();
 }
 
 async function init(){
